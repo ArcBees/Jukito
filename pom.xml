@@ -1,0 +1,161 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.jukito</groupId>
+	<artifactId>jukito</artifactId>
+	<packaging>jar</packaging>
+	<version>1.0-SNAPSHOT</version>
+	<name>jukito</name>
+	<organization>
+		<name>ArcBees Inc.</name>
+		<url>http://arcbees.com</url>
+	</organization>
+	<developers>
+		<developer>
+			<name>Philippe Beaudoin</name>
+			<email>philippe.beaudoin@gmail.com</email>
+			<url>http://www.google.com/profiles/philippe.beaudoin</url>
+			<organization>ArcBees Inc.</organization>
+			<organizationUrl>http://arcbees.com</organizationUrl>
+			<roles>
+				<role>architect</role>
+				<role>lead developer</role>
+			</roles>
+			<timezone>-7</timezone>
+			<properties>
+				<picUrl>http://tinyurl.com/34yeyew</picUrl>
+			</properties>
+		</developer>
+		<developer>
+			<name>Christian Goudreau</name>
+			<email>goudreau.christian@gmail.com</email>
+			<organization>ArcBees Inc.</organization>
+			<organizationUrl>http://arcbees.com</organizationUrl>
+			<roles>
+				<role>developer</role>
+			</roles>
+			<timezone>-4</timezone>
+		</developer>
+	</developers>
+	<url>http://jukito.org</url>
+	<issueManagement>
+		<system>Google Code</system>
+		<url>http://code.google.com/p/jukito/issues/list</url>
+	</issueManagement>
+	<mailingLists>
+		<mailingList>
+			<name>Development</name>
+			<subscribe>jukito+subscribe@googlegroups.com</subscribe>
+			<unsubscribe>jukito+unsubscribe@googlegroups.com</unsubscribe>
+			<post>jukito@googlegroups.com</post>
+			<archive>http://groups.google.com/group/jukito</archive>
+		</mailingList>
+	</mailingLists>
+	<scm>
+		<connection>scm:svn:http://jukito.googlecode.com/hg/</connection>
+		<developerConnection>scm:svn:https://jukito.googlecode.com/hg/</developerConnection>
+		<tag>HEAD</tag>
+		<url>http://code.google.com/p/jukito/source/browse/</url>
+	</scm>
+	<dependencies>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>1.8.1</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.8.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.inject</groupId>
+			<artifactId>guice</artifactId>
+			<version>2.0</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.1</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+						</manifest>
+						<manifestEntries>
+							<Build-Number>${env.BUILD_NUMBER}</Build-Number>
+							<Url>${project.url}</Url>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+					<excludes>
+						<exclude>**/*Point*.java</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.8</version>
+				<configuration>
+					<additionalBuildcommands>
+						<buildcommand>net.sf.eclipsecs.core.CheckstyleBuilder</buildcommand>
+					</additionalBuildcommands>
+					<additionalProjectnatures>
+						<projectnature>net.sf.eclipsecs.core.CheckstyleNature</projectnature>
+					</additionalProjectnatures>
+					<additionalConfig>
+						<file>
+							<name>.checkstyle</name>
+							<content>
+                  <![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+
+<fileset-config file-format-version="1.2.0" simple-config="true" sync-formatter="false">
+  <local-check-config name="jukito" location="checkstyle/checkstyle.xml" type="project" description="">
+    <additional-data name="protect-config-file" value="false"/>
+  </local-check-config>
+  <fileset name="all" enabled="true" check-config-name="gwtp" local="true">
+    <file-match-pattern match-pattern="." include-pattern="true"/>
+  </fileset>
+  <filter name="FilesFromPackage" enabled="true">
+    <filter-data value="src/com/google"/>
+  </filter>
+  <filter name="NonSrcDirs" enabled="true"/>
+</fileset-config>
+]]>
+							</content>
+						</file>
+					</additionalConfig>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<configLocation>checkstyle/checkstyle.xml</configLocation>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
+</project>
