@@ -73,6 +73,7 @@ public abstract class JukitoModule extends TestModule {
   
   @SuppressWarnings({ "unchecked", "rawtypes" })
   public final void configure() {
+    bindScopes();
     configureTest();
     Set<Key<?>> keysObserved = new HashSet<Key<?>>(bindingsObserved.size());
     Set<Key<?>> keysNeeded = new HashSet<Key<?>>(bindingsObserved.size());

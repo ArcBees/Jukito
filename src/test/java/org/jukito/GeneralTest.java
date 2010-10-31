@@ -56,7 +56,7 @@ public class GeneralTest {
       bind(MyInteger.class).annotatedWith(OneHundred.class).toInstance(new MyIntegerImpl(100));
       bind(MyInteger.class).annotatedWith(Names.named("200")).toInstance(new MyIntegerImpl(200));
       bind(Key.get(TestClass.class, Value3.class)).toInstance(new TestClass(MyEnum.VALUE3));
-      bind(Key.get(TestClass.class, Names.named("VALUE2"))).to(TestClass.class).in(TestScope.SINGLETON);
+      bind(Key.get(TestClass.class, Names.named("VALUE2"))).to(TestClass.class).in(TestSingleton.class);
       bind(new TypeLiteral<ParameterizedTestClass<Integer>>() { }).in(TestScope.SINGLETON);
       bind(new TypeLiteral<ParameterizedTestClass<Double>>() { }).to(ParameterizedTestClassDouble.class).in(TestScope.SINGLETON);
     }

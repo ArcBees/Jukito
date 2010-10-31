@@ -37,9 +37,13 @@ public abstract class TestModule extends AbstractModule {
   protected Class<?> testClass;
 
   public void configure() {
+    bindScopes();
+    configureTest();
+  }
+
+  protected void bindScopes() {
     bindScope(TestSingleton.class, TestScope.SINGLETON);
     bindScope(TestEagerSingleton.class, TestScope.EAGER_SINGLETON);
-    configureTest();
   }
   
   public void setTestClass(Class<?> testClass) {

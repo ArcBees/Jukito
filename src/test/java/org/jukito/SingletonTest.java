@@ -32,6 +32,16 @@ import org.junit.runner.RunWith;
  */
 @RunWith(JukitoRunner.class)
 public class SingletonTest {
+
+  /**
+   * Guice test module.
+   */
+  public static class Module extends JukitoModule {
+    @Override
+    protected void configureTest() {
+      bind(MyEagerSingleton.class).asEagerSingleton();
+    }
+  }
   
   /**
    */
@@ -48,8 +58,20 @@ public class SingletonTest {
    * class. It's used to make sure all expected tests are called.
    */
   private static class Bookkeeper {
+    static int numberOfTimesTestEagerSingletonIsInstantiated;
+    static int numberOfTimesTestSingletonIsInstantiated;
     static int numberOfTimesEagerSingletonIsInstantiated;
-    static int numberOfTimesSingletonIsInstantiated;
+  }
+
+  /**
+   * This should be instantiated once for the entire test class.
+   */
+  static class MyEagerSingleton {
+    @Inject
+    public MyEagerSingleton(Registry registry) {
+      registry.register();
+      Bookkeeper.numberOfTimesEagerSingletonIsInstantiated++;
+    }
   }
   
   /**
@@ -60,7 +82,7 @@ public class SingletonTest {
     @Inject
     public MyTestEagerSingleton(Registry registry) {
       registry.register();
-      Bookkeeper.numberOfTimesEagerSingletonIsInstantiated++;
+      Bookkeeper.numberOfTimesTestEagerSingletonIsInstantiated++;
     }
   }
   
@@ -72,7 +94,7 @@ public class SingletonTest {
     @Inject
     public MyTestSingleton(Registry registry) {
       registry.register();
-      Bookkeeper.numberOfTimesSingletonIsInstantiated++;
+      Bookkeeper.numberOfTimesTestSingletonIsInstantiated++;
     }
   }
 
@@ -110,8 +132,9 @@ public class SingletonTest {
   
   @AfterClass
   public static void verifyNumberOfInstantiations() {
-    assertEquals(4, Bookkeeper.numberOfTimesEagerSingletonIsInstantiated);
-    assertEquals(1, Bookkeeper.numberOfTimesSingletonIsInstantiated);
+    assertEquals(4, Bookkeeper.numberOfTimesTestEagerSingletonIsInstantiated);
+    assertEquals(1, Bookkeeper.numberOfTimesTestSingletonIsInstantiated);
+    assertEquals(1, Bookkeeper.numberOfTimesEagerSingletonIsInstantiated);
   }
 
 }

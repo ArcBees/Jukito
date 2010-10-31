@@ -16,16 +16,18 @@
 
 package org.jukito;
 
-import com.google.inject.Inject;
-import com.google.inject.Provider;
-import com.google.inject.name.Named;
-
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.verify;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import com.google.inject.Inject;
+import com.google.inject.Key;
+import com.google.inject.Provider;
+import com.google.inject.name.Named;
 
 /**
  * Test that providers injected by the tester module behaves correctly.
@@ -43,10 +45,11 @@ public class ProviderTest {
     protected void configureTest() {
       bindNamedMock(Mock.class, "singleton").in(TestScope.SINGLETON);
       bindNamedMock(Mock.class, "nonsingleton");
-      bindNamed(Instance.class, "singleton").to(Instance.class).in(TestScope.SINGLETON);
+      bindNamed(Instance.class, "singleton").to(Instance.class).in(TestSingleton.class);
       bindNamed(Instance.class, "nonsingleton").to(Instance.class);
-      bindNamed(Parent.class, "providerInstance").toProvider(new ParentProviderA());
-      bindNamed(Parent.class, "providerClass").toProvider(ParentProviderB.class);
+      bindNamed(Parent.class, "providerInstance").toProvider(new ParentProviderA()).in(TestSingleton.class);
+      bindNamed(Parent.class, "providerClass").toProvider(ParentProviderB.class).in(TestSingleton.class);
+      bindNamed(Parent.class, "providerKey").toProvider(Key.get(ParentProviderA.class)).in(TestSingleton.class);
     }
   }
   
@@ -79,7 +82,10 @@ public class ProviderTest {
     }
   }
   
-  static class ParentProviderA implements Provider<Parent> {
+  abstract static class ParentProviderABase implements Provider<Parent> {
+  }
+  
+  static class ParentProviderA extends ParentProviderABase {
     @Override
     public Parent get() {
       return new ChildA();
@@ -137,11 +143,19 @@ public class ProviderTest {
   @Test
   public void shouldInjectProviderBoundWithInstance(
       @Named("providerInstance") Parent parentProvidedFromProviderInstance) {
+    assertEquals(parentProvidedFromProviderInstance.getClass(), ChildA.class);
   }
 
   @Test
   public void shouldInjectProviderBoundWithClass(
-      @Named("providerClass") Parent parentProvidedFromProviderInstance) {
+      @Named("providerClass") Parent parentProvidedFromProviderClass) {
+    assertEquals(parentProvidedFromProviderClass.getClass(), ChildB.class);
+  }
+
+  @Test
+  public void shouldInjectProviderBoundWithKey(
+      @Named("providerKey") Parent parentProvidedFromProviderKey) {
+    assertEquals(parentProvidedFromProviderKey.getClass(), ChildA.class);
   }
 
 }

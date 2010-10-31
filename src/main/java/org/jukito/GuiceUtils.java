@@ -46,10 +46,17 @@ public class GuiceUtils {
   }
 
   @SuppressWarnings("unchecked")
-  public static <T> TypeLiteral<T> getProvidedType(TypeLiteral<? extends Provider<? extends T>> providerTypeLiteral, 
+  public static <T> TypeLiteral<T> getProvidedType(TypeLiteral<? extends Provider<? extends T>> initialProviderTypeLiteral, 
       Errors errors) throws ErrorsException {
+    
+    TypeLiteral<? extends Provider<? extends T>> providerTypeLiteral = initialProviderTypeLiteral;
+    while (providerTypeLiteral.getRawType() != Provider.class) {
+      providerTypeLiteral = (TypeLiteral<? extends Provider<? extends T>>) 
+          providerTypeLiteral.getSupertype(Provider.class);  
+    }
+    
     Type providerType = providerTypeLiteral.getType();
-
+    
     // If the Provider has no type parameter (raw Provider)...
     if (!(providerType instanceof ParameterizedType)) {
       throw errors.cannotInjectRawProvider().toException();
