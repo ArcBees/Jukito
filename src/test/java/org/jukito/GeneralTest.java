@@ -18,6 +18,7 @@ package org.jukito;
 
 import com.google.inject.Inject;
 import com.google.inject.Key;
+import com.google.inject.TypeLiteral;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 
@@ -46,6 +47,8 @@ public class GeneralTest {
       bindConstant().annotatedWith(Names.named("VALUE2")).to(MyEnum.VALUE2);
       bind(Key.get(TestClass.class, Value3.class)).toInstance(new TestClass(MyEnum.VALUE3));
       bind(Key.get(TestClass.class, Names.named("VALUE2"))).to(TestClass.class).in(TestScope.SINGLETON);
+      bind(new TypeLiteral<ParameterizedTestClass<Integer>>() { }).in(TestScope.SINGLETON);
+      bind(new TypeLiteral<ParameterizedTestClass<Double>>() { }).to(ParameterizedTestClassDouble.class).in(TestScope.SINGLETON);
     }
   }
   
@@ -60,6 +63,49 @@ public class GeneralTest {
     @Inject
     public TestClass(@Named("VALUE2") MyEnum value) {
       this.value = value;
+    }
+  }
+  
+  static class ParameterizedTestClass<T> {
+    private final T value;
+    @Inject
+    public ParameterizedTestClass(@Named("200") T value) {
+      this.value = value;
+    }
+  }
+  
+  static class ParameterizedTestClassDouble extends ParameterizedTestClass<Double> {
+    @Inject
+    public ParameterizedTestClassDouble() {
+      super(10.0);
+    }
+  }
+
+  static class TestClassWithMethodInjection {
+    private int value;
+    @Inject
+    public TestClassWithMethodInjection(@OneHundred Integer value) {
+      this.value = value;
+    }
+    @Inject
+    public void setValue(@Named("200") Integer value) {
+      this.value = value;
+    }
+  }
+  
+  interface NonBoundInterface {
+    int getValue();
+  }
+  
+  static class TestClassWithOptionalInjection {
+    private int value;
+    @Inject
+    public TestClassWithOptionalInjection(@OneHundred Integer value) {
+      this.value = value;
+    }
+    @Inject(optional = true)
+    public void setValue(NonBoundInterface obj) {
+      value = obj.getValue(); // Should never be called, NonBoundInterface should not be mocked
     }
   }
   
@@ -80,4 +126,29 @@ public class GeneralTest {
     assertEquals(MyEnum.VALUE3, testClassValue3.value);
     assertEquals(MyEnum.VALUE2, testClassValue2.value);
   }
+  
+  @Test
+  public void testParameterizedInjection1(
+      ParameterizedTestClass<Integer> testClass) {
+    assertEquals(200, (int) testClass.value);
+  }
+
+  @Test
+  public void testParameterizedInjection2(
+      ParameterizedTestClass<Double> testClass) {
+    assertEquals(10.0, (double) testClass.value, 0.0000001);
+  }
+  
+  @Test
+  public void testMethodInjection(
+      TestClassWithMethodInjection testClass) {
+    assertEquals(200, testClass.value);
+  }
+  
+  @Test
+  public void testOptionalInjection(
+      TestClassWithOptionalInjection testClass) {
+    assertEquals(100, testClass.value);
+  }
+  
 }

@@ -19,6 +19,7 @@ package org.jukito;
 import com.google.inject.Inject;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
 
 import org.junit.AfterClass;
 import org.junit.Test;
@@ -62,7 +63,7 @@ public class SingletonTest {
       Bookkeeper.numberOfTimesEagerSingletonIsInstantiated++;
     }
   }
-
+  
   /**
    * This should register only in tests where it is injected.
    */
@@ -74,7 +75,15 @@ public class SingletonTest {
       Bookkeeper.numberOfTimesSingletonIsInstantiated++;
     }
   }
-  
+
+  /**
+   * This should be different from one test to the next.
+   */
+  @TestMockSingleton
+  interface MyTestMockSingleton {
+    void dummy();
+  }
+
   @Inject Registry registry;
   
   @Test
@@ -87,9 +96,21 @@ public class SingletonTest {
     assertEquals(2, registry.registrationCount);
   }
 
+  @Test
+  public void injectionOfMockShouldBeADifferentObject1(MyTestMockSingleton myTestMockSingleton) {
+    myTestMockSingleton.dummy();
+    verify(myTestMockSingleton).dummy();
+  }
+  
+  @Test
+  public void injectionOfMockShouldBeADifferentObject2(MyTestMockSingleton myTestMockSingleton) {
+    myTestMockSingleton.dummy();
+    verify(myTestMockSingleton).dummy();
+  }
+  
   @AfterClass
   public static void verifyNumberOfInstantiations() {
-    assertEquals(2, Bookkeeper.numberOfTimesEagerSingletonIsInstantiated);
+    assertEquals(4, Bookkeeper.numberOfTimesEagerSingletonIsInstantiated);
     assertEquals(1, Bookkeeper.numberOfTimesSingletonIsInstantiated);
   }
 
