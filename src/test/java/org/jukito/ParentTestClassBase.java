@@ -79,12 +79,17 @@ public class ParentTestClassBase {
   @Inject protected Provider<DummyInterface> dummyProvider;
   @Inject protected MockSingletonDefinedInParent mockSingletonDefinedInParent;
   
-  // This keeps track that the parent test was executed.
-  static boolean parentTestShouldRunExecuted;
+  /**
+   * This class keeps track of what happens in all the tests run in this
+   * class and its child. It's used to make sure all expected tests are called.
+   */
+  protected static class Bookkeeper {
+    static boolean parentTestShouldRunExecuted;
+  }
   
   @Test
   public void parentTestShouldRun() {
-    parentTestShouldRunExecuted = true;
+    Bookkeeper.parentTestShouldRunExecuted = true;
   }
   
   @Test
