@@ -498,7 +498,7 @@ public abstract class JukitoModule extends TestModule {
     @Override
     public void to(Class<?> constant) {
       delegate.to(constant);
-      bindingInfo.abstractType = TypeLiteral.get(constant.getClass());
+      bindingInfo.abstractType = TypeLiteral.get(Class.class);
     }
 
     @Override

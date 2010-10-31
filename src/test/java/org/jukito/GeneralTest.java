@@ -43,14 +43,39 @@ public class GeneralTest {
     protected void configureTest() {
       bindConstant().annotatedWith(OneHundred.class).to(100);
       bindConstant().annotatedWith(Names.named("200")).to(200);
+      bindConstant().annotatedWith(Names.named("HelloWorld")).to("Hello World!");
+      bindConstant().annotatedWith(Names.named("500L")).to(500L);
+      bindConstant().annotatedWith(Names.named("true")).to(true);
+      bindConstant().annotatedWith(Names.named("3.1415")).to(3.1415);
+      bindConstant().annotatedWith(Names.named("2.718f")).to(2.718f);
+      bindConstant().annotatedWith(Names.named("short8")).to((short) 8);
+      bindConstant().annotatedWith(Names.named("'a'")).to('a');
+      bindConstant().annotatedWith(Names.named("IntegerClass")).to(Integer.class);
       bindConstant().annotatedWith(Names.named("VALUE1")).to(MyEnum.VALUE1);
       bindConstant().annotatedWith(Names.named("VALUE2")).to(MyEnum.VALUE2);
+      bind(MyInteger.class).annotatedWith(OneHundred.class).toInstance(new MyIntegerImpl(100));
+      bind(MyInteger.class).annotatedWith(Names.named("200")).toInstance(new MyIntegerImpl(200));
       bind(Key.get(TestClass.class, Value3.class)).toInstance(new TestClass(MyEnum.VALUE3));
       bind(Key.get(TestClass.class, Names.named("VALUE2"))).to(TestClass.class).in(TestScope.SINGLETON);
       bind(new TypeLiteral<ParameterizedTestClass<Integer>>() { }).in(TestScope.SINGLETON);
       bind(new TypeLiteral<ParameterizedTestClass<Double>>() { }).to(ParameterizedTestClassDouble.class).in(TestScope.SINGLETON);
     }
   }
+  
+  interface MyInteger {
+    int getValue();
+  } 
+
+  static class MyIntegerImpl implements MyInteger {
+    private final int value;
+    MyIntegerImpl(int value) {
+      this.value = value;
+    }
+    @Override
+    public int getValue() {
+      return value;
+    }
+  } 
   
   static enum MyEnum {
     VALUE1,
@@ -113,18 +138,37 @@ public class GeneralTest {
   public void testConstantInjection(
       @OneHundred Integer oneHundred,
       @Named("200") Integer twoHundred,
+      @Named("HelloWorld") String helloWorld,
+      @Named("500L") long fiveHundred,
+      @Named("3.1415") double pi,
+      @Named("2.718f") float e,
+      @Named("short8") short eight,
+      @Named("'a'") char a,
+      @SuppressWarnings("rawtypes")
+      @Named("IntegerClass") Class integerClass,
       @Named("VALUE1") MyEnum value1) {
     assertEquals(100, (int) oneHundred);
     assertEquals(200, (int) twoHundred);
+    assertEquals("Hello World!", helloWorld);
+    assertEquals(500L, fiveHundred);
+    assertEquals(3.1415, pi, 0.0000001);
+    assertEquals(2.718f, e, 0.00001);
+    assertEquals(8, eight);
+    assertEquals('a', a);
+    assertEquals(Integer.class, integerClass);
     assertEquals(MyEnum.VALUE1, value1);
   }
 
   @Test
   public void testInjectBoundWithKeys(
       @Value3 TestClass testClassValue3,
-      @Named("VALUE2") TestClass testClassValue2) {
+      @Named("VALUE2") TestClass testClassValue2,
+      @OneHundred MyInteger testMyInteger100,
+      @Named("200") MyInteger testMyInteger200) {
     assertEquals(MyEnum.VALUE3, testClassValue3.value);
     assertEquals(MyEnum.VALUE2, testClassValue2.value);
+    assertEquals(100, testMyInteger100.getValue());
+    assertEquals(200, testMyInteger200.getValue());
   }
   
   @Test
