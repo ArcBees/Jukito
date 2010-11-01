@@ -41,10 +41,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * TODO: Rework this documentation
+ * <p />
  * This class implements the mockito runner but allows Guice dependency
  * injection. To setup the guice environment, the test class can have an inner
  * static class deriving from {@link TestModule}. This last class will let you bind
- * {@link TestSingletonMockProvider} and the runner will make sure these
+ * {@link TestSingleton} and {@link TestEagerSingleton} and the runner will make sure these
  * singletons are reset at every invocation of a test case.
  * <p />
  * This code not very clean as it is cut & paste from

@@ -40,7 +40,7 @@ public class MockProvider<T> implements Provider<T> {
   /**
    * Construct a {@link Provider} that will return mocked objects of the specified types.
    * 
-   * @param mock The {@link Class} of the mock object to provide.
+   * @param classToProvide The {@link Class} of the mock object to provide.
    */
   public MockProvider(Class<T> classToProvide) {
     this.classToProvide = classToProvide;

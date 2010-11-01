@@ -46,16 +46,15 @@ public class SpyProvider<T> implements Provider<T> {
 
   private static Map<Class<?>, Injector> testClassToInjector = new HashMap<Class<?>, Injector>();
   private final Class<?> testClass;
-private final InjectionPoint injectionPoint;
+  private final InjectionPoint injectionPoint;
   private final Constructor<T> constructor;
   
   /**
    * Construct a {@link Provider} that will return spied instances of objects 
    * of the specified types.
    * 
-   * @param injector The {@link Class} of the mock object to provide.
-   * @param typeToProvide The {@link TypeLiteral} of the mock object to provide.
-   * @param annotation 
+   * @param testClass The test class, running with {@link JukitoRunner}.
+   * @param typeToProvide The {@link TypeLiteral} of the spy object to provide.
    */
   @SuppressWarnings("unchecked")
   public SpyProvider(Class<?> testClass, TypeLiteral<T> typeToProvide) {
@@ -63,8 +62,8 @@ private final InjectionPoint injectionPoint;
     injectionPoint = InjectionPoint.forConstructorOf(typeToProvide);
     constructor = (Constructor<T>) injectionPoint.getMember();
   }
-
   @Override
+
   public T get() {
     List<Dependency<?>> dependencies = injectionPoint.getDependencies();
     Injector injector = testClassToInjector.get(testClass);

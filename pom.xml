@@ -10,6 +10,8 @@
 		<name>ArcBees Inc.</name>
 		<url>http://arcbees.com</url>
 	</organization>
+  <description>A testing framework with automocking base on JUnit, Guice and Mokito.</description>
+  <url>http://jukito.org</url>
 	<developers>
 		<developer>
 			<name>Philippe Beaudoin</name>
@@ -37,7 +39,6 @@
 			<timezone>-4</timezone>
 		</developer>
 	</developers>
-	<url>http://jukito.org</url>
 	<issueManagement>
 		<system>Google Code</system>
 		<url>http://code.google.com/p/jukito/issues/list</url>
@@ -57,6 +58,14 @@
 		<tag>HEAD</tag>
 		<url>http://code.google.com/p/jukito/source/browse/</url>
 	</scm>
+	<licenses>
+	  <license>
+	    <name>Apache 2</name>
+	    <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+	    <distribution>repo</distribution>
+	    <comments>A business-friendly OSS license</comments>
+	  </license>
+	</licenses>
 	<dependencies>
 		<dependency>
 			<groupId>org.mockito</groupId>
@@ -105,42 +114,11 @@
 					</excludes>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-eclipse-plugin</artifactId>
-				<version>2.8</version>
-				<configuration>
-					<additionalBuildcommands>
-						<buildcommand>net.sf.eclipsecs.core.CheckstyleBuilder</buildcommand>
-					</additionalBuildcommands>
-					<additionalProjectnatures>
-						<projectnature>net.sf.eclipsecs.core.CheckstyleNature</projectnature>
-					</additionalProjectnatures>
-					<additionalConfig>
-						<file>
-							<name>.checkstyle</name>
-							<content>
-                  <![CDATA[<?xml version="1.0" encoding="UTF-8"?>
-
-<fileset-config file-format-version="1.2.0" simple-config="true" sync-formatter="false">
-  <local-check-config name="jukito" location="checkstyle/checkstyle.xml" type="project" description="">
-    <additional-data name="protect-config-file" value="false"/>
-  </local-check-config>
-  <fileset name="all" enabled="true" check-config-name="gwtp" local="true">
-    <file-match-pattern match-pattern="." include-pattern="true"/>
-  </fileset>
-  <filter name="FilesFromPackage" enabled="true">
-    <filter-data value="src/com/google"/>
-  </filter>
-  <filter name="NonSrcDirs" enabled="true"/>
-</fileset-config>
-]]>
-							</content>
-						</file>
-					</additionalConfig>
-				</configuration>
-			</plugin>
-
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.7</version>
+      </plugin>
 		</plugins>
 	</build>
 	<properties>
