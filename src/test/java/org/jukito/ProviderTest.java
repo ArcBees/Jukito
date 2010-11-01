@@ -19,6 +19,7 @@ package org.jukito;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 import org.junit.Test;
@@ -28,6 +29,7 @@ import com.google.inject.Inject;
 import com.google.inject.Key;
 import com.google.inject.Provider;
 import com.google.inject.name.Named;
+import com.google.inject.name.Names;
 
 /**
  * Test that providers injected by the tester module behaves correctly.
@@ -50,6 +52,11 @@ public class ProviderTest {
       bindNamed(Parent.class, "providerInstance").toProvider(new ParentProviderA()).in(TestSingleton.class);
       bindNamed(Parent.class, "providerClass").toProvider(ParentProviderB.class).in(TestSingleton.class);
       bindNamed(Parent.class, "providerKey").toProvider(Key.get(ParentProviderA.class)).in(TestSingleton.class);
+      bindNamedMock(UninstanciableClass.class, "cannotInstantiate1").in(TestScope.SINGLETON);
+      bind(UninstanciableClass.class).annotatedWith(Names.named("cannotInstantiate2")).toProvider(MyMockProvider2.class);
+      bind(UninstanciableClass.class).annotatedWith(Names.named("cannotInstantiate3")).toProvider(Key.get(MyMockProvider3.class));
+      bind(ClassWithMockedDependency1.class).annotatedWith(Names.named("MockedDependency1")).toProvider(MyProvider1.class);
+      bind(ClassWithMockedDependency2.class).annotatedWith(Names.named("MockedDependency2")).toProvider(Key.get(MyProvider2.class));
     }
   }
   
@@ -109,6 +116,81 @@ public class ProviderTest {
       return childBProvider.get();
     }
   }
+
+  static class UninstanciableClass {
+    private UninstanciableClass() { }
+    public int getValue() {
+      return 42;
+    }
+  }
+  
+  static class MyMockProvider2 extends MockProvider<UninstanciableClass> {
+    @Inject
+    public MyMockProvider2() {
+      super(UninstanciableClass.class);
+    }    
+  }
+  
+  static class MyMockProvider3 extends MockProvider<UninstanciableClass> {
+    @Inject
+    public MyMockProvider3() {
+      super(UninstanciableClass.class);
+    }    
+  }
+
+  interface DependencyShouldBeMocked1 {
+    int getValue();
+  }
+  
+  static class ClassWithMockedDependency1 {
+    private final DependencyShouldBeMocked1 dependency;
+    @Inject
+    public ClassWithMockedDependency1(DependencyShouldBeMocked1 dependency) {
+      this.dependency = dependency;
+    }
+    public DependencyShouldBeMocked1 getDependency() {
+      return dependency;
+    }
+  }
+
+  static class MyProvider1 implements Provider<ClassWithMockedDependency1> {
+    final Provider<ClassWithMockedDependency1> provider;
+    @Inject
+    public MyProvider1(Provider<ClassWithMockedDependency1> provider) {
+      this.provider = provider;
+    }
+    @Override
+    public ClassWithMockedDependency1 get() {
+      return provider.get();
+    }
+  }
+  
+  interface DependencyShouldBeMocked2 {
+    int getValue();
+  }
+  
+  static class ClassWithMockedDependency2 {
+    private final DependencyShouldBeMocked2 dependency;
+    @Inject
+    public ClassWithMockedDependency2(DependencyShouldBeMocked2 dependency) {
+      this.dependency = dependency;
+    }
+    public DependencyShouldBeMocked2 getDependency() {
+      return dependency;
+    }
+  }
+  
+  static class MyProvider2 implements Provider<ClassWithMockedDependency2> {
+    final Provider<ClassWithMockedDependency2> provider;
+    @Inject
+    public MyProvider2(Provider<ClassWithMockedDependency2> provider) {
+      this.provider = provider;
+    }    
+    @Override
+    public ClassWithMockedDependency2 get() {
+      return provider.get();
+    }
+  }
   
   @Test
   public void mockSingletonProviderShouldReturnTheSameInstance(
@@ -158,4 +240,33 @@ public class ProviderTest {
     assertEquals(parentProvidedFromProviderKey.getClass(), ChildA.class);
   }
 
+  @Test
+  public void shouldInjectProviderOfClassWithPrivateConstructor1(
+      @Named("cannotInstantiate1") UninstanciableClass classWithPrivateConstructor) {
+    verify(classWithPrivateConstructor, never()).getValue();
+  }
+
+  @Test
+  public void shouldInjectProviderOfClassWithPrivateConstructor2(
+      @Named("cannotInstantiate2") UninstanciableClass classWithPrivateConstructor) {
+    verify(classWithPrivateConstructor, never()).getValue();
+  }
+
+  @Test
+  public void shouldInjectProviderOfClassWithPrivateConstructor3(
+      @Named("cannotInstantiate3") UninstanciableClass classWithPrivateConstructor) {
+    verify(classWithPrivateConstructor, never()).getValue();
+  }
+
+  @Test
+  public void testInjectingProviderShouldInstantiateDependencies1(
+      @Named("MockedDependency1") ClassWithMockedDependency1 testClass) {
+    verify(testClass.getDependency(), never()).getValue();
+  }
+  
+  @Test
+  public void testInjectingProviderShouldInstantiateDependencies2(
+      @Named("MockedDependency2") ClassWithMockedDependency2 testClass) {
+    verify(testClass.getDependency(), never()).getValue();
+  }
 }

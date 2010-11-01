@@ -16,16 +16,18 @@
 
 package org.jukito;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import com.google.inject.Inject;
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
-
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 /**
  * Test various general behaviors.
@@ -59,6 +61,9 @@ public class GeneralTest {
       bind(Key.get(TestClass.class, Names.named("VALUE2"))).to(TestClass.class).in(TestSingleton.class);
       bind(new TypeLiteral<ParameterizedTestClass<Integer>>() { }).in(TestScope.SINGLETON);
       bind(new TypeLiteral<ParameterizedTestClass<Double>>() { }).to(ParameterizedTestClassDouble.class).in(TestScope.SINGLETON);
+      bindNamedMock(ClassWithUninstanciableDependency3.class, "UninstanciableDependency3a");
+      bind(ClassWithUninstanciableDependency3.class).annotatedWith(Names.named("UninstanciableDependency3b")).toProvider(MyMockProvider3b.class);
+      bind(ClassWithUninstanciableDependency3.class).annotatedWith(Names.named("UninstanciableDependency3c")).toProvider(Key.get(MyMockProvider3c.class));
     }
   }
   
@@ -133,6 +138,50 @@ public class GeneralTest {
       value = obj.getValue(); // Should never be called, NonBoundInterface should not be mocked
     }
   }
+
+  // This class will cause an error if bound
+  static class UninstanciableClass {
+    private UninstanciableClass() { }
+  }  
+  
+  @TestMockSingleton
+  static class ClassWithUninstanciableDependency1 {
+    @Inject
+    public ClassWithUninstanciableDependency1(UninstanciableClass dependency) { }
+    public int getValue() {
+      return 42;
+    }
+  }
+  
+  abstract static class ClassWithUninstanciableDependency2 {
+    @Inject
+    public ClassWithUninstanciableDependency2(UninstanciableClass dependency) { }
+    public int getValue() {
+      return 42;
+    }
+  }
+
+  static class ClassWithUninstanciableDependency3 {
+    @Inject
+    public ClassWithUninstanciableDependency3(UninstanciableClass dependency) { }
+    public int getValue() {
+      return 42;
+    }
+  }
+  
+  static class MyMockProvider3b extends MockProvider<ClassWithUninstanciableDependency3> {
+    @Inject
+    public MyMockProvider3b() {
+      super(ClassWithUninstanciableDependency3.class);
+    }    
+  }
+  
+  static class MyMockProvider3c extends MockProvider<ClassWithUninstanciableDependency3> {
+    @Inject
+    public MyMockProvider3c() {
+      super(ClassWithUninstanciableDependency3.class);
+    }    
+  }
   
   @Test
   public void testConstantInjection(
@@ -193,6 +242,36 @@ public class GeneralTest {
   public void testOptionalInjection(
       TestClassWithOptionalInjection testClass) {
     assertEquals(100, testClass.value);
+  }
+  
+  @Test
+  public void testInjectingMockShouldNotInstantiateDependencies1(
+      ClassWithUninstanciableDependency1 testClass) {
+    verify(testClass, never()).getValue();
+  }
+  
+  @Test
+  public void testInjectingMockShouldNotInstantiateDependencies2(
+      ClassWithUninstanciableDependency2 testClass) {
+    verify(testClass, never()).getValue();
+  }
+  
+  @Test
+  public void testInjectingMockShouldNotInstantiateDependencies3a(
+      @Named("UninstanciableDependency3a") ClassWithUninstanciableDependency3 testClass) {
+    verify(testClass, never()).getValue();
+  }
+  
+  @Test
+  public void testInjectingMockShouldNotInstantiateDependencies3b(
+      @Named("UninstanciableDependency3b") ClassWithUninstanciableDependency3 testClass) {
+    verify(testClass, never()).getValue();
+  }
+  
+  @Test
+  public void testInjectingMockShouldNotInstantiateDependencies3c(
+      @Named("UninstanciableDependency3c") ClassWithUninstanciableDependency3 testClass) {
+    verify(testClass, never()).getValue();
   }
   
 }

@@ -16,6 +16,20 @@
 
 package org.jukito;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
 import com.google.inject.Key;
 import com.google.inject.Provider;
 import com.google.inject.Scope;
@@ -26,23 +40,8 @@ import com.google.inject.binder.ConstantBindingBuilder;
 import com.google.inject.binder.LinkedBindingBuilder;
 import com.google.inject.binder.ScopedBindingBuilder;
 import com.google.inject.internal.Errors;
-import com.google.inject.internal.ErrorsException;
 import com.google.inject.spi.Dependency;
 import com.google.inject.spi.InjectionPoint;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 /**
  * A guice {@link com.google.inject.Module Module} with a bit of syntactic sugar to bind within
@@ -152,7 +151,7 @@ public abstract class JukitoModule extends TestModule {
     // Recursively add the dependencies of all the bindings observed
     for (int i = 0; i < bindingsObserved.size(); ++i) {
       BindingInfo bindingInfo = bindingsObserved.get(i);
-      if (!bindingInfo.isBoundToInstance) {
+      if (!bindingInfo.isBoundToInstanceOrMock) {
         if (bindingInfo.boundType != null) {
           addDependencies(Key.get(bindingInfo.boundType), keysObserved, keysNeeded);
         } else {
@@ -174,6 +173,7 @@ public abstract class JukitoModule extends TestModule {
     keysNeeded.add(keyNeeded);
     bindIfConcrete(keysObserved, keyNeeded);
   }
+  
   private void bindIfConcrete(
       Set<Key<?>> keysObserved, Key<?> key) {
     TypeLiteral<?> parameter = key.getTypeLiteral();
@@ -338,15 +338,18 @@ public abstract class JukitoModule extends TestModule {
     @Override
     public void toInstance(T instance) {
       // Binding to an instance, class cannot be injected
-      bindingInfo.isBoundToInstance = true;
+      bindingInfo.isBoundToInstanceOrMock = true;
       delegate.toInstance(instance);
     }
 
     @Override
     public ScopedBindingBuilder toProvider(Provider<? extends T> provider) {
-      // Can't do better than use our own abstract type as a guess of the bound type
-      // incidentally, this works great for spy providers
-      bindingInfo.boundType = bindingInfo.abstractType;
+      if (SpyProvider.class.isAssignableFrom(provider.getClass())) {
+        // For a SpyProvider, consider all the dependencies of the class spied upon
+        bindingInfo.boundType = bindingInfo.abstractType;
+      } else {
+        bindingInfo.isBoundToInstanceOrMock = true;        
+      }
       return delegate.toProvider(provider);
     }
 
@@ -360,13 +363,7 @@ public abstract class JukitoModule extends TestModule {
     @Override
     public ScopedBindingBuilder toProvider(
         Key<? extends Provider<? extends T>> key) {
-      Errors errors = new Errors();
-      try {
-        bindingInfo.boundType = GuiceUtils.getProvidedType(key.getTypeLiteral(), errors);
-      } catch (ErrorsException e) {
-        errors.merge(e.getErrors()); 
-      }
-      errors.throwConfigurationExceptionIfErrorsExist();
+      bindingInfo.boundType = key.getTypeLiteral();
       return delegate.toProvider(key);
     }
 
@@ -419,7 +416,7 @@ public abstract class JukitoModule extends TestModule {
         AnnotatedConstantBindingBuilder delegate) {
       this.bindingInfo = bindingInfo;
       this.delegate = delegate;
-      bindingInfo.isBoundToInstance = true;
+      bindingInfo.isBoundToInstanceOrMock = true;
     }
 
     @Override
@@ -445,7 +442,7 @@ public abstract class JukitoModule extends TestModule {
         ConstantBindingBuilder delegate) {
       this.bindingInfo = bindingInfo;
       this.delegate = delegate;
-      bindingInfo.isBoundToInstance = true;
+      bindingInfo.isBoundToInstanceOrMock = true;
     }
 
     @Override
@@ -514,7 +511,7 @@ public abstract class JukitoModule extends TestModule {
     private Annotation annotation;
     private Class<? extends Annotation> annotationClass;
     private TypeLiteral<?> boundType;
-    private boolean isBoundToInstance;
+    private boolean isBoundToInstanceOrMock;
   }
 
 }
