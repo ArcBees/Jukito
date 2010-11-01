@@ -36,7 +36,7 @@ public class ParentTestClassTest extends ParentTestClassBase {
   /**
    * Guice test module.
    */
-  public static class Module extends JukitoModule {
+  static class Module extends JukitoModule {
     @Override
     protected void configureTest() {
       bind(DummyInterface.class).to(MyDummyClass.class).in(TestScope.SINGLETON);

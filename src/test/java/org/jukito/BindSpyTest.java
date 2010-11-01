@@ -37,7 +37,7 @@ public class BindSpyTest {
   /**
    * Guice test module.
    */
-  public static class Module extends JukitoModule {
+  static class Module extends JukitoModule {
     @Override
     protected void configureTest() {
       bindSpy(SimpleClass.class).in(TestScope.SINGLETON);

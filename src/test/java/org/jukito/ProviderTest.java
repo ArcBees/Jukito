@@ -42,7 +42,7 @@ public class ProviderTest {
   /**
    * Guice test module.
    */
-  public static class Module extends JukitoModule {
+  static class Module extends JukitoModule {
     @Override
     protected void configureTest() {
       bindNamedMock(Mock.class, "singleton").in(TestScope.SINGLETON);

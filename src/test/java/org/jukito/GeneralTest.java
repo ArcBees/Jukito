@@ -40,7 +40,7 @@ public class GeneralTest {
   /**
    * Guice test module.
    */
-  public static class Module extends JukitoModule {
+  static class Module extends JukitoModule {
     @Override
     protected void configureTest() {
       bindConstant().annotatedWith(OneHundred.class).to(100);

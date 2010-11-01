@@ -34,7 +34,7 @@ public class ForceMockTest {
   /**
    * Guice test module.
    */
-  public static class Module extends JukitoModule {
+  static class Module extends JukitoModule {
     @Override
     protected void configureTest() {
       forceMock(Base1.class);

@@ -80,7 +80,7 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
       return;
     }
     TestModule testModule = null;
-    for (Class<?> subclass : testClass.getClasses()) {
+    for (Class<?> subclass : testClass.getDeclaredClasses()) {
       if (TestModule.class.isAssignableFrom(subclass)) {
         assert testModule == null : "More than one TestModule inner class found within test class \""
             + testClass.getName() + "\".";

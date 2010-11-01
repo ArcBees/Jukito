@@ -37,7 +37,7 @@ public class AllAnnotationTest {
   /**
    * Guice test module.
    */
-  public static class Module extends JukitoModule {
+  static class Module extends JukitoModule {
     @SuppressWarnings("unchecked")
     @Override
     protected void configureTest() {

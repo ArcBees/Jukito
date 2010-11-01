@@ -36,7 +36,7 @@ public class SingletonTest {
   /**
    * Guice test module.
    */
-  public static class Module extends JukitoModule {
+  static class Module extends JukitoModule {
     @Override
     protected void configureTest() {
       bind(MyEagerSingleton.class).asEagerSingleton();

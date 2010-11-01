@@ -41,7 +41,7 @@ public class ParentTestClassBase {
    * This should be automatically injected in the child class.
    */
   @TestSingleton
-  public static class SingletonDefinedInParent {
+  static class SingletonDefinedInParent {
     private String value = "SingletonDefinedInParentValue";
     public String getValue() {
       return value;
