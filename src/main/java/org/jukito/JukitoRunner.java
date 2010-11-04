@@ -98,7 +98,6 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
     }
     testModule.setTestClass(testClass);
     injector = Guice.createInjector(testModule);
-    SpyProvider.setInjector(testClass, injector);
   }
   
   @Override

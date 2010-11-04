@@ -16,18 +16,17 @@
 
 package org.jukito;
 
+import static org.mockito.Mockito.spy;
+
+import java.lang.reflect.Constructor;
+import java.util.List;
+
+import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
 import com.google.inject.spi.Dependency;
 import com.google.inject.spi.InjectionPoint;
-
-import static org.mockito.Mockito.spy;
-
-import java.lang.reflect.Constructor;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * For use in test cases where an {@link Provider} is required to provide an
@@ -44,10 +43,9 @@ import java.util.Map;
  */
 public class SpyProvider<T> implements Provider<T> {
 
-  private static Map<Class<?>, Injector> testClassToInjector = new HashMap<Class<?>, Injector>();
-  private final Class<?> testClass;
   private final InjectionPoint injectionPoint;
   private final Constructor<T> constructor;
+  @Inject private Injector injector;  // Guice will automatically inject this when the injector is created
   
   /**
    * Construct a {@link Provider} that will return spied instances of objects 
@@ -57,17 +55,14 @@ public class SpyProvider<T> implements Provider<T> {
    * @param typeToProvide The {@link TypeLiteral} of the spy object to provide.
    */
   @SuppressWarnings("unchecked")
-  public SpyProvider(Class<?> testClass, TypeLiteral<T> typeToProvide) {
-    this.testClass = testClass;
+  public SpyProvider(TypeLiteral<T> typeToProvide) {
     injectionPoint = InjectionPoint.forConstructorOf(typeToProvide);
     constructor = (Constructor<T>) injectionPoint.getMember();
   }
+  
   @Override
-
   public T get() {
     List<Dependency<?>> dependencies = injectionPoint.getDependencies();
-    Injector injector = testClassToInjector.get(testClass);
-    
     Object[] constructorParameters = new Object[dependencies.size()];
     for (Dependency<?> dependency : dependencies) {
       constructorParameters[dependency.getParameterIndex()] = 
@@ -81,9 +76,5 @@ public class SpyProvider<T> implements Provider<T> {
     }
     injector.injectMembers(instance);
     return spy(instance);
-  }
-
-  public static synchronized void setInjector(Class<?> testClass, Injector injector) {
-    testClassToInjector.put(testClass, injector);
   }
 }

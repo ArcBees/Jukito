@@ -164,7 +164,7 @@ public abstract class TestModule extends AbstractModule {
   }
 
   private <T> Provider<T> createNewSpyProvider(TypeLiteral<T> typeLiteral) {
-    return new SpyProvider<T>(testClass, typeLiteral);
+    return new SpyProvider<T>(typeLiteral);
   }
   
   /**
@@ -261,5 +261,4 @@ public abstract class TestModule extends AbstractModule {
       String name) {
     return bind(typeLiteral).annotatedWith(Names.named(name));
   }
-  
 }
