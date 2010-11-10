@@ -1,3 +1,4 @@
 glob:.classpath
 glob:.settings/**
 glob:target/**
+glob:bin/**

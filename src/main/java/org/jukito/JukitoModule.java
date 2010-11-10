@@ -30,6 +30,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Provider;
 import com.google.inject.Scope;
@@ -162,8 +163,9 @@ public abstract class JukitoModule extends TestModule {
 
     // Bind all keys needed but not observed as mocks
     for (Key<?> key : keysNeeded) {
-      if (!keysObserved.contains(key)) {
-        super.bind(key).toProvider(new MockProvider(key.getTypeLiteral().getRawType())).in(TestScope.SINGLETON);
+      Class<?> rawType = key.getTypeLiteral().getRawType();
+      if (!keysObserved.contains(key) && !isCoreGuiceType(rawType)) {
+        super.bind(key).toProvider(new MockProvider(rawType)).in(TestScope.SINGLETON);
       }
     }
   }
@@ -180,6 +182,7 @@ public abstract class JukitoModule extends TestModule {
     Class<?> rawType = parameter.getRawType();
     if (isInstantiable(rawType) &&
         !shouldForceMock(rawType) &&
+        !isCoreGuiceType(rawType) &&
         !keysObserved.contains(key)) {
       bind(key).in(TestScope.SINGLETON);
       keysObserved.add(key);
@@ -217,6 +220,10 @@ public abstract class JukitoModule extends TestModule {
     return !klass.isInterface() && !Modifier.isAbstract(klass.getModifiers());
   }
 
+  private boolean isCoreGuiceType(Class<?> klass) {
+    return TypeLiteral.class.isAssignableFrom(klass) || Injector.class.isAssignableFrom(klass);
+  }
+  
   @Override
   protected <T> LinkedBindingBuilder<T> bind(Key<T> key) {    
     return new SpyLinkedBindingBuilder<T>(newBindingObserved(key), super.bind(key));

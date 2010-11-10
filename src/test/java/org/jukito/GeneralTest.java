@@ -24,6 +24,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Named;
@@ -66,7 +67,7 @@ public class GeneralTest {
       bind(ClassWithUninstanciableDependency3.class).annotatedWith(Names.named("UninstanciableDependency3c")).toProvider(Key.get(MyMockProvider3c.class));
     }
   }
-  
+
   interface MyInteger {
     int getValue();
   } 
@@ -81,7 +82,7 @@ public class GeneralTest {
       return value;
     }
   } 
-  
+
   static enum MyEnum {
     VALUE1,
     VALUE2,
@@ -95,7 +96,7 @@ public class GeneralTest {
       this.value = value;
     }
   }
-  
+
   static class ParameterizedTestClass<T> {
     private final T value;
     @Inject
@@ -103,7 +104,7 @@ public class GeneralTest {
       this.value = value;
     }
   }
-  
+
   static class ParameterizedTestClassDouble extends ParameterizedTestClass<Double> {
     @Inject
     public ParameterizedTestClassDouble() {
@@ -122,11 +123,11 @@ public class GeneralTest {
       this.value = value;
     }
   }
-  
+
   interface NonBoundInterface {
     int getValue();
   }
-  
+
   static class TestClassWithOptionalInjection {
     private int value;
     @Inject
@@ -143,7 +144,7 @@ public class GeneralTest {
   static class UninstanciableClass {
     private UninstanciableClass() { }
   }  
-  
+
   @TestMockSingleton
   static class ClassWithUninstanciableDependency1 {
     @Inject
@@ -152,7 +153,7 @@ public class GeneralTest {
       return 42;
     }
   }
-  
+
   abstract static class ClassWithUninstanciableDependency2 {
     @Inject
     public ClassWithUninstanciableDependency2(UninstanciableClass dependency) { }
@@ -168,21 +169,32 @@ public class GeneralTest {
       return 42;
     }
   }
-  
+
   static class MyMockProvider3b extends MockProvider<ClassWithUninstanciableDependency3> {
     @Inject
     public MyMockProvider3b() {
       super(ClassWithUninstanciableDependency3.class);
     }    
   }
-  
+
   static class MyMockProvider3c extends MockProvider<ClassWithUninstanciableDependency3> {
     @Inject
     public MyMockProvider3c() {
       super(ClassWithUninstanciableDependency3.class);
     }    
   }
-  
+
+  static class TestGenericClassInjectedWithTypeLiteral<U> {
+    private final Class<? super U> injectedType;
+    @Inject
+    public TestGenericClassInjectedWithTypeLiteral(TypeLiteral<U> typeLiteral) {
+      injectedType = typeLiteral.getRawType(); 
+    }
+    public Class<? super U> getInjectedType() {
+      return injectedType;
+    }
+  }
+
   @Test
   public void testConstantInjection(
       @OneHundred Integer oneHundred,
@@ -219,7 +231,7 @@ public class GeneralTest {
     assertEquals(100, testMyInteger100.getValue());
     assertEquals(200, testMyInteger200.getValue());
   }
-  
+
   @Test
   public void testParameterizedInjection1(
       ParameterizedTestClass<Integer> testClass) {
@@ -231,47 +243,63 @@ public class GeneralTest {
       ParameterizedTestClass<Double> testClass) {
     assertEquals(10.0, (double) testClass.value, 0.0000001);
   }
-  
+
   @Test
   public void testMethodInjection(
       TestClassWithMethodInjection testClass) {
     assertEquals(200, testClass.value);
   }
-  
+
   @Test
   public void testOptionalInjection(
       TestClassWithOptionalInjection testClass) {
     assertEquals(100, testClass.value);
   }
-  
+
   @Test
   public void testInjectingMockShouldNotInstantiateDependencies1(
       ClassWithUninstanciableDependency1 testClass) {
     verify(testClass, never()).getValue();
   }
-  
+
   @Test
   public void testInjectingMockShouldNotInstantiateDependencies2(
       ClassWithUninstanciableDependency2 testClass) {
     verify(testClass, never()).getValue();
   }
-  
+
   @Test
   public void testInjectingMockShouldNotInstantiateDependencies3a(
       @Named("UninstanciableDependency3a") ClassWithUninstanciableDependency3 testClass) {
     verify(testClass, never()).getValue();
   }
-  
+
   @Test
   public void testInjectingMockShouldNotInstantiateDependencies3b(
       @Named("UninstanciableDependency3b") ClassWithUninstanciableDependency3 testClass) {
     verify(testClass, never()).getValue();
   }
-  
+
   @Test
   public void testInjectingMockShouldNotInstantiateDependencies3c(
       @Named("UninstanciableDependency3c") ClassWithUninstanciableDependency3 testClass) {
     verify(testClass, never()).getValue();
   }
+
+  @Test
+  public void testInjectingClassInjectedWithTypeLiteralShouldWork(
+      TestGenericClassInjectedWithTypeLiteral<String> testClass) {
+    assertEquals(String.class, testClass.getInjectedType());
+  }
+
+  @Test
+  public void testInjectingTypeLiteralShouldWork(
+      TypeLiteral<Integer> typeLiteral) {
+    assertEquals(Integer.class, typeLiteral.getRawType());
+  }  
   
+  @Test
+  public void testInjectingInjectorShouldWork(
+      Injector injector) {
+  }  
 }
