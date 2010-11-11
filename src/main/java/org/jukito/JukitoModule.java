@@ -35,6 +35,8 @@ import com.google.inject.Key;
 import com.google.inject.Provider;
 import com.google.inject.Scope;
 import com.google.inject.TypeLiteral;
+import com.google.inject.assistedinject.Assisted;
+import com.google.inject.assistedinject.AssistedInjectHelper;
 import com.google.inject.binder.AnnotatedBindingBuilder;
 import com.google.inject.binder.AnnotatedConstantBindingBuilder;
 import com.google.inject.binder.ConstantBindingBuilder;
@@ -70,7 +72,7 @@ public abstract class JukitoModule extends TestModule {
   protected void forceMock(Class<?> klass) {
     forceMock.add(klass);
   }
-  
+
   @SuppressWarnings({ "unchecked", "rawtypes" })
   public final void configure() {
     bindScopes();
@@ -164,7 +166,7 @@ public abstract class JukitoModule extends TestModule {
     // Bind all keys needed but not observed as mocks
     for (Key<?> key : keysNeeded) {
       Class<?> rawType = key.getTypeLiteral().getRawType();
-      if (!keysObserved.contains(key) && !isCoreGuiceType(rawType)) {
+      if (!keysObserved.contains(key) && !isCoreGuiceType(rawType) && !isAssistedInjection(key)) {
         super.bind(key).toProvider(new MockProvider(rawType)).in(TestScope.SINGLETON);
       }
     }
@@ -175,7 +177,7 @@ public abstract class JukitoModule extends TestModule {
     keysNeeded.add(keyNeeded);
     bindIfConcrete(keysObserved, keyNeeded);
   }
-  
+
   private void bindIfConcrete(
       Set<Key<?>> keysObserved, Key<?> key) {
     TypeLiteral<?> parameter = key.getTypeLiteral();
@@ -183,10 +185,15 @@ public abstract class JukitoModule extends TestModule {
     if (isInstantiable(rawType) &&
         !shouldForceMock(rawType) &&
         !isCoreGuiceType(rawType) &&
+        !isAssistedInjection(key) &&
         !keysObserved.contains(key)) {
       bind(key).in(TestScope.SINGLETON);
       keysObserved.add(key);
     }
+  }
+
+  private boolean isAssistedInjection(Key<?> key) {    
+    return key.getAnnotationType() != null && Assisted.class.isAssignableFrom(key.getAnnotationType());
   }
 
   private boolean shouldForceMock(Class<?> klass) {
@@ -206,13 +213,13 @@ public abstract class JukitoModule extends TestModule {
         break;
       }
     }
-    
+
     if (result) {
       forceMock.add(klass);
     } else {
       dontForceMock.add(klass);
     }
-    
+
     return result;
   }
 
@@ -223,7 +230,7 @@ public abstract class JukitoModule extends TestModule {
   private boolean isCoreGuiceType(Class<?> klass) {
     return TypeLiteral.class.isAssignableFrom(klass) || Injector.class.isAssignableFrom(klass);
   }
-  
+
   @Override
   protected <T> LinkedBindingBuilder<T> bind(Key<T> key) {    
     return new SpyLinkedBindingBuilder<T>(newBindingObserved(key), super.bind(key));
@@ -243,7 +250,7 @@ public abstract class JukitoModule extends TestModule {
   protected AnnotatedConstantBindingBuilder bindConstant() {
     return new SpyAnnotatedConstantBindingBuilder(newBindingObserved(), super.bindConstant());
   }
-  
+
   private BindingInfo newBindingObserved(Key<?> key) {
     BindingInfo bindingInfo = new BindingInfo();
     bindingInfo.abstractType = key.getTypeLiteral();
@@ -272,11 +279,11 @@ public abstract class JukitoModule extends TestModule {
     bindingsObserved.add(bindingInfo);
     return bindingInfo;
   }
-  
+
   private <T> void addDependencies(Key<T> key, Set<Key<?>> keysObserved, Set<Key<?>> keysNeeded) {
     TypeLiteral<T> type = key.getTypeLiteral();
     if (!isInstantiable(type.getRawType())) {
-        return;
+      return;
     }
     addInjectionPointDependencies(InjectionPoint.forConstructorOf(type),
         keysObserved, keysNeeded);
@@ -351,11 +358,15 @@ public abstract class JukitoModule extends TestModule {
 
     @Override
     public ScopedBindingBuilder toProvider(Provider<? extends T> provider) {
-      if (SpyProvider.class.isAssignableFrom(provider.getClass())) {
+      Class<?> providerClass = provider.getClass();
+      if (SpyProvider.class.isAssignableFrom(providerClass)) {
         // For a SpyProvider, consider all the dependencies of the class spied upon
         bindingInfo.boundType = bindingInfo.abstractType;
+      } else if (AssistedInjectHelper.isFactory(providerClass)) {
+        // For an assisted factory, consider all the dependencies of the class generated upon
+        bindingInfo.boundType = AssistedInjectHelper.getProvidedType(provider);
       } else {
-        bindingInfo.isBoundToInstanceOrMock = true;        
+        bindingInfo.isBoundToInstanceOrMock = true;
       }
       return delegate.toProvider(provider);
     }
@@ -512,7 +523,7 @@ public abstract class JukitoModule extends TestModule {
       bindingInfo.abstractType = TypeLiteral.get(constant.getClass());
     }
   }
-  
+
   private static class BindingInfo {
     private TypeLiteral<?> abstractType;
     private Annotation annotation;
