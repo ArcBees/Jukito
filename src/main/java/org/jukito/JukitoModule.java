@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import org.junit.After;
 import org.junit.Before;
@@ -32,8 +33,10 @@ import org.junit.Test;
 
 import com.google.inject.Injector;
 import com.google.inject.Key;
+import com.google.inject.MembersInjector;
 import com.google.inject.Provider;
 import com.google.inject.Scope;
+import com.google.inject.Stage;
 import com.google.inject.TypeLiteral;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInjectHelper;
@@ -228,7 +231,11 @@ public abstract class JukitoModule extends TestModule {
   }
 
   private boolean isCoreGuiceType(Class<?> klass) {
-    return TypeLiteral.class.isAssignableFrom(klass) || Injector.class.isAssignableFrom(klass);
+    return TypeLiteral.class.isAssignableFrom(klass) || 
+      Injector.class.isAssignableFrom(klass) ||
+      Logger.class.isAssignableFrom(klass) ||
+      Stage.class.isAssignableFrom(klass) ||
+      MembersInjector.class.isAssignableFrom(klass);
   }
 
   @Override

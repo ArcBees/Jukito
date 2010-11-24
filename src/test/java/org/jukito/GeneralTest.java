@@ -20,12 +20,16 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
+import java.util.logging.Logger;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Key;
+import com.google.inject.MembersInjector;
+import com.google.inject.Stage;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
@@ -65,6 +69,7 @@ public class GeneralTest {
       bindNamedMock(ClassWithUninstanciableDependency3.class, "UninstanciableDependency3a");
       bind(ClassWithUninstanciableDependency3.class).annotatedWith(Names.named("UninstanciableDependency3b")).toProvider(MyMockProvider3b.class);
       bind(ClassWithUninstanciableDependency3.class).annotatedWith(Names.named("UninstanciableDependency3c")).toProvider(Key.get(MyMockProvider3c.class));
+      bindMock(Logger.class);
     }
   }
 
@@ -301,5 +306,20 @@ public class GeneralTest {
   @Test
   public void testInjectingInjectorShouldWork(
       Injector injector) {
-  }  
+  }
+
+  @Test
+  public void testInjectingLoggerShouldWork(
+      Logger logger) {
+  }
+
+  @Test
+  public void testInjectingStageShouldWork(
+      Stage stage) {
+  }
+
+  @Test
+  public void testInjectingMembersInjectorShouldWork(
+      MembersInjector<TestClass> memberInjector) {
+  }
 }
