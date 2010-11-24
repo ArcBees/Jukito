@@ -69,7 +69,8 @@ public class GeneralTest {
       bindNamedMock(ClassWithUninstanciableDependency3.class, "UninstanciableDependency3a");
       bind(ClassWithUninstanciableDependency3.class).annotatedWith(Names.named("UninstanciableDependency3b")).toProvider(MyMockProvider3b.class);
       bind(ClassWithUninstanciableDependency3.class).annotatedWith(Names.named("UninstanciableDependency3c")).toProvider(Key.get(MyMockProvider3c.class));
-      bindMock(Logger.class);
+      // TODO: Try to bind a mock logger once Issue 9 is solved.
+      // bindMock(Logger.class);
     }
   }
 
