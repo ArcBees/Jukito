@@ -70,7 +70,7 @@ public abstract class JukitoModule extends TestModule {
    * By default, only abstract classes, interfaces and classes annotated with
    * {@link TestMockSingleton} are automatically mocked. Use {@link #forceMock}
    * to indicate that all concrete classes derived from the a specific type
-   * should be mocked in {@link org.jukito.TestMockSingleton} scope.
+   * will be mocked in {@link org.jukito.TestMockSingleton} scope.
    * 
    * @param klass The {@link Class} or interface for which all subclasses will
    *          be mocked.
