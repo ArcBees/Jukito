@@ -205,15 +205,27 @@ public class ProviderTest {
   }
   
   @Test
-  public void singletonClassShouldReturnTheSameInstance(
+  public void singletonProvidedClassShouldReturnTheSameInstance(
       @Named("singleton") Provider<Instance> provider) {
     assertSame(provider.get(), provider.get());
   }
-  
+
   @Test
-  public void nonSingletonClassShouldNotReturnTheSameInstance(
+  public void singletonClassShouldNotReturnTheSameInstance(
+      @Named("singleton") Instance obj1, @Named("singleton") Instance obj2) {
+    assertSame(obj1, obj2);
+  }
+
+  @Test
+  public void nonSingletonProvidedClassShouldNotReturnTheSameInstance(
       @Named("nonsingleton") Provider<Instance> provider) {
     assertNotSame(provider.get(), provider.get());
+  }
+
+  @Test
+  public void nonSingletonClassShouldNotReturnTheSameInstance(
+      @Named("nonsingleton") Instance obj1, @Named("nonsingleton") Instance obj2) {
+    assertNotSame(obj1, obj2);
   }
 
   @Test

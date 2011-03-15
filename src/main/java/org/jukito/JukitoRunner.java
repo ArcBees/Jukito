@@ -16,13 +16,11 @@
 
 package org.jukito;
 
-import com.google.inject.Binding;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Key;
-import com.google.inject.Scope;
-import com.google.inject.internal.Errors;
-import com.google.inject.spi.DefaultBindingScopingVisitor;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -34,11 +32,13 @@ import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.Statement;
 import org.mockito.internal.runners.util.FrameworkUsageValidator;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
+import com.google.inject.Binding;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Key;
+import com.google.inject.Scope;
+import com.google.inject.internal.Errors;
+import com.google.inject.spi.DefaultBindingScopingVisitor;
 
 /**
  * TODO: Rework this documentation
@@ -73,31 +73,43 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
     ensureInjector();
   }
 
+  @SuppressWarnings("unchecked")
   private void ensureInjector()
       throws InstantiationException, IllegalAccessException {
     Class<?> testClass = getTestClass().getJavaClass();
     if (injector != null) {
       return;
     }
-    TestModule testModule = null;
+    Class<? extends TestModule> testModuleClass = null;
     for (Class<?> subclass : testClass.getDeclaredClasses()) {
       if (TestModule.class.isAssignableFrom(subclass)) {
-        assert testModule == null : "More than one TestModule inner class found within test class \""
+        assert testModuleClass == null : "More than one TestModule inner class found within test class \""
             + testClass.getName() + "\".";
-        testModule = (TestModule) subclass.newInstance();
+        testModuleClass = (Class<? extends TestModule>) subclass;
       }
     }
-    if (testModule == null) {
+    if (testModuleClass == null) {
       if (useAutomockingIfNoEnvironmentFound) {
-        testModule = new JukitoModule() {          
-          @Override protected void configureTest() { } };
+        JukitoModule testModule = new JukitoModule() { @Override protected void configureTest() { } };
+        testModule.setTestClass(testClass);
+        injector = Guice.createInjector();
       } else {
-        testModule = new TestModule() {          
-          @Override protected void configureTest() { } };        
+        TestModule testModule = new TestModule() { @Override protected void configureTest() { } };
+        testModule.setTestClass(testClass);
+        injector = Guice.createInjector(testModule);
       }
+    } else {
+      TestModule testModule = testModuleClass.newInstance();
+      testModule.setTestClass(testClass);
+      if (testModule instanceof JukitoModule) {
+        // Create a module just for the purpose of collecting bindings
+        TestModule testModuleForCollection = testModuleClass.newInstance();
+        BindingsCollector collector = new BindingsCollector(testModuleForCollection);
+        collector.collectBindings();
+        ((JukitoModule) testModule).setBindingsObserved(collector.getBindingsObserved());
+      }
+      injector = Guice.createInjector(testModule);
     }
-    testModule.setTestClass(testClass);
-    injector = Guice.createInjector(testModule);
   }
   
   @Override

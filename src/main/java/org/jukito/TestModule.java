@@ -36,6 +36,16 @@ public abstract class TestModule extends AbstractModule {
   
   protected Class<?> testClass;
 
+  /**
+   * Attach the {@link TestModule} to a given test class.
+   * 
+   * @param testClass The test class to attach to this {@link TestModule}.
+   */
+  public void setTestClass(Class<?> testClass) {
+    this.testClass = testClass;
+  }
+
+  @Override
   public void configure() {
     bindScopes();
     configureTest();
@@ -44,10 +54,6 @@ public abstract class TestModule extends AbstractModule {
   protected void bindScopes() {
     bindScope(TestSingleton.class, TestScope.SINGLETON);
     bindScope(TestEagerSingleton.class, TestScope.EAGER_SINGLETON);
-  }
-  
-  public void setTestClass(Class<?> testClass) {
-    this.testClass = testClass;
   }
 
   /**

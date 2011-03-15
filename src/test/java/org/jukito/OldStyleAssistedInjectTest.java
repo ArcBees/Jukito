@@ -28,13 +28,14 @@ import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 
 /**
- * Test that make sure assisted injection is supported.
- * 
+ * Test that make sure old-style Guice 2.0 assisted injection is supported.
+ *  
  * @author Christian Goudreau
  * @author Philippe Beaudoin
  */
+@SuppressWarnings("deprecation") 
 @RunWith(JukitoRunner.class)
-public class AssistedInjectTest {
+public class OldStyleAssistedInjectTest {
   /**
    * Guice test module.
    */
@@ -50,7 +51,7 @@ public class AssistedInjectTest {
           FactoryProvider.newFactory(PaymentAmountFactory.class, RealPaymentAmount.class));
       bind(Amount.class).toInstance(new Amount() { 
         public String toString() {
-          return "An amount of 10.00 dollars.";
+          return "An amount of 10.00 ";
         }
       });
     }
@@ -109,9 +110,10 @@ public class AssistedInjectTest {
     boolean shouldAlwaysHideAmounts();
   }
 
-  // Class InjectedClass should be bound automatically as TestSingleton
+  // Class InjectedClass should be bound automatically
   // because it is a dependency of RealPaymentAmount
   static class InjectedClass {
+    @Inject @Named("moneySymbol") String moneySymbol;
   }
   
   static class RealPaymentAmount implements Payment {
@@ -131,42 +133,9 @@ public class AssistedInjectTest {
     @Override
     public String getPayment() {
       if (configuration.shouldAlwaysHideAmounts()) {
-        return "xxxxxxx";
+        return "xxxxxxx " + injectedClass.moneySymbol;
       }
-      return amount.toString();
-    }
-
-    @Override
-    public int hashCode() {
-      final int prime = 31;
-      int result = 1;
-      result = prime * result
-          + ((injectedClass == null) ? 0 : injectedClass.hashCode());
-      return result;
-    }
-
-    /* Checks only injectedClass, to ensure injectedClass is a singleton.
-     */
-    @Override
-    public boolean equals(Object obj) {
-      if (this == obj) {
-        return true;
-      }
-      if (obj == null) {
-        return false;
-      }
-      if (getClass() != obj.getClass()) {
-        return false;
-      }
-      RealPaymentAmount other = (RealPaymentAmount) obj;
-      if (injectedClass == null) {
-        if (other.injectedClass != null) {
-          return false;
-        }
-      } else if (!injectedClass.equals(other.injectedClass)) {
-        return false;
-      }
-      return true;
+      return amount.toString() + injectedClass.moneySymbol;
     }
   }
   
@@ -198,18 +167,6 @@ public class AssistedInjectTest {
     Payment payment = factoryString.create(amount);
     
     // THEN
-    assertEquals("An amount of 10.00 dollars.", payment.getPayment());
-  }
-
-  @Test
-  public void shouldInjectFactoryWithTestSingletonAsParameter(
-      PaymentAmountFactory factoryString,
-      Amount amount) {
-    // WHEN
-    Payment payment1 = factoryString.create(amount);
-    Payment payment2 = factoryString.create(amount);
-    
-    // THEN
-    assertEquals(payment1, payment2);
+    assertEquals("An amount of 10.00 $", payment.getPayment());
   }
 }
