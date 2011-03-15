@@ -92,7 +92,7 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
       if (useAutomockingIfNoEnvironmentFound) {
         JukitoModule testModule = new JukitoModule() { @Override protected void configureTest() { } };
         testModule.setTestClass(testClass);
-        injector = Guice.createInjector();
+        injector = Guice.createInjector(testModule);
       } else {
         TestModule testModule = new TestModule() { @Override protected void configureTest() { } };
         testModule.setTestClass(testClass);

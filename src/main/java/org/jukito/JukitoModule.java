@@ -125,12 +125,17 @@ public abstract class JukitoModule extends TestModule {
           if (subClass.isAnnotationPresent(TestSingleton.class)) {
             bind(subClass).in(TestScope.SINGLETON);
             keysObserved.add(key);
+            keysNeeded.add(key);
+            keysNeedingTransitiveDependencies.add(key);
           } else if (subClass.isAnnotationPresent(TestEagerSingleton.class)) {
             bind(subClass).in(TestScope.EAGER_SINGLETON);
             keysObserved.add(key);
+            keysNeeded.add(key);
+            keysNeedingTransitiveDependencies.add(key);
           } else if (subClass.isAnnotationPresent(TestMockSingleton.class)) {
             bindMock(subClass).in(TestScope.SINGLETON);
             keysObserved.add(key);
+            keysNeeded.add(key);
           }
         }
       }

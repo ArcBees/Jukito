@@ -16,14 +16,16 @@
 
 package org.jukito;
 
-import com.google.inject.Inject;
-
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertNotSame;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 import org.junit.AfterClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import com.google.inject.Inject;
 
 /**
  * Test that the various flavours of singletons work correctly.
@@ -40,6 +42,7 @@ public class SingletonTest {
     @Override
     protected void configureTest() {
       bind(MyEagerSingleton.class).asEagerSingleton();
+      bindMock(MyTestMockSingletonBoundNonMock.class);
     }
   }
   
@@ -106,6 +109,15 @@ public class SingletonTest {
     void dummy();
   }
 
+  /**
+   * This should be bound as non-mock even though there is an annotation, 
+   * because the module explicitely binds it.
+   */
+  @TestMockSingleton
+  interface MyTestMockSingletonBoundNonMock {
+    void dummy();
+  }
+  
   @Inject Registry registry;
   
   @Test
@@ -130,9 +142,18 @@ public class SingletonTest {
     verify(myTestMockSingleton).dummy();
   }
   
+  @Test
+  public void injectionOfSingletonMockExplicitelyBoundAsNonSingleton(
+      MyTestMockSingletonBoundNonMock a,
+      MyTestMockSingletonBoundNonMock b) {
+    verify(a, never()).dummy();
+    verify(b, never()).dummy();
+    assertNotSame(a, b);
+  }
+  
   @AfterClass
   public static void verifyNumberOfInstantiations() {
-    assertEquals(4, Bookkeeper.numberOfTimesTestEagerSingletonIsInstantiated);
+    assertEquals(5, Bookkeeper.numberOfTimesTestEagerSingletonIsInstantiated);
     assertEquals(1, Bookkeeper.numberOfTimesTestSingletonIsInstantiated);
     assertEquals(1, Bookkeeper.numberOfTimesEagerSingletonIsInstantiated);
   }
