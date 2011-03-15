@@ -107,7 +107,7 @@ public abstract class JukitoModule extends TestModule {
           keysNeeded.add(dependency.getKey());
         }
       }
-    }    
+    }
 
     // Make sure needed keys from Guice bindings are bound as mock or to instances (but not as test singletons)
     for (Key<?> keyNeeded : keysNeeded) {
@@ -199,8 +199,8 @@ public abstract class JukitoModule extends TestModule {
     bindIfConcrete(keysObserved, keyNeeded, asTestSingleton);
   }
 
-  private void bindIfConcrete(Set<Key<?>> keysObserved,
-      Key<?> key, boolean asTestSingleton) {
+  private <T> void bindIfConcrete(Set<Key<?>> keysObserved,
+      Key<T> key, boolean asTestSingleton) {
     TypeLiteral<?> parameter = key.getTypeLiteral();
     Class<?> rawType = parameter.getRawType();
     if (isInstantiable(rawType) && !shouldForceMock(rawType)

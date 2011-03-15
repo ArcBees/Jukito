@@ -152,7 +152,7 @@ public class BindingsCollector {
       bindingsObserved.add(binding);
       return null;
     }
-    
+
     @Override
     public Void visit(LinkedKeyBinding<? extends T> linkedKeyBinding) {
       BindingInfo binding = new BindingInfo();
