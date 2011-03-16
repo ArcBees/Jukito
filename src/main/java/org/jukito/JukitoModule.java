@@ -112,6 +112,7 @@ public abstract class JukitoModule extends TestModule {
     // Make sure needed keys from Guice bindings are bound as mock or to instances (but not as test singletons)
     for (Key<?> keyNeeded : keysNeeded) {
       addNeededKey(keysObserved, keysNeeded, keyNeeded, false);
+      keysNeedingTransitiveDependencies.add(keyNeeded);
     }
 
     // Preempt JIT binding by looking through the test class and any base

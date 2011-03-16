@@ -16,6 +16,7 @@
 
 package org.jukito;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
@@ -32,6 +33,14 @@ import com.google.inject.Inject;
 @RunWith(JukitoRunner.class)
 public class TransitiveDependencyTest {
 
+  static class MyModule extends JukitoModule {
+    @Override
+    protected void configureTest() {
+      bind(MyInterface.class).to(MyInterfaceImpl.class).in(TestSingleton.class);
+      bind(MyInterfaceImpl.class);
+    }
+  }
+  
   interface SubCollaborator {
     void subCollaborate();
   }
@@ -54,10 +63,39 @@ public class TransitiveDependencyTest {
     }
   }
   
+  interface MyInterface {
+    int getValue();
+  }
+  
+  static class MyDependency {
+    public int getValue() {
+      return 10;
+    }
+  }
+
+  interface MyDependentInterface {
+  }
+  
+  static class MyInterfaceImpl implements MyInterface {
+    private final MyDependency myDependency;
+    @Inject
+    MyInterfaceImpl(MyDependency myDependency, 
+        MyDependentInterface myDependentInterface) {
+      this.myDependency = myDependency;
+    }
+    @Override
+    public int getValue() {
+      return myDependency.getValue();
+    }
+  }
+  
   @Test
-  public void test(Leader leader) {
-    // THEN
+  public void testDoubleDependency(Leader leader) {
     verify(leader.collaborator.subCollaborator, never()).subCollaborate();
   }
 
+  @Test
+  public void testDependencyFromInterface(MyInterface myInterface) {
+    assertEquals(10, myInterface.getValue());
+  }
 }
