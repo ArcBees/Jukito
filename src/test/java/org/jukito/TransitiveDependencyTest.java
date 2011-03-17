@@ -17,6 +17,7 @@
 package org.jukito;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
@@ -24,6 +25,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 
 /**
  * Test that various form of automatic discovery of transitive dependencies work.
@@ -88,7 +90,33 @@ public class TransitiveDependencyTest {
       return myDependency.getValue();
     }
   }
+
+  enum MyEnum {
+    OPTION_1, OPTION_2
+  }
   
+  static class MyClassInjectedWithUnboundConstants {
+    @Inject @Named("version") Integer version;
+    @Inject @Named("someClass") Class<? extends MyClassInjectedWithUnboundConstants> someClass;
+    @Inject @Named("timestamp") Long timestamp;
+    @Inject @Named("option") MyEnum option;
+    
+    @Inject
+    MyClassInjectedWithUnboundConstants(
+        @Named("pi") double pi,
+        @Named("salt") String salt,
+        @Named("small") short small,
+        @Named("tiny") byte tiny,
+        @Named("letter") Character letter) {
+    }
+    
+    @Inject
+    void setAutoinit(@Named("autoinit") boolean autoinit) { }
+    
+    @Inject
+    void setSensitivity(@Named("sensitivity") float sensitivity) { }
+  }
+
   @Test
   public void testDoubleDependency(Leader leader) {
     verify(leader.collaborator.subCollaborator, never()).subCollaborate();
@@ -97,5 +125,10 @@ public class TransitiveDependencyTest {
   @Test
   public void testDependencyFromInterface(MyInterface myInterface) {
     assertEquals(10, myInterface.getValue());
+  }
+  
+  @Test
+  public void testDependencyOnUnboundConstants(MyClassInjectedWithUnboundConstants object) {
+    assertNotNull(object);
   }
 }

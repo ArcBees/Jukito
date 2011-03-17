@@ -22,8 +22,10 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -63,7 +65,21 @@ public abstract class JukitoModule extends TestModule {
   private final Set<Class<?>> forceMock = new HashSet<Class<?>>();
   private final Set<Class<?>> dontForceMock = new HashSet<Class<?>>();
   private final List<Key<?>> keysNeedingTransitiveDependencies = new ArrayList<Key<?>>();
+  private final Map<Class<?>, Object> primitiveTypes = new HashMap<Class<?>, Object>();
 
+  public JukitoModule() {
+    primitiveTypes.put(String.class, "");
+    primitiveTypes.put(Integer.class, 0);
+    primitiveTypes.put(Long.class, 0L);
+    primitiveTypes.put(Boolean.class, false);
+    primitiveTypes.put(Double.class, 0.0);
+    primitiveTypes.put(Float.class, 0.0f);
+    primitiveTypes.put(Short.class, (short) 0);
+    primitiveTypes.put(Character.class, '\0');
+    primitiveTypes.put(Byte.class, (byte) 0);
+    primitiveTypes.put(Class.class, Object.class);
+  }
+  
   /**
    * Attach this {@link JukitoModule} to a list of the bindings that were 
    * observed by a preliminary run of {@link BindingsCollector}.
@@ -168,9 +184,19 @@ public abstract class JukitoModule extends TestModule {
       Class<?> rawType = key.getTypeLiteral().getRawType();
       if (!keysObserved.contains(key) && !isCoreGuiceType(rawType)
           && !isAssistedInjection(key)) {
-        bind(key).toProvider(new MockProvider(rawType)).in(TestScope.SINGLETON);
+        Object primitiveInstance = getDummyInstanceOfPrimitiveType(rawType);
+        if (primitiveInstance == null) {
+          bind(key).toProvider(new MockProvider(rawType)).in(TestScope.SINGLETON);
+        } else {
+          bindKeyToInstance(key, primitiveInstance);
+        }
       }
     }
+  }
+
+  @SuppressWarnings("unchecked")
+  private <T> void bindKeyToInstance(Key<T> key, Object primitiveInstance) {
+    bind(key).toInstance((T) primitiveInstance);
   }
 
   private void addNeededKey(Set<Key<?>> keysObserved, Set<Key<?>> keysNeeded,
@@ -184,7 +210,8 @@ public abstract class JukitoModule extends TestModule {
     TypeLiteral<?> typeToBind = key.getTypeLiteral();
     Class<?> rawType = typeToBind.getRawType();
     if (isInstantiable(rawType) && !shouldForceMock(rawType)
-        && canBeInjected(typeToBind) && !isCoreGuiceType(rawType) && !isAssistedInjection(key)
+        && canBeInjected(typeToBind) && !isCoreGuiceType(rawType) 
+        && !isPrimitive(rawType) && !isAssistedInjection(key)
         && !keysObserved.contains(key)) {
 
       // If an @Singleton annotation is present, force the bind as TestSingleton
@@ -246,6 +273,23 @@ public abstract class JukitoModule extends TestModule {
     return !klass.isInterface() && !Modifier.isAbstract(klass.getModifiers());
   }
 
+  private boolean isPrimitive(Class<?> klass) {
+    return getDummyInstanceOfPrimitiveType(klass) != null;
+  }
+  
+  private Object getDummyInstanceOfPrimitiveType(Class<?> klass) {
+    Object instance = primitiveTypes.get(klass);
+    if (instance == null && Enum.class.isAssignableFrom(klass)) {
+      // Safe to ignore exception, Guice will fail with a reasonable error
+      // if the Enum is empty.
+      try {
+        instance = ((Object[]) klass.getMethod("values").invoke(null))[0];
+      } catch (Exception e) {
+      }
+    }
+    return instance;
+  }
+  
   private boolean isCoreGuiceType(Class<?> klass) {
     return TypeLiteral.class.isAssignableFrom(klass)
         || Injector.class.isAssignableFrom(klass)
