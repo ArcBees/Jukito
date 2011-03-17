@@ -32,10 +32,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.inject.ConfigurationException;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.MembersInjector;
 import com.google.inject.Provider;
+import com.google.inject.Singleton;
 import com.google.inject.Stage;
 import com.google.inject.TypeLiteral;
 import com.google.inject.assistedinject.Assisted;
@@ -115,38 +117,10 @@ public abstract class JukitoModule extends TestModule {
       keysNeedingTransitiveDependencies.add(keyNeeded);
     }
 
-    // Preempt JIT binding by looking through the test class and any base
-    // class looking for nested classes annotated with @TestSingleton and
-    // @TestEagerSingleton
+    // Preempt JIT binding by looking through the test class and any parent class
+    // looking for methods annotated with @Test, @Before, or @After.
+    // Concrete classes bound in this way are bound in @TestSingleton.
     Class<?> currentClass = testClass;
-    while (currentClass != null) {
-      for (Class<?> subClass : testClass.getDeclaredClasses()) {
-        Key<?> key = Key.get(subClass);
-        if (!keysObserved.contains(key)) {
-          if (subClass.isAnnotationPresent(TestSingleton.class)) {
-            bind(subClass).in(TestScope.SINGLETON);
-            keysObserved.add(key);
-            keysNeeded.add(key);
-            keysNeedingTransitiveDependencies.add(key);
-          } else if (subClass.isAnnotationPresent(TestEagerSingleton.class)) {
-            bind(subClass).in(TestScope.EAGER_SINGLETON);
-            keysObserved.add(key);
-            keysNeeded.add(key);
-            keysNeedingTransitiveDependencies.add(key);
-          } else if (subClass.isAnnotationPresent(TestMockSingleton.class)) {
-            bindMock(subClass).in(TestScope.SINGLETON);
-            keysObserved.add(key);
-            keysNeeded.add(key);
-          }
-        }
-      }
-      currentClass = currentClass.getSuperclass();
-    }
-
-    // Preempt JIT binding by looking through the test class looking for
-    // methods annotated with @Test, @Before, or @After
-    // Concrete classes bound in this way are singleton
-    currentClass = testClass;
     while (currentClass != null) {
       for (Method method : currentClass.getDeclaredMethods()) {
         if (method.isAnnotationPresent(Test.class)
@@ -170,7 +144,8 @@ public abstract class JukitoModule extends TestModule {
     }
 
     // Preempt JIT binding by looking through the test class looking for
-    // fields and methods annotated with @Inject
+    // fields and methods annotated with @Inject.
+    // Concrete classes bound in this way are bound in @TestSingleton.
     Set<InjectionPoint> injectionPoints = InjectionPoint.forInstanceMethodsAndFields(testClass);
     for (InjectionPoint injectionPoint : injectionPoints) {
       Errors errors = new Errors(injectionPoint);
@@ -193,8 +168,7 @@ public abstract class JukitoModule extends TestModule {
       Class<?> rawType = key.getTypeLiteral().getRawType();
       if (!keysObserved.contains(key) && !isCoreGuiceType(rawType)
           && !isAssistedInjection(key)) {
-        super.bind(key).toProvider(new MockProvider(rawType)).in(
-            TestScope.SINGLETON);
+        bind(key).toProvider(new MockProvider(rawType)).in(TestScope.SINGLETON);
       }
     }
   }
@@ -207,18 +181,30 @@ public abstract class JukitoModule extends TestModule {
 
   private <T> void bindIfConcrete(Set<Key<?>> keysObserved,
       Key<T> key, boolean asTestSingleton) {
-    TypeLiteral<?> parameter = key.getTypeLiteral();
-    Class<?> rawType = parameter.getRawType();
+    TypeLiteral<?> typeToBind = key.getTypeLiteral();
+    Class<?> rawType = typeToBind.getRawType();
     if (isInstantiable(rawType) && !shouldForceMock(rawType)
-        && !isCoreGuiceType(rawType) && !isAssistedInjection(key)
+        && canBeInjected(typeToBind) && !isCoreGuiceType(rawType) && !isAssistedInjection(key)
         && !keysObserved.contains(key)) {
-      if (asTestSingleton) {
+
+      // If an @Singleton annotation is present, force the bind as TestSingleton
+      if (asTestSingleton || 
+          rawType.getAnnotation(Singleton.class) != null) {
         bind(key).in(TestScope.SINGLETON);
       } else {
         bind(key);
       }
       keysObserved.add(key);
       keysNeedingTransitiveDependencies.add(key);
+    }
+  }
+
+  private boolean canBeInjected(TypeLiteral<?> type) {
+    try {
+      InjectionPoint.forConstructorOf(type);
+      return true;
+    } catch (ConfigurationException e) {
+      return false;
     }
   }
 

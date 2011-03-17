@@ -21,6 +21,9 @@ import static org.junit.Assert.assertNotSame;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.AfterClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,16 +46,22 @@ public class SingletonTest {
     protected void configureTest() {
       bind(MyEagerSingleton.class).asEagerSingleton();
       bindMock(MyTestMockSingletonBoundNonMock.class);
+      bind(MyTestEagerSingleton.class);
     }
   }
   
-  /**
-   */
   @TestSingleton
-  public static class Registry {
-    public int registrationCount;
-    public void register() { 
-      registrationCount++;
+  static class Registry {
+    public Map<Class<?>, Integer> registrationCount = new HashMap<Class<?>, Integer>();
+    public void register(Class<?> clazz) {      
+      registrationCount.put(clazz, getCount(clazz) + 1);
+    }
+    public int getCount(Class<?> clazz) {
+      Integer value = registrationCount.get(clazz);
+      if (value == null) {
+        return 0;
+      }
+      return value;
     }
   }
 
@@ -64,6 +73,8 @@ public class SingletonTest {
     static int numberOfTimesTestEagerSingletonIsInstantiated;
     static int numberOfTimesTestSingletonIsInstantiated;
     static int numberOfTimesEagerSingletonIsInstantiated;
+    static ExternalSingleton singleton1;
+    static ExternalSingleton singleton2;
   }
 
   /**
@@ -72,7 +83,7 @@ public class SingletonTest {
   static class MyEagerSingleton {
     @Inject
     public MyEagerSingleton(Registry registry) {
-      registry.register();
+      registry.register(getClass());
       Bookkeeper.numberOfTimesEagerSingletonIsInstantiated++;
     }
   }
@@ -84,7 +95,7 @@ public class SingletonTest {
   static class MyTestEagerSingleton {
     @Inject
     public MyTestEagerSingleton(Registry registry) {
-      registry.register();
+      registry.register(getClass());
       Bookkeeper.numberOfTimesTestEagerSingletonIsInstantiated++;
     }
   }
@@ -96,7 +107,7 @@ public class SingletonTest {
   static class MyTestSingleton {
     @Inject
     public MyTestSingleton(Registry registry) {
-      registry.register();
+      registry.register(getClass());
       Bookkeeper.numberOfTimesTestSingletonIsInstantiated++;
     }
   }
@@ -122,12 +133,13 @@ public class SingletonTest {
   
   @Test
   public void onlyEagerSingletonShouldBeRegistered() {
-    assertEquals(1, registry.registrationCount);
+    assertEquals(1, registry.getCount(MyTestEagerSingleton.class));
   }
   
   @Test
   public void bothSingletonsShouldBeRegistered(MyTestSingleton myTestSingleton) {
-    assertEquals(2, registry.registrationCount);
+    assertEquals(1, registry.getCount(MyTestEagerSingleton.class));
+    assertEquals(1, registry.getCount(MyTestSingleton.class));
   }
 
   @Test
@@ -150,12 +162,23 @@ public class SingletonTest {
     verify(b, never()).dummy();
     assertNotSame(a, b);
   }
+
+  @Test
+  public void firstInjectionOfSingleton(ExternalSingleton obj) {
+    Bookkeeper.singleton1 = obj;
+  }
+  
+  @Test
+  public void secondInjectionOfSingleton(ExternalSingleton obj) {
+    Bookkeeper.singleton2 = obj;
+  }
   
   @AfterClass
   public static void verifyNumberOfInstantiations() {
-    assertEquals(5, Bookkeeper.numberOfTimesTestEagerSingletonIsInstantiated);
+    assertEquals(7, Bookkeeper.numberOfTimesTestEagerSingletonIsInstantiated);
     assertEquals(1, Bookkeeper.numberOfTimesTestSingletonIsInstantiated);
     assertEquals(1, Bookkeeper.numberOfTimesEagerSingletonIsInstantiated);
+    assertNotSame(Bookkeeper.singleton1, Bookkeeper.singleton2);
   }
 
 }

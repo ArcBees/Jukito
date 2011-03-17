@@ -149,14 +149,21 @@ public class GeneralTest {
   // This class will cause an error if bound
   static class UninstanciableClass {
     private UninstanciableClass() { }
+    public int getValue() { return 360; }
   }  
 
   @TestMockSingleton
   static class ClassWithUninstanciableDependency1 {
+    private final UninstanciableClass dependency;
     @Inject
-    public ClassWithUninstanciableDependency1(UninstanciableClass dependency) { }
+    public ClassWithUninstanciableDependency1(UninstanciableClass dependency) {
+      this.dependency = dependency;
+    }
     public int getValue() {
       return 42;
+    }
+    public UninstanciableClass getDependency() {
+      return dependency;
     }
   }
 
@@ -265,7 +272,8 @@ public class GeneralTest {
   @Test
   public void testInjectingMockShouldNotInstantiateDependencies1(
       ClassWithUninstanciableDependency1 testClass) {
-    verify(testClass, never()).getValue();
+    assertEquals(42, testClass.getValue());
+    verify(testClass.getDependency(), never()).getValue();
   }
 
   @Test
