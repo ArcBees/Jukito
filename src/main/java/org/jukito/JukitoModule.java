@@ -1,21 +1,19 @@
 /**
  * Copyright 2010 ArcBees Inc.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-
 package org.jukito;
-
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
@@ -28,12 +26,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
-
 import org.jukito.BindingsCollector.BindingInfo;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 import com.google.inject.ConfigurationException;
 import com.google.inject.Injector;
 import com.google.inject.Key;
@@ -47,7 +43,6 @@ import com.google.inject.internal.Errors;
 import com.google.inject.spi.Dependency;
 import com.google.inject.spi.HasDependencies;
 import com.google.inject.spi.InjectionPoint;
-
 /**
  * A guice {@link com.google.inject.Module Module} with a bit of syntactic sugar
  * to bind within typical test scopes. Depends on mockito. This module
@@ -56,17 +51,15 @@ import com.google.inject.spi.InjectionPoint;
  * not explicitly provided is bound as a {@link TestScope#SINGLETON}.
  * <p />
  * Depends on Mockito.
- * 
+ *
  * @author Philippe Beaudoin
  */
 public abstract class JukitoModule extends TestModule {
-
   protected List<BindingInfo> bindingsObserved = Collections.emptyList();
   private final Set<Class<?>> forceMock = new HashSet<Class<?>>();
   private final Set<Class<?>> dontForceMock = new HashSet<Class<?>>();
   private final List<Key<?>> keysNeedingTransitiveDependencies = new ArrayList<Key<?>>();
   private final Map<Class<?>, Object> primitiveTypes = new HashMap<Class<?>, Object>();
-
   public JukitoModule() {
     primitiveTypes.put(String.class, "");
     primitiveTypes.put(Integer.class, 0);
@@ -79,39 +72,34 @@ public abstract class JukitoModule extends TestModule {
     primitiveTypes.put(Byte.class, (byte) 0);
     primitiveTypes.put(Class.class, Object.class);
   }
-  
   /**
-   * Attach this {@link JukitoModule} to a list of the bindings that were 
+   * Attach this {@link JukitoModule} to a list of the bindings that were
    * observed by a preliminary run of {@link BindingsCollector}.
-   * 
+   *
    * @param bindingsObserved The observed bindings.
    */
   public void setBindingsObserved(List<BindingInfo> bindingsObserved) {
     this.bindingsObserved = bindingsObserved;
   }
-
   /**
    * By default, only abstract classes, interfaces and classes annotated with
    * {@link TestMockSingleton} are automatically mocked. Use {@link #forceMock}
    * to indicate that all concrete classes derived from the a specific type
    * will be mocked in {@link org.jukito.TestMockSingleton} scope.
-   * 
+   *
    * @param klass The {@link Class} or interface for which all subclasses will
    *          be mocked.
    */
   protected void forceMock(Class<?> klass) {
     forceMock.add(klass);
   }
-
   @Override
   @SuppressWarnings({"unchecked", "rawtypes"})
   public final void configure() {
     bindScopes();
     configureTest();
-    
     Set<Key<?>> keysObserved = new HashSet<Key<?>>(bindingsObserved.size());
     Set<Key<?>> keysNeeded = new HashSet<Key<?>>(bindingsObserved.size());
-
     for (BindingInfo bindingInfo : bindingsObserved) {
       if (bindingInfo.key != null) {
         keysObserved.add(bindingInfo.key);
@@ -126,13 +114,11 @@ public abstract class JukitoModule extends TestModule {
         }
       }
     }
-
     // Make sure needed keys from Guice bindings are bound as mock or to instances (but not as test singletons)
     for (Key<?> keyNeeded : keysNeeded) {
       addNeededKey(keysObserved, keysNeeded, keyNeeded, false);
       keysNeedingTransitiveDependencies.add(keyNeeded);
     }
-
     // Preempt JIT binding by looking through the test class and any parent class
     // looking for methods annotated with @Test, @Before, or @After.
     // Concrete classes bound in this way are bound in @TestSingleton.
@@ -142,10 +128,8 @@ public abstract class JukitoModule extends TestModule {
         if (method.isAnnotationPresent(Test.class)
             || method.isAnnotationPresent(Before.class)
             || method.isAnnotationPresent(After.class)) {
-
           Errors errors = new Errors(method);
           List<Key<?>> keys = GuiceUtils.getMethodKeys(method, errors);
-
           for (Key<?> key : keys) {
             // Skip keys annotated with @All
             if (!All.class.equals(key.getAnnotationType())) {
@@ -158,7 +142,6 @@ public abstract class JukitoModule extends TestModule {
       }
       currentClass = currentClass.getSuperclass();
     }
-
     // Preempt JIT binding by looking through the test class looking for
     // fields and methods annotated with @Inject.
     // Concrete classes bound in this way are bound in @TestSingleton.
@@ -173,12 +156,10 @@ public abstract class JukitoModule extends TestModule {
       }
       errors.throwConfigurationExceptionIfErrorsExist();
     }
-
     // Recursively add the dependencies of all the bindings observed
     for (int i = 0; i < keysNeedingTransitiveDependencies.size(); ++i) {
       addDependencies(keysNeedingTransitiveDependencies.get(i), keysObserved, keysNeeded);
     }
-
     // Bind all keys needed but not observed as mocks
     for (Key<?> key : keysNeeded) {
       Class<?> rawType = key.getTypeLiteral().getRawType();
@@ -193,29 +174,25 @@ public abstract class JukitoModule extends TestModule {
       }
     }
   }
-
   @SuppressWarnings("unchecked")
   private <T> void bindKeyToInstance(Key<T> key, Object primitiveInstance) {
     bind(key).toInstance((T) primitiveInstance);
   }
-
   private void addNeededKey(Set<Key<?>> keysObserved, Set<Key<?>> keysNeeded,
       Key<?> keyNeeded, boolean asTestSingleton) {
     keysNeeded.add(keyNeeded);
     bindIfConcrete(keysObserved, keyNeeded, asTestSingleton);
   }
-
   private <T> void bindIfConcrete(Set<Key<?>> keysObserved,
       Key<T> key, boolean asTestSingleton) {
     TypeLiteral<?> typeToBind = key.getTypeLiteral();
     Class<?> rawType = typeToBind.getRawType();
     if (isInstantiable(rawType) && !shouldForceMock(rawType)
-        && canBeInjected(typeToBind) && !isCoreGuiceType(rawType) 
+        && canBeInjected(typeToBind) && !isCoreGuiceType(rawType)
         && !isPrimitive(rawType) && !isAssistedInjection(key)
         && !keysObserved.contains(key)) {
-
       // If an @Singleton annotation is present, force the bind as TestSingleton
-      if (asTestSingleton || 
+      if (asTestSingleton ||
           rawType.getAnnotation(Singleton.class) != null) {
         bind(key).in(TestScope.SINGLETON);
       } else {
@@ -225,7 +202,6 @@ public abstract class JukitoModule extends TestModule {
       keysNeedingTransitiveDependencies.add(key);
     }
   }
-
   private boolean canBeInjected(TypeLiteral<?> type) {
     try {
       InjectionPoint.forConstructorOf(type);
@@ -234,12 +210,10 @@ public abstract class JukitoModule extends TestModule {
       return false;
     }
   }
-
   private boolean isAssistedInjection(Key<?> key) {
     return key.getAnnotationType() != null
         && Assisted.class.isAssignableFrom(key.getAnnotationType());
   }
-
   private boolean shouldForceMock(Class<?> klass) {
     if (dontForceMock.contains(klass)) {
       return false;
@@ -259,24 +233,19 @@ public abstract class JukitoModule extends TestModule {
         break;
       }
     }
-
     if (result) {
       forceMock.add(klass);
     } else {
       dontForceMock.add(klass);
     }
-
     return result;
   }
-
   private boolean isInstantiable(Class<?> klass) {
     return !klass.isInterface() && !Modifier.isAbstract(klass.getModifiers());
   }
-
   private boolean isPrimitive(Class<?> klass) {
     return getDummyInstanceOfPrimitiveType(klass) != null;
   }
-  
   private Object getDummyInstanceOfPrimitiveType(Class<?> klass) {
     Object instance = primitiveTypes.get(klass);
     if (instance == null && Enum.class.isAssignableFrom(klass)) {
@@ -289,7 +258,6 @@ public abstract class JukitoModule extends TestModule {
     }
     return instance;
   }
-  
   private boolean isCoreGuiceType(Class<?> klass) {
     return TypeLiteral.class.isAssignableFrom(klass)
         || Injector.class.isAssignableFrom(klass)
@@ -297,7 +265,6 @@ public abstract class JukitoModule extends TestModule {
         || Stage.class.isAssignableFrom(klass)
         || MembersInjector.class.isAssignableFrom(klass);
   }
-
   private <T> void addDependencies(Key<T> key, Set<Key<?>> keysObserved,
       Set<Key<?>> keysNeeded) {
     TypeLiteral<T> type = key.getTypeLiteral();
@@ -311,7 +278,6 @@ public abstract class JukitoModule extends TestModule {
       addInjectionPointDependencies(injectionPoint, keysObserved, keysNeeded);
     }
   }
-
   private void addInjectionPointDependencies(InjectionPoint injectionPoint,
       Set<Key<?>> keysObserved, Set<Key<?>> keysNeeded) {
     // Do not consider dependencies coming from optional injections
@@ -323,7 +289,6 @@ public abstract class JukitoModule extends TestModule {
       addKeyDependency(key, keysObserved, keysNeeded);
     }
   }
-
   private void addKeyDependency(Key<?> key, Set<Key<?>> keysObserved,
       Set<Key<?>> keysNeeded) {
     Key<?> newKey = key;
