@@ -203,7 +203,7 @@
   </module>
   <module name="RegexpSingleline">
     <property name="format" value="\s+$"/>
-	<property name="message" value="Line has trailing spaces."/>
+    <property name="message" value="Line has trailing spaces."/>
   </module>
   <module name="Header">
     <property name="fileExtensions" value="java"/>
