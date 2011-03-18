@@ -2,3 +2,5 @@ glob:.classpath
 glob:.settings/**
 glob:target/**
 glob:bin/**
+glob:.project
+glob:.checkstyle
