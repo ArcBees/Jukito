@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 ArcBees Inc.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -29,7 +29,7 @@ import com.google.inject.name.Named;
 
 /**
  * Test that various form of automatic discovery of transitive dependencies work.
- * 
+ *
  * @author Philippe Beaudoin
  */
 @RunWith(JukitoRunner.class)
@@ -42,11 +42,11 @@ public class TransitiveDependencyTest {
       bind(MyInterfaceImpl.class);
     }
   }
-  
+
   interface SubCollaborator {
     void subCollaborate();
   }
-  
+
   @TestEagerSingleton
   static class Collaborator {
     private final SubCollaborator subCollaborator;
@@ -55,7 +55,7 @@ public class TransitiveDependencyTest {
       this.subCollaborator = subCollaborator;
     }
   }
-    
+
   @TestEagerSingleton
   static class Leader {
     private final Collaborator collaborator;
@@ -64,11 +64,11 @@ public class TransitiveDependencyTest {
       this.collaborator = collaborator;
     }
   }
-  
+
   interface MyInterface {
     int getValue();
   }
-  
+
   static class MyDependency {
     public int getValue() {
       return 10;
@@ -77,11 +77,11 @@ public class TransitiveDependencyTest {
 
   interface MyDependentInterface {
   }
-  
+
   static class MyInterfaceImpl implements MyInterface {
     private final MyDependency myDependency;
     @Inject
-    MyInterfaceImpl(MyDependency myDependency, 
+    MyInterfaceImpl(MyDependency myDependency,
         MyDependentInterface myDependentInterface) {
       this.myDependency = myDependency;
     }
@@ -94,13 +94,13 @@ public class TransitiveDependencyTest {
   enum MyEnum {
     OPTION_1, OPTION_2
   }
-  
+
   static class MyClassInjectedWithUnboundConstants {
     @Inject @Named("version") Integer version;
     @Inject @Named("someClass") Class<? extends MyClassInjectedWithUnboundConstants> someClass;
     @Inject @Named("timestamp") Long timestamp;
     @Inject @Named("option") MyEnum option;
-    
+
     @Inject
     MyClassInjectedWithUnboundConstants(
         @Named("pi") double pi,
@@ -109,10 +109,10 @@ public class TransitiveDependencyTest {
         @Named("tiny") byte tiny,
         @Named("letter") Character letter) {
     }
-    
+
     @Inject
     void setAutoinit(@Named("autoinit") boolean autoinit) { }
-    
+
     @Inject
     void setSensitivity(@Named("sensitivity") float sensitivity) { }
   }
@@ -126,7 +126,7 @@ public class TransitiveDependencyTest {
   public void testDependencyFromInterface(MyInterface myInterface) {
     assertEquals(10, myInterface.getValue());
   }
-  
+
   @Test
   public void testDependencyOnUnboundConstants(MyClassInjectedWithUnboundConstants object) {
     assertNotNull(object);

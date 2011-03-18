@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 ArcBees Inc.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -31,7 +31,7 @@ import com.google.inject.Provider;
 
 /**
  * This parent test class is used by {@link ParentTestClassTest}.
- * 
+ *
  * @author Philippe Beaudoin
  */
 @Ignore("Tests in this base class are not meant to be run independantly.")
@@ -47,38 +47,38 @@ public class ParentTestClassBase {
       return value;
     }
   }
-  
+
   /**
    * This should be automatically injected in the child class.
    */
   @TestMockSingleton
-  interface MockSingletonDefinedInParent { 
+  interface MockSingletonDefinedInParent {
     void mockSingletonMethod();
   }
 
-  interface DummyInterface { 
+  interface DummyInterface {
     String getDummyValue();
   }
 
   interface DummyInterfaceUsedOnlyInParent1 {
     String getDummyValue();
   }
-  
+
   interface DummyInterfaceUsedOnlyInParent2 {
     String getDummyValue();
   }
-  
+
   interface DummyInterfaceUsedOnlyInParent3 {
     String getDummyValue();
   }
-  
+
   static class DummyClassUsedOnlyInParent1 { }
   static class DummyClassUsedOnlyInParent2 { }
   static class DummyClassUsedOnlyInParent3 { }
-  
+
   @Inject protected Provider<DummyInterface> dummyProvider;
   @Inject protected MockSingletonDefinedInParent mockSingletonDefinedInParent;
-  
+
   /**
    * This class keeps track of what happens in all the tests run in this
    * class and its child. It's used to make sure all expected tests are called.
@@ -86,17 +86,17 @@ public class ParentTestClassBase {
   protected static class Bookkeeper {
     static boolean parentTestShouldRunExecuted;
   }
-  
+
   @Test
   public void parentTestShouldRun() {
     Bookkeeper.parentTestShouldRunExecuted = true;
   }
-  
+
   @Test
   public void interfaceBoundInChildIsInjectedInParent() {
     assertEquals("DummyValue", dummyProvider.get().getDummyValue());
   }
-  
+
   @Test
   public void interfaceBoundInChildIsInjectedInParentTestMethod(
       DummyInterface dummyInterface) {
@@ -108,10 +108,10 @@ public class ParentTestClassBase {
       Provider<DummyInterfaceUsedOnlyInParent1> provider) {
     // Following should not crash
     verify(provider.get(), never()).getDummyValue();
-    
+
     assertSame(provider.get(), provider.get());
   }
-  
+
   @Test
   public void concreteClassUsedInParentTestMethodShouldBeBoundAsTestSingleton(
       Provider<DummyClassUsedOnlyInParent1> provider) {
@@ -123,10 +123,10 @@ public class ParentTestClassBase {
       Provider<DummyInterfaceUsedOnlyInParent2> provider) {
     // Following should not crash
     verify(provider.get(), never()).getDummyValue();
-    
+
     assertSame(provider.get(), provider.get());
   }
-  
+
   @Before
   public void concreteClassUsedInParentBeforeMethodShouldBeBoundAsTestSingleton(
       Provider<DummyClassUsedOnlyInParent2> provider) {
@@ -138,10 +138,10 @@ public class ParentTestClassBase {
       Provider<DummyInterfaceUsedOnlyInParent3> provider) {
     // Following should not crash
     verify(provider.get(), never()).getDummyValue();
-    
+
     assertSame(provider.get(), provider.get());
   }
-  
+
   @After
   public void concreteClassUsedInParentAfterMethodShouldBeBoundAsTestSingleton(
       Provider<DummyClassUsedOnlyInParent3> provider) {

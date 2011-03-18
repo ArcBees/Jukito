@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 ArcBees Inc.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -42,11 +42,11 @@ public class BindingsCollector {
 
   private final AbstractModule module;
   private final List<BindingInfo> bindingsObserved = new ArrayList<BindingInfo>();
-  
+
   BindingsCollector(AbstractModule module) {
     this.module = module;
   }
-  
+
   public void collectBindings() {
     GuiceElementVisitor visitor = new GuiceElementVisitor();
     visitor.visitElements(Elements.getElements(module));
@@ -57,7 +57,7 @@ public class BindingsCollector {
   public List<BindingInfo> getBindingsObserved() {
     return bindingsObserved;
   }
-  
+
   /**
    * Information on a binding, used by Jukito to identify provided keys and needed keys.
    */
@@ -68,9 +68,9 @@ public class BindingsCollector {
   }
 
   private final List<Message> messages = new ArrayList<Message>();
-  
+
   /**
-   * This visitor collects all information on various guice elements. 
+   * This visitor collects all information on various guice elements.
    */
   public class GuiceElementVisitor extends DefaultElementVisitor<Void> {
 
@@ -79,7 +79,7 @@ public class BindingsCollector {
         element.acceptVisitor(this);
       }
     }
-    
+
     @Override
     public <T> Void visit(com.google.inject.Binding<T> command) {
       GuiceBindingVisitor<T> bindingVisitor = new GuiceBindingVisitor<T>();
@@ -95,7 +95,7 @@ public class BindingsCollector {
   }
 
   /**
-   * This visitor collects all information on guice bindings. 
+   * This visitor collects all information on guice bindings.
    */
   public class GuiceBindingVisitor<T> extends DefaultBindingTargetVisitor<T, Void> {
 

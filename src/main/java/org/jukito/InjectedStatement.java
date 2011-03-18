@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 ArcBees Inc.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -32,7 +32,7 @@ import java.util.List;
 /**
  * A {@link Statement} invoking a method with parameters by filling-in these
  * parameters with injected instances.
- * 
+ *
  * @author Philippe Beaudoin
  */
 class InjectedStatement extends Statement {
@@ -46,22 +46,22 @@ class InjectedStatement extends Statement {
     this.test = test;
     this.injector = injector;
   }
-  
+
   @Override
   public void evaluate() throws Throwable {
     Method javaMethod = method.getMethod();
-    
+
     Errors errors = new Errors(javaMethod);
     List<Key<?>> keys = GuiceUtils.getMethodKeys(javaMethod, errors);
     errors.throwConfigurationExceptionIfErrorsExist();
-    
+
     Iterator<Binding<?>> bindingIter;
     if (InjectedFrameworkMethod.class.isAssignableFrom(method.getClass())) {
       bindingIter = ((InjectedFrameworkMethod) method).getBindingsToUseForParameters().iterator();
     } else {
       bindingIter = new ArrayList<Binding<?>>().iterator();
     }
-    
+
     List<Object> injectedParameters = new ArrayList<Object>();
     for (Key<?> key : keys) {
       if (!All.class.equals(key.getAnnotationType())) {
@@ -73,7 +73,7 @@ class InjectedStatement extends Statement {
         injectedParameters.add(injector.getInstance(bindingIter.next().getKey()));
       }
     }
-    
+
     method.invokeExplosively(test, injectedParameters.toArray());
   }
 }

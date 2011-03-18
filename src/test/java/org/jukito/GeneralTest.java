@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 ArcBees Inc.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -36,7 +36,7 @@ import com.google.inject.name.Names;
 
 /**
  * Test various general behaviors.
- * 
+ *
  * @author Philippe Beaudoin
  */
 @RunWith(JukitoRunner.class)
@@ -76,7 +76,7 @@ public class GeneralTest {
 
   interface MyInteger {
     int getValue();
-  } 
+  }
 
   static class MyIntegerImpl implements MyInteger {
     private final int value;
@@ -87,7 +87,7 @@ public class GeneralTest {
     public int getValue() {
       return value;
     }
-  } 
+  }
 
   static enum MyEnum {
     VALUE1,
@@ -150,7 +150,7 @@ public class GeneralTest {
   static class UninstanciableClass {
     private UninstanciableClass() { }
     public int getValue() { return 360; }
-  }  
+  }
 
   @TestMockSingleton
   static class ClassWithUninstanciableDependency1 {
@@ -187,21 +187,21 @@ public class GeneralTest {
     @Inject
     public MyMockProvider3b() {
       super(ClassWithUninstanciableDependency3.class);
-    }    
+    }
   }
 
   static class MyMockProvider3c extends MockProvider<ClassWithUninstanciableDependency3> {
     @Inject
     public MyMockProvider3c() {
       super(ClassWithUninstanciableDependency3.class);
-    }    
+    }
   }
 
   static class TestGenericClassInjectedWithTypeLiteral<U> {
     private final Class<? super U> injectedType;
     @Inject
     public TestGenericClassInjectedWithTypeLiteral(TypeLiteral<U> typeLiteral) {
-      injectedType = typeLiteral.getRawType(); 
+      injectedType = typeLiteral.getRawType();
     }
     public Class<? super U> getInjectedType() {
       return injectedType;
@@ -310,8 +310,8 @@ public class GeneralTest {
   public void testInjectingTypeLiteralShouldWork(
       TypeLiteral<Integer> typeLiteral) {
     assertEquals(Integer.class, typeLiteral.getRawType());
-  }  
-  
+  }
+
   @Test
   public void testInjectingInjectorShouldWork(
       Injector injector) {

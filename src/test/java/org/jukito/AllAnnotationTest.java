@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 ArcBees Inc.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -28,7 +28,7 @@ import java.util.List;
 
 /**
  * Test that methods with some parameters annotated with {@literal @}{@link All} behave correctly.
- * 
+ *
  * @author Philippe Beaudoin
  */
 @RunWith(JukitoRunner.class)
@@ -46,7 +46,7 @@ public class AllAnnotationTest {
       bindMany(TestData.class, TestDataA.class, TestDataB.class);
     }
   }
-  
+
   interface TestData {
     String getData();
   }
@@ -58,7 +58,7 @@ public class AllAnnotationTest {
   static class TestDataB implements TestData {
     public String getData() { return "B"; }
   }
-  
+
   static class TestDataInstance {
     private final String data;
     public TestDataInstance(String data) {
@@ -67,7 +67,7 @@ public class AllAnnotationTest {
 
     public String getData() { return data; }
   }
-  
+
   /**
    * This class keeps track of what happens in all the tests run in this
    * class. It's used to make sure all expected tests are called.
@@ -77,7 +77,7 @@ public class AllAnnotationTest {
     static List<String> dataProcessed = new ArrayList<String>();
     static List<String> dataInstanceProcessed = new ArrayList<String>();
   }
-  
+
   @Test
   public void testAllWithInstance(@All String string1, @All String string2) {
     Bookkeeper.stringsProcessed.add(string1 + string2);
@@ -87,12 +87,12 @@ public class AllAnnotationTest {
   public void testAllWithClass(@All TestData data1, @All TestData data2) {
     Bookkeeper.dataProcessed.add(data1.getData() + data2.getData());
   }
-  
+
   @Test
   public void testAllWithClassInstance(@All TestDataInstance data1, @All TestDataInstance data2) {
     Bookkeeper.dataInstanceProcessed.add(data1.getData() + data2.getData());
   }
-  
+
   @AfterClass
   public static void checkBookkeeper() {
     assertTrue(Bookkeeper.stringsProcessed.contains("AA"));
@@ -105,12 +105,12 @@ public class AllAnnotationTest {
     assertTrue(Bookkeeper.dataProcessed.contains("AB"));
     assertTrue(Bookkeeper.dataProcessed.contains("BA"));
     assertTrue(Bookkeeper.dataProcessed.contains("BB"));
-    assertEquals(4, Bookkeeper.dataProcessed.size());  
+    assertEquals(4, Bookkeeper.dataProcessed.size());
 
     assertTrue(Bookkeeper.dataInstanceProcessed.contains("AA"));
     assertTrue(Bookkeeper.dataInstanceProcessed.contains("AB"));
     assertTrue(Bookkeeper.dataInstanceProcessed.contains("BA"));
     assertTrue(Bookkeeper.dataInstanceProcessed.contains("BB"));
-    assertEquals(4, Bookkeeper.dataInstanceProcessed.size());  
+    assertEquals(4, Bookkeeper.dataInstanceProcessed.size());
   }
 }

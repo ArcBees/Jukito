@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 ArcBees Inc.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -59,14 +59,14 @@ import com.google.inject.spi.DefaultBindingScopingVisitor;
  * html</a>
  * <p />
  * Depends on Mockito.
- * 
+ *
  * @author Philippe Beaudoin
  */
 public class JukitoRunner extends BlockJUnit4ClassRunner {
 
   private static final boolean useAutomockingIfNoEnvironmentFound = true;
-  private Injector injector;  
-  
+  private Injector injector;
+
   public JukitoRunner(Class<?> klass) throws InitializationError,
       InvocationTargetException, InstantiationException, IllegalAccessException {
     super(klass);
@@ -111,7 +111,7 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
       injector = Guice.createInjector(testModule);
     }
   }
-  
+
   @Override
   public void run(final RunNotifier notifier) {
     // add listener that validates framework usage at the end of each test
@@ -128,7 +128,7 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
 
   @Override
   protected Statement methodInvoker(final FrameworkMethod method, final Object test) {
-    return new InjectedStatement(method, test, injector);    
+    return new InjectedStatement(method, test, injector);
   }
 
   @Override
@@ -158,7 +158,7 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
     return afters.isEmpty() ? statement : new InjectedAfterStatements(statement,
         afters, target, injector);
   }
-  
+
   @Override
   protected List<FrameworkMethod> computeTestMethods() {
     try {
@@ -168,38 +168,38 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
     }
     List<FrameworkMethod> testMethods = getTestClass().getAnnotatedMethods(Test.class);
     List<FrameworkMethod> result = new ArrayList<FrameworkMethod>(testMethods.size());
-    for (FrameworkMethod method : testMethods) {      
+    for (FrameworkMethod method : testMethods) {
       Method javaMethod = method.getMethod();
       Errors errors = new Errors(javaMethod);
       List<Key<?>> keys = GuiceUtils.getMethodKeys(javaMethod, errors);
       errors.throwConfigurationExceptionIfErrorsExist();
-      
+
       List<List<Binding<?>>> bindingsToUseForParameters = new ArrayList<List<Binding<?>>>();
       for (Key<?> key : keys) {
         if (All.class.equals(key.getAnnotationType())) {
           List<Binding<?>> bindings = new ArrayList<Binding<?>>();
           for (Binding<?> binding : injector.findBindingsByType(key.getTypeLiteral())) {
             bindings.add(binding);
-          }          
+          }
           bindingsToUseForParameters.add(bindings);
         }
       }
-      
+
       // Add an injected method for every combination of binding
-      addAllBindingAssignations(bindingsToUseForParameters, 0, 
-          new ArrayList<Binding<?>>(bindingsToUseForParameters.size()), 
+      addAllBindingAssignations(bindingsToUseForParameters, 0,
+          new ArrayList<Binding<?>>(bindingsToUseForParameters.size()),
           javaMethod, result);
     }
-    
+
     return result;
   }
-  
+
   /**
    * This method looks at all possible way to assign the bindings in
    * {@code bindingsToUseForParameters}, starting at index {@code index}.
    * If {@code index} is larger than the number of elements in {@code bindingsToUseForParameters}
    * then the {@code currentAssignation} with {@javaMethod} is added to {@code result}.
-   * 
+   *
    * @param result
    * @param javaMethod
    * @param bindingsToUseForParameters
@@ -207,17 +207,17 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
    * @param currentAssignation
    */
   private void addAllBindingAssignations(
-      List<List<Binding<?>>> bindingsToUseForParameters, int index, 
-      List<Binding<?>> currentAssignation, 
+      List<List<Binding<?>>> bindingsToUseForParameters, int index,
+      List<Binding<?>> currentAssignation,
       Method javaMethod, List<FrameworkMethod> result) {
-    
+
     if (index >= bindingsToUseForParameters.size()) {
       List<Binding<?>> assignation = new ArrayList<Binding<?>>(currentAssignation.size());
       assignation.addAll(currentAssignation);
       result.add(new InjectedFrameworkMethod(javaMethod, assignation));
       return;
     }
-    
+
     for (Binding<?> binding : bindingsToUseForParameters.get(index)) {
       currentAssignation.add(binding);
       if (currentAssignation.size() != index + 1) {
@@ -249,7 +249,7 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
       }
     }
   }
-  
+
   /**
    * Adds to {@code errors} for each method annotated with {@code @Test},
    * {@code @Before}, or {@code @After} that is not a public, void instance
@@ -264,7 +264,7 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
       errors.add(new Exception("No runnable methods"));
     }
   }
-  
+
   /**
    * Adds to {@code errors} for each method annotated with {@code @Test}that
    * is not a public, void instance method with no arguments.
@@ -292,10 +292,10 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
       // TODO We should validate that all parameters have a binding
     }
   }
-  
+
   /**
    * Access the Guice injector.
-   * 
+   *
    * @return The Guice {@link Injector}.
    */
   protected Injector getInjector() {

@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 ArcBees Inc.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -33,7 +33,7 @@ import com.google.inject.name.Names;
 
 /**
  * Test that providers injected by the tester module behaves correctly.
- * 
+ *
  * @author Philippe Beaudoin
  */
 @RunWith(JukitoRunner.class)
@@ -59,16 +59,16 @@ public class ProviderTest {
       bind(ClassWithMockedDependency2.class).annotatedWith(Names.named("MockedDependency2")).toProvider(Key.get(MyProvider2.class));
     }
   }
-  
-  interface Mock { }  
+
+  interface Mock { }
 
   static class Instance {
     @Inject Instance() { }
   }
-  
+
   interface Parent {
     String getValue();
-  }  
+  }
 
   static class ChildA implements Parent {
     public String getValue() {
@@ -81,36 +81,36 @@ public class ProviderTest {
   interface MockInProviderB {
     void test();
   }
-  
+
   static class ChildB implements Parent {
     @Inject MockInChildB mockB;
     public String getValue() {
       return "childB";
     }
   }
-  
+
   abstract static class ParentProviderABase implements Provider<Parent> {
   }
-  
+
   static class ParentProviderA extends ParentProviderABase {
     @Override
     public Parent get() {
       return new ChildA();
     }
   }
-  
+
   static class ParentProviderB implements Provider<Parent> {
     private final Provider<ChildB> childBProvider;
 
     @Inject
     ParentProviderB(Provider<ChildB> childBProvider, Provider<MockInProviderB> myMock) {
       this.childBProvider = childBProvider;
-      
+
       // These calls should succeed
       myMock.get().test();
       verify(myMock.get()).test();
     }
-    
+
     @Override
     public Parent get() {
       return childBProvider.get();
@@ -123,25 +123,25 @@ public class ProviderTest {
       return 42;
     }
   }
-  
+
   static class MyMockProvider2 extends MockProvider<UninstanciableClass> {
     @Inject
     public MyMockProvider2() {
       super(UninstanciableClass.class);
-    }    
+    }
   }
-  
+
   static class MyMockProvider3 extends MockProvider<UninstanciableClass> {
     @Inject
     public MyMockProvider3() {
       super(UninstanciableClass.class);
-    }    
+    }
   }
 
   interface DependencyShouldBeMocked1 {
     int getValue();
   }
-  
+
   static class ClassWithMockedDependency1 {
     private final DependencyShouldBeMocked1 dependency;
     @Inject
@@ -164,11 +164,11 @@ public class ProviderTest {
       return provider.get();
     }
   }
-  
+
   interface DependencyShouldBeMocked2 {
     int getValue();
   }
-  
+
   static class ClassWithMockedDependency2 {
     private final DependencyShouldBeMocked2 dependency;
     @Inject
@@ -179,31 +179,31 @@ public class ProviderTest {
       return dependency;
     }
   }
-  
+
   static class MyProvider2 implements Provider<ClassWithMockedDependency2> {
     final Provider<ClassWithMockedDependency2> provider;
     @Inject
     public MyProvider2(Provider<ClassWithMockedDependency2> provider) {
       this.provider = provider;
-    }    
+    }
     @Override
     public ClassWithMockedDependency2 get() {
       return provider.get();
     }
   }
-  
+
   @Test
   public void mockSingletonProviderShouldReturnTheSameInstance(
       @Named("singleton") Provider<Mock> provider) {
     assertSame(provider.get(), provider.get());
   }
-  
+
   @Test
   public void mockNonSingletonProviderShouldNotReturnTheSameInstance(
       @Named("nonsingleton") Provider<Mock> provider) {
     assertNotSame(provider.get(), provider.get());
   }
-  
+
   @Test
   public void singletonProvidedClassShouldReturnTheSameInstance(
       @Named("singleton") Provider<Instance> provider) {
@@ -275,7 +275,7 @@ public class ProviderTest {
       @Named("MockedDependency1") ClassWithMockedDependency1 testClass) {
     verify(testClass.getDependency(), never()).getValue();
   }
-  
+
   @Test
   public void testInjectingProviderShouldInstantiateDependencies2(
       @Named("MockedDependency2") ClassWithMockedDependency2 testClass) {

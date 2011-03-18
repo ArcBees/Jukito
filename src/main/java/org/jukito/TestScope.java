@@ -1,12 +1,12 @@
 /**
  * Copyright 2010 ArcBees Inc.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -24,11 +24,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Container of the {@link #SINGLETON} and {@link #EAGER_SINGLETON} scopes for 
+ * Container of the {@link #SINGLETON} and {@link #EAGER_SINGLETON} scopes for
  * test cases running with the {@link JukitoRunner}. Depends on mockito.
  * <p />
  * Depends on Mockito.
- * 
+ *
  * @author Philippe Beaudoin
  */
 public class TestScope {
@@ -68,10 +68,10 @@ public class TestScope {
    * test, use {@link #EAGER_SINGLETON}.
    */
   public static final Singleton SINGLETON = new Singleton();
-  
+
   /**
    * Eager test-scoped singleton are similar to test-scoped {@link #SINGLETON}
-   * but they get instantiated automatically with each new test. 
+   * but they get instantiated automatically with each new test.
    */
   public static final Singleton EAGER_SINGLETON = new Singleton();
 
