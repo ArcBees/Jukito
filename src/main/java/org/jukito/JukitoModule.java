@@ -211,10 +211,8 @@ public abstract class JukitoModule extends TestModule {
       Key<T> key, boolean asTestSingleton) {
     TypeLiteral<?> typeToBind = key.getTypeLiteral();
     Class<?> rawType = typeToBind.getRawType();
-    if (isInstantiable(rawType) && !shouldForceMock(rawType)
-        && canBeInjected(typeToBind) && !isCoreGuiceType(rawType)
-        && !isPrimitive(rawType) && !isAssistedInjection(key)
-        && !keysObserved.contains(key)) {
+    if (!keysObserved.contains(key) && canBeInjected(typeToBind)
+        && !shouldForceMock(rawType) && !isAssistedInjection(key)) {
 
       // If an @Singleton annotation is present, force the bind as TestSingleton
       if (asTestSingleton ||
@@ -229,6 +227,10 @@ public abstract class JukitoModule extends TestModule {
   }
 
   private boolean canBeInjected(TypeLiteral<?> type) {
+    Class<?> rawType = type.getRawType();
+    if (isPrimitive(rawType) || isCoreGuiceType(rawType) || !isInstantiable(rawType)) {
+      return false;
+    }
     try {
       InjectionPoint.forConstructorOf(type);
       return true;
@@ -303,7 +305,7 @@ public abstract class JukitoModule extends TestModule {
   private <T> void addDependencies(Key<T> key, Set<Key<?>> keysObserved,
       Set<Key<?>> keysNeeded) {
     TypeLiteral<T> type = key.getTypeLiteral();
-    if (!isInstantiable(type.getRawType())) {
+    if (!canBeInjected(type)) {
       return;
     }
     addInjectionPointDependencies(InjectionPoint.forConstructorOf(type),

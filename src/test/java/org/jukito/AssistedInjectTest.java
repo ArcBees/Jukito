@@ -32,6 +32,8 @@ import org.junit.runner.RunWith;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
+import com.google.inject.name.Named;
+import com.google.inject.name.Names;
 
 /**
  * Tests that new Guice 3.0 assisted injection works in Jukito.
@@ -47,8 +49,11 @@ public class AssistedInjectTest {
   static class Module extends JukitoModule {
     @Override
     protected void configureTest() {
+      bindConstant().annotatedWith(Names.named("G")).to(6.673E-11);
       install(new FactoryModuleBuilder().implement(Payment.class, RealPayment.class)
           .build(PaymentFactory.class));
+      install(new FactoryModuleBuilder().implement(Star.class, StarImpl.class)
+          .build(StarFactory.class));
     }
   }
 
@@ -90,18 +95,74 @@ public class AssistedInjectTest {
     boolean isMoneySignBefore();
   }
 
+  interface StarFactory {
+    Star create(String name, double mass);
+  }
+
+  interface Star {
+    double getGravitationalConstant();
+    double getMass();
+    String getName();
+  }
+
+  static class StarImpl implements Star {
+    private final double gravitationalConstant;
+    private final double mass;
+    private final String name;
+
+    @Inject
+    public StarImpl(@Named("G") Double gravitationalConstant, @Assisted double mass,
+        @Assisted String name) {
+      this.gravitationalConstant = gravitationalConstant;
+      this.mass = mass;
+      this.name = name;
+    }
+
+    @Override
+    public double getGravitationalConstant() {
+      return gravitationalConstant;
+    }
+
+    @Override
+    public double getMass() {
+      return mass;
+    }
+
+    @Override
+    public String getName() {
+      return name;
+    }
+  }
+
   @Before
-  public void setUp(LocaleInfo localeInfo) {
+  public void setup(LocaleInfo localeInfo) {
     when(localeInfo.getMoneySign()).thenReturn("$");
     when(localeInfo.isMoneySignBefore()).thenReturn(false);
   }
 
   @Test
   public void testFactory(PaymentFactory factory) {
+    // GIVEN
     Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"), Locale.US);
     calendar.set(2011, 4, 24); // Month is 0-based
+
+    // WHEN
     Payment payment = factory.create(calendar.getTime(), 50);
+
+    // THEN
     assertEquals("Paid 50$ on 05/24/2011", payment.format());
   }
 
-}
+  @Inject
+  StarFactory starFactory;
+
+  @Test
+  public void testFactoryWithInjectedConstant() {
+    // WHEN
+    Star star = starFactory.create("Sun", 1.99E30);
+
+    // THEN
+    assertEquals("Sun", star.getName());
+    assertEquals(1.99E30, star.getMass(), 0.000001);
+    assertEquals(6.673E-11, star.getGravitationalConstant(), 0.000001);
+  }}
