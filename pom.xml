@@ -85,7 +85,7 @@
     </mailingLists>
 
     <properties>
-        <target.jdk>1.6</target.jdk>
+        <target.jdk>1.5</target.jdk>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
@@ -97,8 +97,9 @@
         <maven-release-plugin.version>2.1</maven-release-plugin.version>
         <maven-source-plugin.version>2.1.2</maven-source-plugin.version>
         <maven-surefire-plugin.version>2.6</maven-surefire-plugin.version>
+        <animal-sniffer-maven-plugin.version>1.6</animal-sniffer-maven-plugin.version>
 
-        <guice.version>3.0-rc2</guice.version>
+        <guice.version>3.0</guice.version>
         <junit.version>4.5</junit.version>
         <mockito.version>1.8.5</mockito.version>
     </properties>
@@ -219,7 +220,29 @@
                     <arguments>-Psonatype-oss-release -Prelease -Dgpg.passphrase=${gpg.passphrase}</arguments>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>animal-sniffer-maven-plugin</artifactId>
+                <version>${animal-sniffer-maven-plugin.version}</version>
+                <configuration>
+                    <signature>
+                        <groupId>org.codehaus.mojo.signature</groupId>
+                        <artifactId>java15</artifactId>
+                        <version>1.0</version>
+                    </signature>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin> 
         </plugins>
+
     </build>
 
     <dependencies>
