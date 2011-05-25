@@ -46,7 +46,8 @@ public class GuiceUtils {
   }
 
   @SuppressWarnings("unchecked")
-  public static <T> TypeLiteral<T> getProvidedType(TypeLiteral<? extends Provider<? extends T>> initialProviderTypeLiteral,
+  public static <T> TypeLiteral<T> getProvidedType(
+      TypeLiteral<? extends Provider<? extends T>> initialProviderTypeLiteral,
       Errors errors) throws ErrorsException {
 
     TypeLiteral<? extends Provider<? extends T>> providerTypeLiteral = initialProviderTypeLiteral;
@@ -66,7 +67,8 @@ public class GuiceUtils {
     return (TypeLiteral<T>) TypeLiteral.get(entryType);
   }
 
-  public static <T> Key<T> getProvidedKey(Key<Provider<T>> key, Errors errors) throws ErrorsException {
+  public static <T> Key<T> getProvidedKey(Key<Provider<T>> key,
+      Errors errors) throws ErrorsException {
     TypeLiteral<T> providedType = getProvidedType(key.getTypeLiteral(), errors);
 
     Key<T> providedKey;

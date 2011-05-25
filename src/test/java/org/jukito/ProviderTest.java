@@ -49,14 +49,21 @@ public class ProviderTest {
       bindNamedMock(Mock.class, "nonsingleton");
       bindNamed(Instance.class, "singleton").to(Instance.class).in(TestSingleton.class);
       bindNamed(Instance.class, "nonsingleton").to(Instance.class);
-      bindNamed(Parent.class, "providerInstance").toProvider(new ParentProviderA()).in(TestSingleton.class);
-      bindNamed(Parent.class, "providerClass").toProvider(ParentProviderB.class).in(TestSingleton.class);
-      bindNamed(Parent.class, "providerKey").toProvider(Key.get(ParentProviderA.class)).in(TestSingleton.class);
+      bindNamed(Parent.class, "providerInstance").toProvider(new ParentProviderA()).in(
+          TestSingleton.class);
+      bindNamed(Parent.class, "providerClass").toProvider(ParentProviderB.class).in(
+          TestSingleton.class);
+      bindNamed(Parent.class, "providerKey").toProvider(Key.get(ParentProviderA.class)).in(
+          TestSingleton.class);
       bindNamedMock(UninstanciableClass.class, "cannotInstantiate1").in(TestScope.SINGLETON);
-      bind(UninstanciableClass.class).annotatedWith(Names.named("cannotInstantiate2")).toProvider(MyMockProvider2.class);
-      bind(UninstanciableClass.class).annotatedWith(Names.named("cannotInstantiate3")).toProvider(Key.get(MyMockProvider3.class));
-      bind(ClassWithMockedDependency1.class).annotatedWith(Names.named("MockedDependency1")).toProvider(MyProvider1.class);
-      bind(ClassWithMockedDependency2.class).annotatedWith(Names.named("MockedDependency2")).toProvider(Key.get(MyProvider2.class));
+      bind(UninstanciableClass.class).annotatedWith(Names.named("cannotInstantiate2")).toProvider(
+          MyMockProvider2.class);
+      bind(UninstanciableClass.class).annotatedWith(Names.named("cannotInstantiate3")).toProvider(
+          Key.get(MyMockProvider3.class));
+      bind(ClassWithMockedDependency1.class).annotatedWith(
+          Names.named("MockedDependency1")).toProvider(MyProvider1.class);
+      bind(ClassWithMockedDependency2.class).annotatedWith(
+          Names.named("MockedDependency2")).toProvider(Key.get(MyProvider2.class));
     }
   }
 

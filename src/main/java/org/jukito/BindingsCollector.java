@@ -21,6 +21,7 @@ import java.util.List;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Key;
+import com.google.inject.spi.ConstructorBinding;
 import com.google.inject.spi.ConvertedConstantBinding;
 import com.google.inject.spi.DefaultBindingTargetVisitor;
 import com.google.inject.spi.DefaultElementVisitor;
@@ -158,6 +159,14 @@ public class BindingsCollector {
       BindingInfo binding = new BindingInfo();
       binding.key = linkedKeyBinding.getKey();
       binding.boundKey = linkedKeyBinding.getLinkedKey();
+      bindingsObserved.add(binding);
+      return null;
+    }
+
+    public Void visit(ConstructorBinding<? extends T> constructorBinding) {
+      BindingInfo binding = new BindingInfo();
+      binding.key = constructorBinding.getKey();
+      binding.boundKey = constructorBinding.getKey();
       bindingsObserved.add(binding);
       return null;
     }

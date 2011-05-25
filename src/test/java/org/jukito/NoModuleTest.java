@@ -76,7 +76,8 @@ public class NoModuleTest {
   }
 
   @Test
-  public void testAnnotatedEagerSingleton(MyAnnotatedEagerSingleton a, MyAnnotatedEagerSingleton b) {
+  public void testAnnotatedEagerSingleton(MyAnnotatedEagerSingleton a,
+      MyAnnotatedEagerSingleton b) {
     assertSame(a, b);
   }
 }

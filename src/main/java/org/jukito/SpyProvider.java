@@ -18,18 +18,13 @@ package org.jukito;
 
 import static org.mockito.Mockito.spy;
 
-import java.lang.reflect.Constructor;
-import java.util.HashSet;
-import java.util.List;
+import java.util.Collections;
 import java.util.Set;
 
-import com.google.inject.Inject;
-import com.google.inject.Injector;
+import com.google.inject.Key;
 import com.google.inject.Provider;
-import com.google.inject.TypeLiteral;
 import com.google.inject.spi.Dependency;
 import com.google.inject.spi.HasDependencies;
-import com.google.inject.spi.InjectionPoint;
 
 /**
  * For use in test cases where an {@link Provider} is required to provide an
@@ -44,55 +39,33 @@ import com.google.inject.spi.InjectionPoint;
  *
  * @param <T> The class to provide.
  */
-public class SpyProvider<T> implements Provider<T>, HasDependencies {
+class SpyProvider<T> implements Provider<T>, HasDependencies {
 
-  private final InjectionPoint constructorInjectionPoint;
-  private final Constructor<T> constructor;
-  private final HashSet<Dependency<?>> dependencySet;
-  @Inject private Injector injector;  // Guice will automatically inject this when the injector is created
+  private final Provider<T> rawProvider;
+  private final Set<Dependency<?>> dependencies;
 
   /**
    * Construct a {@link Provider} that will return spied instances of objects
-   * of the specified types.
+   * of the specified types. You should not call this directly, instead use
+   * {@link TestModule#bindSpy(Class)} or {@link TestModule#bindSpy(com.google.inject.TypeLiteral)}.
    *
-   * @param testClass The test class, running with {@link JukitoRunner}.
-   * @param typeToProvide The {@link TypeLiteral} of the spy object to provide.
+   * @param rawProvider The test class, running with {@link JukitoRunner}.
+   * @param relayingKey The key of the binding used to relay to the real class. This should usually
+   *                    be the key of a {code toConstructor} binding. Internally, Jukito uses the
+   *                    {@link JukitoInternal} annotation to distinguish this binding.
    */
-  @SuppressWarnings("unchecked")
-  public SpyProvider(TypeLiteral<T> typeToProvide) {
-    constructorInjectionPoint = InjectionPoint.forConstructorOf(typeToProvide);
-    constructor = (Constructor<T>) constructorInjectionPoint.getMember();
-    dependencySet = new HashSet<Dependency<?>>(constructorInjectionPoint.getDependencies());
-    addDependenciesForMethodsAndFields(typeToProvide);
-  }
-
-  private void addDependenciesForMethodsAndFields(TypeLiteral<T> typeToProvide) {
-    Set<InjectionPoint> injectionPoints = InjectionPoint.forInstanceMethodsAndFields(typeToProvide);
-    for (InjectionPoint injectionPoint : injectionPoints) {
-      dependencySet.addAll(injectionPoint.getDependencies());
-    }
+  public SpyProvider(Provider<T> rawProvider, Key<T> relayingKey) {
+    this.rawProvider = rawProvider;
+    dependencies = Collections.<Dependency<?>>singleton(Dependency.get(relayingKey));
   }
 
   @Override
   public T get() {
-    List<Dependency<?>> dependencies = constructorInjectionPoint.getDependencies();
-    Object[] constructorParameters = new Object[dependencies.size()];
-    for (Dependency<?> dependency : dependencies) {
-      constructorParameters[dependency.getParameterIndex()] =
-        injector.getInstance(dependency.getKey());
-    }
-    T instance;
-    try {
-      instance = constructor.newInstance(constructorParameters);
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
-    injector.injectMembers(instance);
-    return spy(instance);
+    return spy(rawProvider.get());
   }
 
   @Override
   public Set<Dependency<?>> getDependencies() {
-    return dependencySet;
+    return dependencies;
   }
 }

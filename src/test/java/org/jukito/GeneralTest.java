@@ -63,12 +63,24 @@ public class GeneralTest {
       bind(MyInteger.class).annotatedWith(OneHundred.class).toInstance(new MyIntegerImpl(100));
       bind(MyInteger.class).annotatedWith(Names.named("200")).toInstance(new MyIntegerImpl(200));
       bind(Key.get(TestClass.class, Value3.class)).toInstance(new TestClass(MyEnum.VALUE3));
-      bind(Key.get(TestClass.class, Names.named("VALUE2"))).to(TestClass.class).in(TestSingleton.class);
+      bind(Key.get(TestClass.class, Names.named("VALUE2"))).to(TestClass.class).in(
+          TestSingleton.class);
       bind(new TypeLiteral<ParameterizedTestClass<Integer>>() { }).in(TestScope.SINGLETON);
-      bind(new TypeLiteral<ParameterizedTestClass<Double>>() { }).to(ParameterizedTestClassDouble.class).in(TestScope.SINGLETON);
+      bind(new TypeLiteral<ParameterizedTestClass<Double>>() { }).to(
+          ParameterizedTestClassDouble.class).in(TestScope.SINGLETON);
       bindNamedMock(ClassWithUninstanciableDependency3.class, "UninstanciableDependency3a");
-      bind(ClassWithUninstanciableDependency3.class).annotatedWith(Names.named("UninstanciableDependency3b")).toProvider(MyMockProvider3b.class);
-      bind(ClassWithUninstanciableDependency3.class).annotatedWith(Names.named("UninstanciableDependency3c")).toProvider(Key.get(MyMockProvider3c.class));
+      bind(ClassWithUninstanciableDependency3.class).annotatedWith(
+          Names.named("UninstanciableDependency3b")).toProvider(MyMockProvider3b.class);
+      bind(ClassWithUninstanciableDependency3.class).annotatedWith(
+          Names.named("UninstanciableDependency3c")).toProvider(Key.get(MyMockProvider3c.class));
+      try {
+        bind(ParameterizedTestClassString.class).toConstructor(
+            ParameterizedTestClassString.class.getConstructor(String.class));
+      } catch (SecurityException e) {
+        e.printStackTrace();
+      } catch (NoSuchMethodException e) {
+        e.printStackTrace();
+      }
       // TODO: Try to bind a mock logger once Issue 9 is solved.
       // bindMock(Logger.class);
     }
@@ -104,7 +116,7 @@ public class GeneralTest {
   }
 
   static class ParameterizedTestClass<T> {
-    private final T value;
+    final T value;
     @Inject
     public ParameterizedTestClass(@Named("200") T value) {
       this.value = value;
@@ -115,6 +127,16 @@ public class GeneralTest {
     @Inject
     public ParameterizedTestClassDouble() {
       super(10.0);
+    }
+  }
+
+  static class ParameterizedTestClassString extends ParameterizedTestClass<String> {
+    @Inject
+    public ParameterizedTestClassString() {
+      super("default constructor");
+    }
+    public ParameterizedTestClassString(@Named("HelloWorld") String value) {
+      super(value);
     }
   }
 
@@ -330,5 +352,10 @@ public class GeneralTest {
   @Test
   public void testInjectingMembersInjectorShouldWork(
       MembersInjector<TestClass> memberInjector) {
+  }
+
+  @Test
+  public void toConstructorInjectionShouldWork(ParameterizedTestClassString object) {
+    assertEquals("Hello World!", object.value);
   }
 }

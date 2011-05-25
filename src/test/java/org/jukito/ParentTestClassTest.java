@@ -59,7 +59,8 @@ public class ParentTestClassTest extends ParentTestClassBase {
   }
 
   @Test
-  public void singletonDefinedInParentShouldBeBound(SingletonDefinedInParent singletonDefinedInParent) {
+  public void singletonDefinedInParentShouldBeBound(
+      SingletonDefinedInParent singletonDefinedInParent) {
     assertEquals("SingletonDefinedInParentValue", singletonDefinedInParent.getValue());
   }
 

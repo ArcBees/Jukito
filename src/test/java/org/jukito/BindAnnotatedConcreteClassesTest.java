@@ -58,19 +58,22 @@ public class BindAnnotatedConcreteClassesTest {
   }
 
   @Test
-  public void testConcreteClassBoundToDifferentSingletons(@Named("a") ConcreteClass a, @Named("b") ConcreteClass b) {
+  public void testConcreteClassBoundToDifferentSingletons(@Named("a") ConcreteClass a,
+      @Named("b") ConcreteClass b) {
     // THEN
     assertNotSame(a, b);
   }
 
   @Test
-  public void testConcreteClassBoundToSameSingleton(@Named("c") ConcreteClass c, @Named("d") ConcreteClass d) {
+  public void testConcreteClassBoundToSameSingleton(@Named("c") ConcreteClass c,
+      @Named("d") ConcreteClass d) {
     // THEN
     assertSame(c, d);
   }
 
   @Test
-  public void testConcreteClassNoBoundAsSingleton(SubSubConcreteClass instance1, SubSubConcreteClass instance2) {
+  public void testConcreteClassNoBoundAsSingleton(SubSubConcreteClass instance1,
+      SubSubConcreteClass instance2) {
     // THEN
     assertNotSame(instance1, instance2);
   }

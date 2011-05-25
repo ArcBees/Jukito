@@ -42,7 +42,8 @@ public class AllAnnotationTest {
     @Override
     protected void configureTest() {
       bindManyInstances(String.class, "A", "B");
-      bindManyInstances(TestDataInstance.class, new TestDataInstance("A"), new TestDataInstance("B"));
+      bindManyInstances(TestDataInstance.class, new TestDataInstance("A"),
+          new TestDataInstance("B"));
       bindMany(TestData.class, TestDataA.class, TestDataB.class);
     }
   }

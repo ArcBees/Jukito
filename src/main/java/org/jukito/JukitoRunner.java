@@ -83,18 +83,21 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
     Class<? extends TestModule> testModuleClass = null;
     for (Class<?> subclass : testClass.getDeclaredClasses()) {
       if (TestModule.class.isAssignableFrom(subclass)) {
-        assert testModuleClass == null : "More than one TestModule inner class found within test class \""
-            + testClass.getName() + "\".";
+        assert testModuleClass == null :
+          "More than one TestModule inner class found within test class \""
+          + testClass.getName() + "\".";
         testModuleClass = (Class<? extends TestModule>) subclass;
       }
     }
     if (testModuleClass == null) {
       if (useAutomockingIfNoEnvironmentFound) {
-        JukitoModule testModule = new JukitoModule() { @Override protected void configureTest() { } };
+        JukitoModule testModule = new JukitoModule() {
+          @Override protected void configureTest() { } };
         testModule.setTestClass(testClass);
         injector = Guice.createInjector(testModule);
       } else {
-        TestModule testModule = new TestModule() { @Override protected void configureTest() { } };
+        TestModule testModule = new TestModule() {
+          @Override protected void configureTest() { } };
         testModule.setTestClass(testClass);
         injector = Guice.createInjector(testModule);
       }
@@ -231,7 +234,8 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
   }
 
   private void instantiateEagerTestSingletons() {
-    DefaultBindingScopingVisitor<Boolean> isEagerTestScopeSingleton = new DefaultBindingScopingVisitor<Boolean>() {
+    DefaultBindingScopingVisitor<Boolean> isEagerTestScopeSingleton =
+      new DefaultBindingScopingVisitor<Boolean>() {
       public Boolean visitScope(Scope scope) {
         return scope == TestScope.EAGER_SINGLETON;
       }

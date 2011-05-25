@@ -119,7 +119,8 @@ public abstract class JukitoModule extends TestModule {
       if (bindingInfo.boundKey != null) {
         keysNeeded.add(bindingInfo.boundKey);
       }
-      if (bindingInfo.boundInstance != null && bindingInfo.boundInstance instanceof HasDependencies) {
+      if (bindingInfo.boundInstance != null &&
+          bindingInfo.boundInstance instanceof HasDependencies) {
         HasDependencies hasDependencies = (HasDependencies) bindingInfo.boundInstance;
         for (Dependency<?> dependency : hasDependencies.getDependencies()) {
           keysNeeded.add(dependency.getKey());
@@ -127,7 +128,8 @@ public abstract class JukitoModule extends TestModule {
       }
     }
 
-    // Make sure needed keys from Guice bindings are bound as mock or to instances (but not as test singletons)
+    // Make sure needed keys from Guice bindings are bound as mock or to instances
+    // (but not as test singletons)
     for (Key<?> keyNeeded : keysNeeded) {
       addNeededKey(keysObserved, keysNeeded, keyNeeded, false);
       keysNeedingTransitiveDependencies.add(keyNeeded);
@@ -306,7 +308,8 @@ public abstract class JukitoModule extends TestModule {
     }
     addInjectionPointDependencies(InjectionPoint.forConstructorOf(type),
         keysObserved, keysNeeded);
-    Set<InjectionPoint> methodsAndFieldsInjectionPoints = InjectionPoint.forInstanceMethodsAndFields(type);
+    Set<InjectionPoint> methodsAndFieldsInjectionPoints =
+      InjectionPoint.forInstanceMethodsAndFields(type);
     for (InjectionPoint injectionPoint : methodsAndFieldsInjectionPoints) {
       addInjectionPointDependencies(injectionPoint, keysObserved, keysNeeded);
     }
@@ -328,7 +331,8 @@ public abstract class JukitoModule extends TestModule {
       Set<Key<?>> keysNeeded) {
     Key<?> newKey = key;
     if (Provider.class.isAssignableFrom(key.getTypeLiteral().getRawType())) {
-      Type providedType = ((ParameterizedType) key.getTypeLiteral().getType()).getActualTypeArguments()[0];
+      Type providedType = (
+          (ParameterizedType) key.getTypeLiteral().getType()).getActualTypeArguments()[0];
       if (key.getAnnotation() != null) {
         newKey = Key.get(providedType, key.getAnnotation());
       } else if (key.getAnnotationType() != null) {
