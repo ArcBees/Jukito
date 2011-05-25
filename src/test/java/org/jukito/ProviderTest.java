@@ -28,6 +28,7 @@ import org.junit.runner.RunWith;
 import com.google.inject.Inject;
 import com.google.inject.Key;
 import com.google.inject.Provider;
+import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 
@@ -64,6 +65,11 @@ public class ProviderTest {
           Names.named("MockedDependency1")).toProvider(MyProvider1.class);
       bind(ClassWithMockedDependency2.class).annotatedWith(
           Names.named("MockedDependency2")).toProvider(Key.get(MyProvider2.class));
+    }
+
+    @Provides
+    ProvidedViaMethod getProvidedViaMethod() {
+      return new ProvidedViaMethod("good");
     }
   }
 
@@ -199,6 +205,13 @@ public class ProviderTest {
     }
   }
 
+  static class ProvidedViaMethod {
+    final String value;
+    ProvidedViaMethod(String value) {
+      this.value = value;
+    }
+  }
+
   @Test
   public void mockSingletonProviderShouldReturnTheSameInstance(
       @Named("singleton") Provider<Mock> provider) {
@@ -287,5 +300,10 @@ public class ProviderTest {
   public void testInjectingProviderShouldInstantiateDependencies2(
       @Named("MockedDependency2") ClassWithMockedDependency2 testClass) {
     verify(testClass.getDependency(), never()).getValue();
+  }
+
+  @Test
+  public void providesMethodShouldWork(ProvidedViaMethod providedViaMethod) {
+    assertEquals("good", providedViaMethod.value);
   }
 }
