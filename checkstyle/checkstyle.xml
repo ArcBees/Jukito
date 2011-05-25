@@ -15,7 +15,6 @@
     <module name="UnnecessaryParentheses"/>
     <module name="ExplicitInitialization"/>
     <module name="ParameterAssignment"/>
-    <module name="JUnitTestCase"/>
     <module name="StringLiteralEquality"/>
     <module name="SimplifyBooleanReturn"/>
     <module name="SimplifyBooleanExpression"/>
