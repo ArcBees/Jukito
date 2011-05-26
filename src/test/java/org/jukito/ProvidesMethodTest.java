@@ -35,6 +35,7 @@ import com.google.inject.name.Named;
  * Test that @Provides methods in the tester module behave correctly.
  *
  * @author Trask Stalnaker
+ * @author tpeierls@gmail.com
  * @author Philippe Beaudoin
  */
 @RunWith(JukitoRunner.class)
@@ -97,6 +98,8 @@ public class ProvidesMethodTest {
     protected ClassWithMockedDependency2 providesClassWithMockedDependency2(ClassWithMockedDependency2 x) {
       return x;
     }
+    @Provides public Value aValue() { return VALUE; }
+    @Provides public Integer anInteger(Value value) { return 3; }
   }
 
   interface Mock { }
@@ -164,6 +167,13 @@ public class ProvidesMethodTest {
       return dependency;
     }
   }
+
+  static class Value {
+    public Value(String string) { this.string = string; }
+    public final String string;
+  }
+
+  private static final Value VALUE = new Value("ok");
 
   @Test
   public void mockSingletonProviderShouldReturnTheSameInstance(
@@ -253,5 +263,11 @@ public class ProvidesMethodTest {
   public void testInjectingProviderShouldInstantiateDependencies2(
       @Named("MockedDependency2") ClassWithMockedDependency2 testClass) {
     verify(testClass.getDependency(), never()).getValue();
+  }
+
+  @Test
+  public void testProvidingConstants(Value value, Integer integer) {
+    assertEquals("ok", value.string);
+    assertEquals(3, (int) integer);
   }
 }
