@@ -34,7 +34,13 @@ import java.util.Map;
 public class TestScope {
 
   private static class Singleton implements Scope {
+    private final String simpleName;
+
     private final Map<Key<?>, Object> backingMap = new HashMap<Key<?>, Object>();
+
+    public Singleton(String simpleName) {
+      this.simpleName = simpleName;
+    }
 
     public void clear() {
       backingMap.clear();
@@ -56,6 +62,10 @@ public class TestScope {
         }
       };
     }
+
+    public String toString() {
+      return simpleName;
+    }
   }
 
   /**
@@ -67,13 +77,13 @@ public class TestScope {
    * If you want your singleton to be instantiated automatically with each new
    * test, use {@link #EAGER_SINGLETON}.
    */
-  public static final Singleton SINGLETON = new Singleton();
+  public static final Singleton SINGLETON = new Singleton("TestSingleton");
 
   /**
    * Eager test-scoped singleton are similar to test-scoped {@link #SINGLETON}
    * but they get instantiated automatically with each new test.
    */
-  public static final Singleton EAGER_SINGLETON = new Singleton();
+  public static final Singleton EAGER_SINGLETON = new Singleton("EagerTestSingleton");
 
   /**
    * Clears all the instances of test-scoped singletons. After this method is

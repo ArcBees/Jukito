@@ -81,6 +81,9 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
       return;
     }
     Class<? extends TestModule> testModuleClass = null;
+    TestModule testModule;
+    TestModule testModuleForCollection;
+    JukitoModule jukitoModule = null; // Only non-null if it's a JukitoModule
     for (Class<?> subclass : testClass.getDeclaredClasses()) {
       if (TestModule.class.isAssignableFrom(subclass)) {
         assert testModuleClass == null :
@@ -91,27 +94,33 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
     }
     if (testModuleClass == null) {
       if (useAutomockingIfNoEnvironmentFound) {
-        JukitoModule testModule = new JukitoModule() {
+        testModule = new JukitoModule() {
           @Override protected void configureTest() { } };
-        testModule.setTestClass(testClass);
-        injector = Guice.createInjector(testModule);
+        testModuleForCollection = new JukitoModule() {
+          @Override protected void configureTest() { } };
       } else {
-        TestModule testModule = new TestModule() {
+        testModule = new TestModule() {
           @Override protected void configureTest() { } };
-        testModule.setTestClass(testClass);
-        injector = Guice.createInjector(testModule);
       }
     } else {
-      TestModule testModule = testModuleClass.newInstance();
-      testModule.setTestClass(testClass);
-      if (testModule instanceof JukitoModule) {
-        // Create a module just for the purpose of collecting bindings
-        TestModule testModuleForCollection = testModuleClass.newInstance();
-        BindingsCollector collector = new BindingsCollector(testModuleForCollection);
-        collector.collectBindings();
-        ((JukitoModule) testModule).setBindingsObserved(collector.getBindingsObserved());
-      }
-      injector = Guice.createInjector(testModule);
+      testModule = testModuleClass.newInstance();
+      testModuleForCollection = testModuleClass.newInstance();
+    }
+    testModule.setTestClass(testClass);
+    if (testModule instanceof JukitoModule) {
+      jukitoModule = (JukitoModule) testModule;
+
+      // Create a module just for the purpose of collecting bindings
+      BindingsCollector collector = new BindingsCollector(testModuleForCollection);
+      collector.collectBindings();
+      jukitoModule.setBindingsObserved(collector.getBindingsObserved());
+    }
+    injector = Guice.createInjector(testModule);
+    if (jukitoModule != null && jukitoModule.getReportWriter() != null) {
+      // An output report is desired
+      BindingsCollector collector = new BindingsCollector(jukitoModule);
+      collector.collectBindings();
+      jukitoModule.printReport(collector.getBindingsObserved());
     }
   }
 

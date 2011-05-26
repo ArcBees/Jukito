@@ -16,6 +16,8 @@
 
 package org.jukito;
 
+import java.io.IOException;
+import java.io.Writer;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
@@ -344,5 +346,82 @@ public abstract class JukitoModule extends TestModule {
       }
     }
     addNeededKey(keysObserved, keysNeeded, newKey, true);
+  }
+
+  /**
+   * Override and return the {@link Writer} you want to use to report the tree of test objects,and whether they
+   * were mocked, spied, automatically instantiated, or explicitly bound. Mostly useful for
+   * debugging.
+   *
+   * @return The {@link Writer}, if {@code null} no report will be output.
+   */
+  public Writer getReportWriter() {
+    return null;
+  }
+
+  /**
+   * Outputs the report, see {@link #setReportWriter(Writer)}. Will not output anything if the
+   * {@code reportWriter} is {@code null}. Do not call directly, it will be called by
+   * {@link JukitoRunner}. To obtain a report, override {@link #getReportWriter()}.
+   */
+  public void printReport(List<BindingInfo> allBindings) {
+    Writer reportWriter = getReportWriter();
+    if (reportWriter == null) {
+      return;
+    }
+
+    try {
+      reportWriter.append("*** EXPLICIT BINDINGS ***\n");
+      Set<Key<?>> reportedKeys = outputBindings(reportWriter, bindingsObserved,
+          Collections.<Key<?>>emptySet());
+      reportWriter.append('\n');
+      reportWriter.append("*** AUTOMATIC BINDINGS ***\n");
+      outputBindings(reportWriter, allBindings, reportedKeys);
+      reportWriter.append('\n');
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * @param reportWriter The {@link Writer} to use to output the report.
+   * @param bindings The bindings to report.
+   * @param keysToSkip The keys that should not be reported.
+   * @return All the keys that were reported.
+   * @throws IOException If something goes wrong when writing.
+   */
+  private Set<Key<?>> outputBindings(Writer reportWriter, List<BindingInfo> bindings,
+      Set<Key<?>> keysToSkip) throws IOException {
+
+    Set<Key<?>> reportedKeys = new HashSet<Key<?>>(bindings.size());
+    for (BindingInfo bindingInfo : bindings) {
+      if (keysToSkip.contains(bindingInfo.key)) {
+        continue;
+      }
+      reportedKeys.add(bindingInfo.key);
+      reportWriter.append("  ");
+      reportWriter.append(bindingInfo.key.toString());
+      reportWriter.append(" --> ");
+      if (bindingInfo.boundKey != null) {
+        if (bindingInfo.key == bindingInfo.boundKey) {
+          reportWriter.append("Bound directly");
+        } else {
+          reportWriter.append(bindingInfo.boundKey.toString());
+        }
+      } else if (bindingInfo.boundInstance != null) {
+        reportWriter.append("Instance of " + bindingInfo.boundInstance.getClass().getCanonicalName());
+      } else {
+        reportWriter.append("NOTHING!?");
+      }
+      reportWriter.append(" ### ");
+      if (bindingInfo.scope == null) {
+        reportWriter.append("No scope");
+      } else {
+        reportWriter.append("In scope ");
+        reportWriter.append(bindingInfo.scope);
+      }
+      reportWriter.append('\n');
+    }
+    return reportedKeys;
   }
 }

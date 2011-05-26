@@ -16,13 +16,17 @@
 
 package org.jukito;
 
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Binding;
 import com.google.inject.Key;
+import com.google.inject.Scope;
 import com.google.inject.spi.ConstructorBinding;
 import com.google.inject.spi.ConvertedConstantBinding;
+import com.google.inject.spi.DefaultBindingScopingVisitor;
 import com.google.inject.spi.DefaultBindingTargetVisitor;
 import com.google.inject.spi.DefaultElementVisitor;
 import com.google.inject.spi.Element;
@@ -63,9 +67,21 @@ public class BindingsCollector {
    * Information on a binding, used by Jukito to identify provided keys and needed keys.
    */
   public static class BindingInfo {
+
+    public static BindingInfo create(Binding<?> binding, Key<?> boundKey,
+        Object instance) {
+      BindingInfo bindingInfo = new BindingInfo();
+      bindingInfo.key = binding.getKey();
+      bindingInfo.boundKey = boundKey;
+      bindingInfo.boundInstance = instance;
+      bindingInfo.scope = binding.acceptScopingVisitor(new GuiceScopingVisitor());
+      return bindingInfo;
+    }
+
     Key<?> key;
     Key<?> boundKey;
     public Object boundInstance;
+    String scope;
   }
 
   private final List<Message> messages = new ArrayList<Message>();
@@ -100,75 +116,84 @@ public class BindingsCollector {
    */
   public class GuiceBindingVisitor<T> extends DefaultBindingTargetVisitor<T, Void> {
 
+    private Void addBindingInfo(Binding<? extends T> binding, Key<?> boundKey, Object instance) {
+      bindingsObserved.add(BindingInfo.create(binding, boundKey, instance));
+      return null;
+    }
+
+    private Void addBinding(Binding<? extends T> binding) {
+      return addBindingInfo(binding, binding.getKey(), null);
+    }
+
+    private Void addBindingKey(Binding<? extends T> binding, Key<?> boundKey) {
+      return addBindingInfo(binding, boundKey, null);
+    }
+
+    private Void addBindingInstance(Binding<? extends T> binding, Object instance) {
+      return addBindingInfo(binding, null, instance);
+    }
+
     @Override
     public Void visit(ProviderBinding<? extends T> providerBinding) {
-      BindingInfo binding = new BindingInfo();
-      binding.key = providerBinding.getKey();
-      binding.boundKey = providerBinding.getProvidedKey();
-      bindingsObserved.add(binding);
-      return null;
+      return addBindingKey(providerBinding, providerBinding.getProvidedKey());
     }
 
     @Override
     public Void visit(ProviderKeyBinding<? extends T> providerKeyBinding) {
-      BindingInfo binding = new BindingInfo();
-      binding.key = providerKeyBinding.getKey();
-      binding.boundKey = providerKeyBinding.getProviderKey();
-      bindingsObserved.add(binding);
-      return null;
+      return addBindingKey(providerKeyBinding, providerKeyBinding.getProviderKey());
     }
 
     @Override
     public Void visit(ProviderInstanceBinding<? extends T> providerInstanceBinding) {
-      BindingInfo binding = new BindingInfo();
-      binding.key = providerInstanceBinding.getKey();
-      binding.boundInstance = providerInstanceBinding.getProviderInstance();
-      bindingsObserved.add(binding);
-      return null;
+      return addBindingInstance(providerInstanceBinding,
+          providerInstanceBinding.getProviderInstance());
     }
 
     @Override
     public Void visit(InstanceBinding<? extends T> instanceBinding) {
-      BindingInfo binding = new BindingInfo();
-      binding.key = instanceBinding.getKey();
-      binding.boundInstance = instanceBinding.getInstance();
-      bindingsObserved.add(binding);
-      return null;
+      return addBindingInstance(instanceBinding, instanceBinding.getInstance());
     }
 
     @Override
     public Void visit(ConvertedConstantBinding<? extends T> constantBinding) {
-      BindingInfo binding = new BindingInfo();
-      binding.key = constantBinding.getKey();
-      binding.boundInstance = constantBinding.getValue();
-      bindingsObserved.add(binding);
-      return null;
+      return addBindingInstance(constantBinding, constantBinding.getValue());
     }
 
     @Override
     public Void visit(UntargettedBinding<? extends T> untargettedBinding) {
-      BindingInfo binding = new BindingInfo();
-      binding.key = untargettedBinding.getKey();
-      binding.boundKey = untargettedBinding.getKey();
-      bindingsObserved.add(binding);
-      return null;
+      return addBinding(untargettedBinding);
     }
 
     @Override
     public Void visit(LinkedKeyBinding<? extends T> linkedKeyBinding) {
-      BindingInfo binding = new BindingInfo();
-      binding.key = linkedKeyBinding.getKey();
-      binding.boundKey = linkedKeyBinding.getLinkedKey();
-      bindingsObserved.add(binding);
-      return null;
+      return addBindingKey(linkedKeyBinding, linkedKeyBinding.getLinkedKey());
     }
 
+    @Override
     public Void visit(ConstructorBinding<? extends T> constructorBinding) {
-      BindingInfo binding = new BindingInfo();
-      binding.key = constructorBinding.getKey();
-      binding.boundKey = constructorBinding.getKey();
-      bindingsObserved.add(binding);
-      return null;
+      return addBinding(constructorBinding);
     }
   }
+
+  /**
+   * This visitor collects all information on guice scopes associated to the bindings.
+   */
+  public static class GuiceScopingVisitor extends DefaultBindingScopingVisitor<String> {
+
+    @Override
+    public String visitEagerSingleton() {
+      return "EagerSingleton";
+    }
+
+    @Override
+    public String visitScope(Scope scope) {
+      return scope.toString();
+    }
+
+    @Override
+    public String visitScopeAnnotation(Class<? extends Annotation> scopeAnnotation) {
+      return scopeAnnotation.getCanonicalName();
+    }
+  }
+
 }
