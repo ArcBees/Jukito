@@ -288,10 +288,9 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
 
   /**
    * Adds to {@code errors} if any method in this class is annotated with
-   * {@code annotation}, but:
+   * the provided {@code annotation}, but:
    * <ul>
    * <li>is not public, or
-   * <li>takes parameters, or
    * <li>returns something other than void, or
    * <li>is static (given {@code isStatic is false}), or
    * <li>is not static (given {@code isStatic is true}).
@@ -302,7 +301,6 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
 
     for (FrameworkMethod eachTestMethod : methods) {
       eachTestMethod.validatePublicVoid(isStatic, errors);
-      // TODO We should validate that all parameters have a binding
     }
   }
 
