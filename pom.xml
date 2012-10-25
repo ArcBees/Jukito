@@ -100,8 +100,8 @@
         <animal-sniffer-maven-plugin.version>1.6</animal-sniffer-maven-plugin.version>
 
         <guice.version>3.0</guice.version>
-        <junit.version>4.5</junit.version>
-        <mockito.version>1.8.5</mockito.version>
+        <junit.version>4.10</junit.version>
+        <mockito.version>1.9.5</mockito.version>
     </properties>
 
     <build>
