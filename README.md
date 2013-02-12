@@ -5,7 +5,7 @@ The combined power of JUnit, Guice and Mockito. Plus it sounds like a cool marti
 * https://code.google.com/p/jukito/ - Previous Jukito home.
 
 ##Reference
-* [GWTP](https://github.com/ArcBees/GWTP) - Find out more about GWT-Platform.
+* [GWTP](https://github.com/ArcBees/GWTP) - Find out more about the GWT-Platform.
 * [Jukito WebSite Source](https://github.com/ArcBees/jukito-website) - Jukito website source.
 * [Jukito Previous Repo](https://code.google.com/p/jukito/) - Previous home of Jukito.
 
