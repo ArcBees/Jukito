@@ -5,7 +5,7 @@ The combined power of JUnit, Guice and Mockito. Plus it sounds like a cool marti
 * https://code.google.com/p/jukito/ - Previous Jukito home.
 
 ##Jukito Reference
-* [Jukito/GWTP Custom Google Search](http://www.google.com/cse/home?cx=011138278718949652927:5yuja8xc600) - Search GWTP documentation, wiki and thread collections.
+* [Jukito Custom Google Search](http://www.google.com/cse/home?cx=011138278718949652927:5yuja8xc600) - Search GWTP documentation, wiki and thread collections.
 * [Jukito WebSite Source](https://github.com/ArcBees/jukito-website) - Jukito website source.
 * [Jukito Previous Repo](https://code.google.com/p/jukito/) - Previous home of Jukito.
 
