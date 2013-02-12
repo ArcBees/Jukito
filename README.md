@@ -10,7 +10,7 @@ The combined power of JUnit, Guice and Mockito. Plus it sounds like a cool marti
 * [Jukito Previous Repo](https://code.google.com/p/jukito/) - Previous home of Jukito.
 
 ##Maven
-* [Maven Central Jars](http://search.maven.org/#search%7Cga%7C1%7Corg.jukito)
+* [Maven Central Jars](http://search.maven.org/#search%7Cga%7C1%7Corg.jukito) - Download jars from Maven Central.
 
   ```xml
   <dependency>
