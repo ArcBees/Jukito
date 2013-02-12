@@ -1,0 +1,541 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<rss version="0.91">
+  <channel>
+    <title>jukito - Checkstyle report</title>
+    <link>http://jukito.org</link>
+    <description>jukito - Checkstyle report</description>
+    <language>en-us</language>
+    <copyright>&#169;2010 - 2013 ArcBees Inc.</copyright>
+    <item>
+      <title>File: 36,
+             Errors: 0,
+             Warnings: 2,
+             Infos: 0
+      </title>
+            <link>http://jukito.org/checkstyle.html</link>
+      <description>
+        <p>Click <a href="http://jukito.org/checkstyle.html">here</a> for the full Checkstyle report.</p>
+
+        <table summary="Files" boder="1">
+          <thead>
+            <tr>
+              <th>Files</th>
+              <th style="width:30px;"><abbr title="Info">I</abbr></th>
+              <th style="width:30px;"><abbr title="Warning">W</abbr></th>
+              <th style="width:30px;"><abbr title="Error">E</abbr></th>
+            </tr>
+          </thead>
+          <tbody>
+                          <tr>
+                <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.ParentTestClassTest.java">org/jukito/ParentTestClassTest.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.ParentTestClassBase.java">org/jukito/ParentTestClassBase.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.InjectedFrameworkMethod.java">org/jukito/InjectedFrameworkMethod.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.InjectedStatement.java">org/jukito/InjectedStatement.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.ExternalSingleton.java">org/jukito/ExternalSingleton.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.OneHundred.java">org/jukito/OneHundred.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.AssistedInjectTest.java">org/jukito/AssistedInjectTest.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.ProvidesMethodTest.java">org/jukito/ProvidesMethodTest.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.ProviderTest.java">org/jukito/ProviderTest.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.MockProvider.java">org/jukito/MockProvider.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.NoModuleTest.java">org/jukito/NoModuleTest.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.InjectedAfterStatements.java">org/jukito/InjectedAfterStatements.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.All.java">org/jukito/All.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.BindingsCollector.java">org/jukito/BindingsCollector.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.SpyProvider.java">org/jukito/SpyProvider.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.InjectedBeforeStatements.java">org/jukito/InjectedBeforeStatements.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.TestModule.java">org/jukito/TestModule.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.BindSpyTest.java">org/jukito/BindSpyTest.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.TestEagerSingleton.java">org/jukito/TestEagerSingleton.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.JukitoRunner.java">org/jukito/JukitoRunner.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.BindAnnotatedConcreteClassesTest.java">org/jukito/BindAnnotatedConcreteClassesTest.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.TestMockSingleton.java">org/jukito/TestMockSingleton.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.TestScope.java">org/jukito/TestScope.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.ReportWriterTest.java">org/jukito/ReportWriterTest.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.JukitoInternal.java">org/jukito/JukitoInternal.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.SingletonTest.java">org/jukito/SingletonTest.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.ForceMockTest.java">org/jukito/ForceMockTest.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.AllAnnotationTest.java">org/jukito/AllAnnotationTest.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.JukitoModule.java">org/jukito/JukitoModule.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.GeneralTest.java">org/jukito/GeneralTest.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.GuiceUtils.java">org/jukito/GuiceUtils.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.Value3.java">org/jukito/Value3.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.OldStyleAssistedInjectTest.java">org/jukito/OldStyleAssistedInjectTest.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  2
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.TransitiveDependencyTest.java">org/jukito/TransitiveDependencyTest.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.InstallTest.java">org/jukito/InstallTest.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.TestSingleton.java">org/jukito/TestSingleton.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                      </tbody>
+        </table>
+        
+      </description>
+    </item>
+  </channel>
+</rss>
+
