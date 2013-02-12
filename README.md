@@ -1,8 +1,8 @@
 ![Jukito] (http://i.imgur.com/sRnKp.png "Jukito") Jukito
 The combined power of JUnit, Guice and Mockito. Plus it sounds like a cool martial art.
 
-##Jukito Moving From
-* https://code.google.com/p/jukito/ - The new home for Jukito.
+##Jukito's Moved from
+* https://code.google.com/p/jukito/ - Previous Jukito home.
 
 
 ##Thanks to
