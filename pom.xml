@@ -1,15 +1,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
+    <parent> 
         <groupId>org.sonatype.oss</groupId>
         <artifactId>oss-parent</artifactId>
-        <version>5</version>
+        <version>7</version>
     </parent>
     
     <groupId>org.jukito</groupId>
     <artifactId>jukito</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>jukito</name>
     <inceptionYear>2010</inceptionYear>
@@ -27,10 +27,10 @@
 
     <organization>
         <name>ArcBees Inc.</name>
-        <url>http://arcbees.com</url>
+        <url>http://arcbees.com</url> 
     </organization>
     
-    <developers>
+    <developers>  
         <developer>
             <name>Philippe Beaudoin</name>
             <email>philippe.beaudoin@gmail.com</email>
@@ -59,19 +59,19 @@
     </developers>
     
     <scm>
-        <connection>scm:hg:http://jukito.googlecode.com/hg/</connection>
-        <developerConnection>scm:hg:https://jukito.googlecode.com/hg/</developerConnection>
-        <url>http://code.google.com/p/jukito/source/browse/</url>
+        <connection>scm:git:https://github.com/ArcBees/Jukito.git</connection>
+        <developerConnection>scm:git:https://github.com/ArcBees/Jukito.git</developerConnection>
+        <url>https://github.com/ArcBees/Jukito</url>
     </scm>
 
     <issueManagement>
-        <system>Google Code</system>
-        <url>http://code.google.com/p/jukito/issues</url>
+        <system>GitHub Issues</system>
+        <url>https://github.com/ArcBees/Jukito/issues</url>
     </issueManagement>
 
     <ciManagement>
       <system>Team City</system>
-      <url>http://teamcity.codebetter.com</url>
+      <url>http://teamcity.gonevertical.org</url>
     </ciManagement>
 
     <mailingLists>
@@ -85,7 +85,7 @@
     </mailingLists>
 
     <properties>
-        <target.jdk>1.5</target.jdk>
+        <target.jdk>1.6</target.jdk>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
