@@ -1,4 +1,4 @@
-![Jukito](http://code.google.com/p/jukito/ "Jukito") Jukito
+![Jukito] (http://i.imgur.com/sRnKp.png "Jukito") Jukito
 The combined power of JUnit, Guice and Mockito. Plus it sounds like a cool martial art.
 
 ##Jukito Moving From
