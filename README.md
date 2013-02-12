@@ -14,10 +14,10 @@ The combined power of JUnit, Guice and Mockito. Plus it sounds like a cool marti
 
   ```xml
   <dependency>
-      <groupId>org.jukito</groupId>
-      <artifactId>jukito</artifactId>
-      <version>1.1</version>
-      <scope>test</scope>
+        <groupId>org.jukito</groupId>
+        <artifactId>jukito</artifactId>
+        <version>1.1</version>
+        <scope>test</scope>
   </dependency>
   ```
 
