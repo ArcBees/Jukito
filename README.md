@@ -24,7 +24,7 @@ The combined power of JUnit, Guice and Mockito. Plus it sounds like a cool marti
   </dependency>
   ```
 
-##JavaDocs
+##Javadocs
 * [Javadocs](http://arcbees.github.com/Jukito/javadoc/apidocs/index.html)
 
 ##Thanks to
