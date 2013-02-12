@@ -1,8 +1,8 @@
 #Jukito
-New home for Jutkito source. 
+The combined power of JUnit, Guice and Mockito. Plus it sounds like a cool martial art.
 
 ##Jukito Moving From
-* https://code.google.com/p/jukito/
+* https://code.google.com/p/jukito/ - The new home for Jukito.
 
 
 ##Thanks to
