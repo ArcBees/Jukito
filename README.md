@@ -9,6 +9,9 @@ The combined power of JUnit, Guice and Mockito. Plus it sounds like a cool marti
 * [Jukito WebSite Source](https://github.com/ArcBees/jukito-website) - Jukito website source.
 * [Jukito Previous Repo](https://code.google.com/p/jukito/) - Previous home of Jukito.
 
+##Latest Release
+* 1.1
+
 ##Maven
 * [Maven Central Jars](http://search.maven.org/#search%7Cga%7C1%7Corg.jukito) - Download jars from Maven Central.
 
