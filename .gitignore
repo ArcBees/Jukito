@@ -1,0 +1,12 @@
+gwt-unitCache
+www-test
+target
+.project
+*.iml
+.settings
+.idea
+.classpath
+.gwt
+bin
+META-INF
+.checkstyle
