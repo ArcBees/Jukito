@@ -46,6 +46,8 @@ import com.google.inject.Stage;
 import com.google.inject.TypeLiteral;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.internal.Errors;
+import com.google.inject.internal.ProviderMethod;
+import com.google.inject.internal.ProviderMethodsModule;
 import com.google.inject.spi.Dependency;
 import com.google.inject.spi.HasDependencies;
 import com.google.inject.spi.InjectionPoint;
@@ -56,7 +58,7 @@ import com.google.inject.spi.InjectionPoint;
  * automatically mocks any interface or abstract class dependency for which a
  * binding is not explicitly provided. Any concrete class for which a binding is
  * not explicitly provided is bound as a {@link TestScope#SINGLETON}.
- * <p />
+ * <p/>
  * Depends on Mockito.
  *
  * @author Philippe Beaudoin
@@ -99,7 +101,7 @@ public abstract class JukitoModule extends TestModule {
    * will be mocked in {@link org.jukito.TestMockSingleton} scope.
    *
    * @param klass The {@link Class} or interface for which all subclasses will
-   *          be mocked.
+   *              be mocked.
    */
   protected void forceMock(Class<?> klass) {
     forceMock.add(klass);
@@ -128,6 +130,15 @@ public abstract class JukitoModule extends TestModule {
           keysNeeded.add(dependency.getKey());
         }
       }
+    }
+
+    // registering keys build via @Provides methods in this module in the keysObserved set.
+    ProviderMethodsModule providerMethodsModule = (ProviderMethodsModule)
+        ProviderMethodsModule.forModule(this);
+
+    List<ProviderMethod<?>> providerMethodList = providerMethodsModule.getProviderMethods(binder());
+    for (ProviderMethod<?> providerMethod : providerMethodList) {
+      keysObserved.add(providerMethod.getKey());
     }
 
     // Make sure needed keys from Guice bindings are bound as mock or to instances
@@ -315,7 +326,7 @@ public abstract class JukitoModule extends TestModule {
     addInjectionPointDependencies(InjectionPoint.forConstructorOf(type),
         keysObserved, keysNeeded);
     Set<InjectionPoint> methodsAndFieldsInjectionPoints =
-      InjectionPoint.forInstanceMethodsAndFields(type);
+        InjectionPoint.forInstanceMethodsAndFields(type);
     for (InjectionPoint injectionPoint : methodsAndFieldsInjectionPoints) {
       addInjectionPointDependencies(injectionPoint, keysObserved, keysNeeded);
     }
@@ -387,8 +398,8 @@ public abstract class JukitoModule extends TestModule {
 
   /**
    * @param reportWriter The {@link Writer} to use to output the report.
-   * @param bindings The bindings to report.
-   * @param keysToSkip The keys that should not be reported.
+   * @param bindings     The bindings to report.
+   * @param keysToSkip   The keys that should not be reported.
    * @return All the keys that were reported.
    * @throws IOException If something goes wrong when writing.
    */
