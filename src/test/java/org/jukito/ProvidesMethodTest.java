@@ -16,20 +16,20 @@
 
 package org.jukito;
 
+import com.google.inject.Inject;
+import com.google.inject.Provider;
+import com.google.inject.Provides;
+import com.google.inject.name.Named;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import com.google.inject.Inject;
-import com.google.inject.Provider;
-import com.google.inject.Provides;
-import com.google.inject.name.Named;
 
 /**
  * Test that @Provides methods in the tester module behave correctly.
@@ -53,12 +53,14 @@ public class ProvidesMethodTest {
       bindNamed(Instance.class, "nonsingleton").to(Instance.class);
       bindNamedMock(UninstanciableClass.class, "cannotInstantiate1").in(TestScope.SINGLETON);
     }
+
     @Provides
     @TestSingleton
     @Named("providerInstance")
     protected Parent providesParent1() {
       return new ChildA();
     }
+
     @Provides
     @TestSingleton
     @Named("providerClass")
@@ -68,44 +70,60 @@ public class ProvidesMethodTest {
       verify(myMock).test();
       return childB;
     }
+
     @Provides
     @TestSingleton
     @Named("providerKey")
     protected Parent providesParent3() {
       return new ChildA();
     }
+
     @Provides
     @TestSingleton
     @Named("cannotInstantiate2")
     protected UninstanciableClass providesUninstanciableClass2() {
       return mock(UninstanciableClass.class);
     }
+
     @Provides
     @TestSingleton
     @Named("cannotInstantiate3")
     protected UninstanciableClass providesUninstanciableClass3() {
       return mock(UninstanciableClass.class);
     }
+
     @Provides
     @TestSingleton
     @Named("MockedDependency1")
     protected ClassWithMockedDependency1 providesClassWithMockedDependency1(ClassWithMockedDependency1 x) {
       return x;
     }
+
     @Provides
     @TestSingleton
     @Named("MockedDependency2")
     protected ClassWithMockedDependency2 providesClassWithMockedDependency2(ClassWithMockedDependency2 x) {
       return x;
     }
-    @Provides public Value aValue() { return VALUE; }
-    @Provides public Integer anInteger(Value value) { return 3; }
+
+    @Provides
+    public Value aValue() {
+      return VALUE;
+    }
+
+    @Provides
+    public Integer anInteger(Value value) {
+      return 3;
+    }
   }
 
-  interface Mock { }
+  interface Mock {
+  }
 
   static class Instance {
-    @Inject Instance() { }
+    @Inject
+    Instance() {
+    }
   }
 
   interface Parent {
@@ -118,21 +136,26 @@ public class ProvidesMethodTest {
     }
   }
 
-  interface MockInChildB { }
+  interface MockInChildB {
+  }
 
   interface MockInProviderB {
     void test();
   }
 
   static class ChildB implements Parent {
-    @Inject MockInChildB mockB;
+    @Inject
+    MockInChildB mockB;
+
     public String getValue() {
       return "childB";
     }
   }
 
   static class UninstanciableClass {
-    private UninstanciableClass() { }
+    private UninstanciableClass() {
+    }
+
     public int getValue() {
       return 42;
     }
@@ -144,10 +167,12 @@ public class ProvidesMethodTest {
 
   static class ClassWithMockedDependency1 {
     private final DependencyShouldBeMocked1 dependency;
+
     @Inject
     public ClassWithMockedDependency1(DependencyShouldBeMocked1 dependency) {
       this.dependency = dependency;
     }
+
     public DependencyShouldBeMocked1 getDependency() {
       return dependency;
     }
@@ -159,18 +184,23 @@ public class ProvidesMethodTest {
 
   static class ClassWithMockedDependency2 {
     private final DependencyShouldBeMocked2 dependency;
+
     @Inject
     public ClassWithMockedDependency2(DependencyShouldBeMocked2 dependency) {
       this.dependency = dependency;
     }
+
     public DependencyShouldBeMocked2 getDependency() {
       return dependency;
     }
   }
 
   static class Value {
-    public Value(String string) { this.string = string; }
     public final String string;
+
+    public Value(String string) {
+      this.string = string;
+    }
   }
 
   private static final Value VALUE = new Value("ok");

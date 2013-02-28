@@ -16,18 +16,18 @@
 
 package org.jukito;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.google.inject.Inject;
-import com.google.inject.Provider;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 /**
  * This parent test class is used by {@link ParentTestClassTest}.
@@ -43,6 +43,7 @@ public class ParentTestClassBase {
   @TestSingleton
   static class SingletonDefinedInParent {
     private String value = "SingletonDefinedInParentValue";
+
     public String getValue() {
       return value;
     }
@@ -72,12 +73,19 @@ public class ParentTestClassBase {
     String getDummyValue();
   }
 
-  static class DummyClassUsedOnlyInParent1 { }
-  static class DummyClassUsedOnlyInParent2 { }
-  static class DummyClassUsedOnlyInParent3 { }
+  static class DummyClassUsedOnlyInParent1 {
+  }
 
-  @Inject protected Provider<DummyInterface> dummyProvider;
-  @Inject protected MockSingletonDefinedInParent mockSingletonDefinedInParent;
+  static class DummyClassUsedOnlyInParent2 {
+  }
+
+  static class DummyClassUsedOnlyInParent3 {
+  }
+
+  @Inject
+  protected Provider<DummyInterface> dummyProvider;
+  @Inject
+  protected MockSingletonDefinedInParent mockSingletonDefinedInParent;
 
   /**
    * This class keeps track of what happens in all the tests run in this

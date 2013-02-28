@@ -16,10 +16,6 @@
 
 package org.jukito;
 
-import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.Binding;
 import com.google.inject.Key;
@@ -39,14 +35,39 @@ import com.google.inject.spi.ProviderInstanceBinding;
 import com.google.inject.spi.ProviderKeyBinding;
 import com.google.inject.spi.UntargettedBinding;
 
+import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Collects all the bindings from a Guice module, so that Jukito can identify missing
  * bindings and bind them to mock or instances.
  */
 public class BindingsCollector {
+  /**
+   * Information on a binding, used by Jukito to identify provided keys and needed keys.
+   */
+  public static class BindingInfo {
+
+    public Object boundInstance;
+    Key<?> key;
+    Key<?> boundKey;
+    String scope;
+
+    public static BindingInfo create(Binding<?> binding, Key<?> boundKey,
+                                     Object instance) {
+      BindingInfo bindingInfo = new BindingInfo();
+      bindingInfo.key = binding.getKey();
+      bindingInfo.boundKey = boundKey;
+      bindingInfo.boundInstance = instance;
+      bindingInfo.scope = binding.acceptScopingVisitor(new GuiceScopingVisitor());
+      return bindingInfo;
+    }
+  }
 
   private final AbstractModule module;
   private final List<BindingInfo> bindingsObserved = new ArrayList<BindingInfo>();
+  private final List<Message> messages = new ArrayList<Message>();
 
   BindingsCollector(AbstractModule module) {
     this.module = module;
@@ -62,29 +83,6 @@ public class BindingsCollector {
   public List<BindingInfo> getBindingsObserved() {
     return bindingsObserved;
   }
-
-  /**
-   * Information on a binding, used by Jukito to identify provided keys and needed keys.
-   */
-  public static class BindingInfo {
-
-    public static BindingInfo create(Binding<?> binding, Key<?> boundKey,
-        Object instance) {
-      BindingInfo bindingInfo = new BindingInfo();
-      bindingInfo.key = binding.getKey();
-      bindingInfo.boundKey = boundKey;
-      bindingInfo.boundInstance = instance;
-      bindingInfo.scope = binding.acceptScopingVisitor(new GuiceScopingVisitor());
-      return bindingInfo;
-    }
-
-    Key<?> key;
-    Key<?> boundKey;
-    public Object boundInstance;
-    String scope;
-  }
-
-  private final List<Message> messages = new ArrayList<Message>();
 
   /**
    * This visitor collects all information on various guice elements.

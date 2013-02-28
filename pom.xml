@@ -142,7 +142,6 @@
                 <version>${maven-checkstyle-plugin.version}</version>
                 <configuration>
                     <configLocation>/checkstyle/checkstyle.xml</configLocation>
-                    <headerLocation>/checkstyle/java-header.txt</headerLocation>
                     <suppressionsLocation>/checkstyle/suppressions.xml</suppressionsLocation>
                     <propertiesLocation>/checkstyle/checkstyle.properties</propertiesLocation>
                     <propertyExpansion>basedir=${project.basedir}</propertyExpansion>
