@@ -16,7 +16,10 @@
 
 package org.jukito;
 
-import static org.junit.Assert.assertEquals;
+import com.google.inject.Inject;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.io.StringWriter;
 import java.io.Writer;
@@ -26,10 +29,7 @@ import java.util.Set;
 
 import javax.inject.Singleton;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import com.google.inject.Inject;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests that new Guice 3.0 assisted injection works in Jukito.
@@ -46,7 +46,10 @@ public class ReportWriterTest {
     final Writer reportWriter = new StringWriter();
 
     // Overriding this method will cause a report to be generated.
-    @Override public Writer getReportWriter() { return reportWriter; }
+    @Override
+    public Writer getReportWriter() {
+      return reportWriter;
+    }
 
     @Override
     protected void configureTest() {
@@ -56,19 +59,40 @@ public class ReportWriterTest {
     }
   }
 
-  @Singleton static class Resource1 { }
-  interface Resource2 { }
-  static class Resource3 {
-    @Inject public Resource3(Resource4 resource4) { }
-    @Inject @OneHundred Resource5 resource5;
-    @Inject void setResource6(Resource6 resource6) { }
+  @Singleton
+  static class Resource1 {
   }
-  static class Resource4 { }
-  interface Resource5 { }
-  static class Resource6 { }
 
-  @Inject Resource2 resource2;
-  @Inject Resource3 resource3;
+  interface Resource2 {
+  }
+
+  static class Resource3 {
+    @Inject
+    @OneHundred
+    Resource5 resource5;
+
+    @Inject
+    public Resource3(Resource4 resource4) {
+    }
+
+    @Inject
+    void setResource6(Resource6 resource6) {
+    }
+  }
+
+  static class Resource4 {
+  }
+
+  interface Resource5 {
+  }
+
+  static class Resource6 {
+  }
+
+  @Inject
+  Resource2 resource2;
+  @Inject
+  Resource3 resource3;
 
   @Test
   public void ensureReport(Writer reportWriter, Resource1 resource1) {
@@ -77,17 +101,26 @@ public class ReportWriterTest {
         reportWriter.toString());
 
     Set<String> e = new HashSet<String>();
-    e.add("  Key[type=java.io.Writer, annotation=[none]] --> Instance of java.io.StringWriter ### In scope EagerSingleton");
-    e.add("  Key[type=org.jukito.ReportWriterTest$Resource4, annotation=@org.jukito.JukitoInternal] --> Bound directly ### No scope");
-    e.add("  Key[type=org.jukito.ReportWriterTest$Resource4, annotation=@com.google.inject.name.Named(value=Spy)] --> Instance of org.jukito.SpyProvider ### In scope org.jukito.TestSingleton");
+    e.add("  Key[type=java.io.Writer, annotation=[none]] --> Instance of java.io.StringWriter ### In scope " +
+        "EagerSingleton");
+    e.add("  Key[type=org.jukito.ReportWriterTest$Resource4, annotation=@org.jukito.JukitoInternal] --> Bound " +
+        "directly ### No scope");
+    e.add("  Key[type=org.jukito.ReportWriterTest$Resource4, annotation=@com.google.inject.name.Named(value=Spy)] " +
+        "--> Instance of org.jukito.SpyProvider ### In scope org.jukito.TestSingleton");
 
     Set<String> a = new HashSet<String>();
-    a.add("  Key[type=org.jukito.ReportWriterTest$Resource1, annotation=[none]] --> Bound directly ### In scope TestSingleton");
-    a.add("  Key[type=org.jukito.ReportWriterTest$Resource2, annotation=[none]] --> Instance of org.jukito.MockProvider ### In scope TestSingleton");
-    a.add("  Key[type=org.jukito.ReportWriterTest$Resource3, annotation=[none]] --> Bound directly ### In scope TestSingleton");
-    a.add("  Key[type=org.jukito.ReportWriterTest$Resource4, annotation=[none]] --> Bound directly ### In scope TestSingleton");
-    a.add("  Key[type=org.jukito.ReportWriterTest$Resource5, annotation=@org.jukito.OneHundred] --> Instance of org.jukito.MockProvider ### In scope TestSingleton");
-    a.add("  Key[type=org.jukito.ReportWriterTest$Resource6, annotation=[none]] --> Instance of org.jukito.MockProvider ### In scope TestSingleton");
+    a.add("  Key[type=org.jukito.ReportWriterTest$Resource1, annotation=[none]] --> Bound directly ### In scope " +
+        "TestSingleton");
+    a.add("  Key[type=org.jukito.ReportWriterTest$Resource2, annotation=[none]] --> Instance of " +
+        "org.jukito.MockProvider ### In scope TestSingleton");
+    a.add("  Key[type=org.jukito.ReportWriterTest$Resource3, annotation=[none]] --> Bound directly ### In scope " +
+        "TestSingleton");
+    a.add("  Key[type=org.jukito.ReportWriterTest$Resource4, annotation=[none]] --> Bound directly ### In scope " +
+        "TestSingleton");
+    a.add("  Key[type=org.jukito.ReportWriterTest$Resource5, annotation=@org.jukito.OneHundred] --> Instance of " +
+        "org.jukito.MockProvider ### In scope TestSingleton");
+    a.add("  Key[type=org.jukito.ReportWriterTest$Resource6, annotation=[none]] --> Instance of " +
+        "org.jukito.MockProvider ### In scope TestSingleton");
 
     assertEquals(e, explicitBindings);
     assertEquals(a, automaticBindings);

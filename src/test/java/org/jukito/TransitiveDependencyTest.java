@@ -16,16 +16,16 @@
 
 package org.jukito;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 /**
  * Test that various form of automatic discovery of transitive dependencies work.
@@ -50,6 +50,7 @@ public class TransitiveDependencyTest {
   @TestEagerSingleton
   static class Collaborator {
     private final SubCollaborator subCollaborator;
+
     @Inject
     public Collaborator(SubCollaborator subCollaborator) {
       this.subCollaborator = subCollaborator;
@@ -59,6 +60,7 @@ public class TransitiveDependencyTest {
   @TestEagerSingleton
   static class Leader {
     private final Collaborator collaborator;
+
     @Inject
     public Leader(Collaborator collaborator) {
       this.collaborator = collaborator;
@@ -80,11 +82,13 @@ public class TransitiveDependencyTest {
 
   static class MyInterfaceImpl implements MyInterface {
     private final MyDependency myDependency;
+
     @Inject
     MyInterfaceImpl(MyDependency myDependency,
-        MyDependentInterface myDependentInterface) {
+                    MyDependentInterface myDependentInterface) {
       this.myDependency = myDependency;
     }
+
     @Override
     public int getValue() {
       return myDependency.getValue();
@@ -96,10 +100,18 @@ public class TransitiveDependencyTest {
   }
 
   static class MyClassInjectedWithUnboundConstants {
-    @Inject @Named("version") Integer version;
-    @Inject @Named("someClass") Class<? extends MyClassInjectedWithUnboundConstants> someClass;
-    @Inject @Named("timestamp") Long timestamp;
-    @Inject @Named("option") MyEnum option;
+    @Inject
+    @Named("version")
+    Integer version;
+    @Inject
+    @Named("someClass")
+    Class<? extends MyClassInjectedWithUnboundConstants> someClass;
+    @Inject
+    @Named("timestamp")
+    Long timestamp;
+    @Inject
+    @Named("option")
+    MyEnum option;
 
     @Inject
     MyClassInjectedWithUnboundConstants(
@@ -111,10 +123,12 @@ public class TransitiveDependencyTest {
     }
 
     @Inject
-    void setAutoinit(@Named("autoinit") boolean autoinit) { }
+    void setAutoinit(@Named("autoinit") boolean autoinit) {
+    }
 
     @Inject
-    void setSensitivity(@Named("sensitivity") float sensitivity) { }
+    void setSensitivity(@Named("sensitivity") float sensitivity) {
+    }
   }
 
   @Test

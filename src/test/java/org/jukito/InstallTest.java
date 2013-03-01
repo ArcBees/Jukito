@@ -16,17 +16,17 @@
 
 package org.jukito;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
+import com.google.inject.AbstractModule;
+import com.google.inject.Inject;
+import com.google.inject.Provider;
+import com.google.inject.name.Named;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Inject;
-import com.google.inject.Provider;
-import com.google.inject.name.Named;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 
 /**
  * Test exercising Guice's install() mechanism.
@@ -97,7 +97,8 @@ public class InstallTest {
     }
   }
 
-  @Inject Foo foo;
+  @Inject
+  Foo foo;
 
   @Before
   public void setup(@Named("10") Foo ten) {
