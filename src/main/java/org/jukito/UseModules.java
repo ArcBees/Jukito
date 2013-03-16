@@ -17,11 +17,13 @@ import com.google.inject.Module;
  * {@literal @}RunWith(JukitoRunner.class)
  * {@literal @}UseModules({ FooModule.class, BarModule.class}
  * public class MyTest {
- *   // Tests methods  
+ *   {@literal @}Test
+ *   public void someTest(TypeBoundInFooModule a, TypeBoundInBarModule b) {
+ *   }
  * }</pre>
  * 
- * The example is equivalent to the following <i>inner static module
- * class</i> approach.
+ * The example is equivalent to the following <i>inner static module</i>
+ * approach.
  * <pre>
  * {@literal @}RunWith(JukitoRunner.class)
  * public class MyTest {
