@@ -16,11 +16,11 @@
 
 package org.jukito;
 
-import static org.junit.Assert.assertSame;
-import static org.mockito.Mockito.verify;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import static org.junit.Assert.assertSame;
+import static org.mockito.Mockito.verify;
 
 /**
  * Test to ensure injection works well without a module.
@@ -37,7 +37,7 @@ public class NoModuleTest {
     int dummy();
   }
 
-  static class MySingleton  {
+  static class MySingleton {
   }
 
   @TestSingleton
@@ -45,7 +45,7 @@ public class NoModuleTest {
   }
 
   @TestEagerSingleton
-  static class MyAnnotatedEagerSingleton  {
+  static class MyAnnotatedEagerSingleton {
   }
 
   @Test
@@ -58,7 +58,7 @@ public class NoModuleTest {
 
   @Test
   public void testAnnotatedMockSingleton(MyAnnotatedMockSingleton a,
-      MyAnnotatedMockSingleton b) {
+                                         MyAnnotatedMockSingleton b) {
     assertSame(a, b);
     a.dummy();
     verify(a).dummy();
@@ -77,7 +77,7 @@ public class NoModuleTest {
 
   @Test
   public void testAnnotatedEagerSingleton(MyAnnotatedEagerSingleton a,
-      MyAnnotatedEagerSingleton b) {
+                                          MyAnnotatedEagerSingleton b) {
     assertSame(a, b);
   }
 }

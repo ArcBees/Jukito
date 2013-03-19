@@ -16,8 +16,15 @@
 
 package org.jukito;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
+import com.google.inject.assistedinject.FactoryModuleBuilder;
+import com.google.inject.name.Named;
+import com.google.inject.name.Names;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -25,15 +32,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import com.google.inject.Inject;
-import com.google.inject.assistedinject.Assisted;
-import com.google.inject.assistedinject.FactoryModuleBuilder;
-import com.google.inject.name.Named;
-import com.google.inject.name.Names;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 
 /**
  * Tests that new Guice 3.0 assisted injection works in Jukito.
@@ -69,12 +69,14 @@ public class AssistedInjectTest {
     private final Date date;
     private final int amount;
     private final LocaleInfo localeInfo;
+
     @Inject
     public RealPayment(@Assisted Date date, @Assisted int amount, LocaleInfo localeInfo) {
       this.date = date;
       this.amount = amount;
       this.localeInfo = localeInfo;
     }
+
     @Override
     public String format() {
       String result = "Paid " + Integer.toString(amount);
@@ -92,6 +94,7 @@ public class AssistedInjectTest {
 
   interface LocaleInfo {
     String getMoneySign();
+
     boolean isMoneySignBefore();
   }
 
@@ -101,7 +104,9 @@ public class AssistedInjectTest {
 
   interface Star {
     double getGravitationalConstant();
+
     double getMass();
+
     String getName();
   }
 
@@ -112,7 +117,7 @@ public class AssistedInjectTest {
 
     @Inject
     public StarImpl(@Named("G") Double gravitationalConstant, @Assisted double mass,
-        @Assisted String name) {
+                    @Assisted String name) {
       this.gravitationalConstant = gravitationalConstant;
       this.mass = mass;
       this.name = name;
@@ -134,6 +139,9 @@ public class AssistedInjectTest {
     }
   }
 
+  @Inject
+  StarFactory starFactory;
+
   @Before
   public void setup(LocaleInfo localeInfo) {
     when(localeInfo.getMoneySign()).thenReturn("$");
@@ -153,9 +161,6 @@ public class AssistedInjectTest {
     assertEquals("Paid 50$ on 05/24/2011", payment.format());
   }
 
-  @Inject
-  StarFactory starFactory;
-
   @Test
   public void testFactoryWithInjectedConstant() {
     // WHEN
@@ -165,4 +170,5 @@ public class AssistedInjectTest {
     assertEquals("Sun", star.getName());
     assertEquals(1.99E30, star.getMass(), 0.000001);
     assertEquals(6.673E-11, star.getGravitationalConstant(), 0.000001);
-  }}
+  }
+}

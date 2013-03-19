@@ -16,28 +16,27 @@
 
 package org.jukito;
 
-import static org.mockito.Mockito.spy;
-
-import java.util.Collections;
-import java.util.Set;
-
 import com.google.inject.Key;
 import com.google.inject.Provider;
 import com.google.inject.spi.Dependency;
 import com.google.inject.spi.HasDependencies;
 
+import java.util.Collections;
+import java.util.Set;
+
+import static org.mockito.Mockito.spy;
+
 /**
  * For use in test cases where an {@link Provider} is required to provide an
  * object and the test case needs to provide a spy of the object.
- * <p />
+ * <p/>
  * A new object is returned each the the provider is invoked, unless the object
  * is bound as a {@link TestScope#SINGLETON} or {@link TestScope#EAGER_SINGLETON}.
- * <p />
+ * <p/>
  * Depends on Mockito.
  *
- * @author Philippe Beaudoin
- *
  * @param <T> The class to provide.
+ * @author Philippe Beaudoin
  */
 class SpyProvider<T> implements Provider<T>, HasDependencies {
 
