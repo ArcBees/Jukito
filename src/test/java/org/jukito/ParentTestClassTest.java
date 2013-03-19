@@ -16,14 +16,14 @@
 
 package org.jukito;
 
+import org.junit.AfterClass;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-
-import org.junit.AfterClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 /**
  * Test that inheritance of test classes works correctly.

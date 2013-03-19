@@ -16,11 +16,14 @@
 
 package org.jukito;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
+import com.google.inject.Binding;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Key;
+import com.google.inject.Module;
+import com.google.inject.Scope;
+import com.google.inject.internal.Errors;
+import com.google.inject.spi.DefaultBindingScopingVisitor;
 
 import org.junit.After;
 import org.junit.Before;
@@ -32,33 +35,30 @@ import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.Statement;
 import org.mockito.internal.runners.util.FrameworkUsageValidator;
 
-import com.google.inject.Binding;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Key;
-import com.google.inject.Module;
-import com.google.inject.Scope;
-import com.google.inject.internal.Errors;
-import com.google.inject.spi.DefaultBindingScopingVisitor;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * TODO: Rework this documentation
- * <p />
+ * <p/>
  * This class implements the mockito runner but allows Guice dependency
  * injection. To setup the guice environment, the test class can have an inner
  * static class deriving from {@link TestModule}. This last class will let you bind
  * {@link TestSingleton} and {@link TestEagerSingleton} and the runner will make sure these
  * singletons are reset at every invocation of a test case.
- * <p />
+ * <p/>
  * This code not very clean as it is cut & paste from
  * {@link org.mockito.internal.runners.JUnit45AndHigherRunnerImpl}, but it's
  * unclear how we could make otherwise.
- * <p />
+ * <p/>
  * Most of the code here is inspired from: <a href=
  * "http://cowwoc.blogspot.com/2008/10/integrating-google-guice-into-junit4.html"
  * > http://cowwoc.blogspot.com/2008/10/integrating-google-guice-into-junit4.
  * html</a>
- * <p />
+ * <p/>
  * Depends on Mockito.
  *
  * @author Philippe Beaudoin
@@ -73,7 +73,7 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
     super(klass);
     ensureInjector();
   }
-  
+
   private void ensureInjector()
       throws InstantiationException, IllegalAccessException {
     if (injector != null) {
@@ -82,13 +82,13 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
     Class<?> testClass = getTestClass().getJavaClass();
     TestModule testModule = getTestModule(testClass);
     testModule.setTestClass(testClass);
-    
+
     JukitoModule jukitoModule = null; // Only non-null if it's a JukitoModule
     if (testModule instanceof JukitoModule) {
       jukitoModule = (JukitoModule) testModule;
 
       // Create a module just for the purpose of collecting bindings
-			TestModule testModuleForCollection = getTestModule(testClass);
+      TestModule testModuleForCollection = getTestModule(testClass);
       BindingsCollector collector = new BindingsCollector(testModuleForCollection);
       collector.collectBindings();
       jukitoModule.setBindingsObserved(collector.getBindingsObserved());
@@ -103,51 +103,53 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
   }
 
   private TestModule getTestModule(Class<?> testClass) throws InstantiationException, IllegalAccessException {
-  	UseModules useModules = testClass.getAnnotation(UseModules.class);
-  	if (useModules != null) {
-  		Class<? extends Module>[] moduleClasses = useModules.value();
-  		return createJukitoModule(moduleClasses);
-  	}
-  	
-  	TestModule testModule = null;
-  	for (Class<?> innerClass : testClass.getDeclaredClasses()) {
+    UseModules useModules = testClass.getAnnotation(UseModules.class);
+    if (useModules != null) {
+      Class<? extends Module>[] moduleClasses = useModules.value();
+      return createJukitoModule(moduleClasses);
+    }
+
+    TestModule testModule = null;
+    for (Class<?> innerClass : testClass.getDeclaredClasses()) {
       if (TestModule.class.isAssignableFrom(innerClass)) {
         assert testModule == null :
-          "More than one TestModule inner class found within test class \""
-          + testClass.getName() + "\".";
+            "More than one TestModule inner class found within test class \""
+                + testClass.getName() + "\".";
         testModule = (TestModule) innerClass.newInstance();
       }
     }
-  	if (testModule != null)
-  		return testModule;
-  	
-  	if (useAutomockingIfNoEnvironmentFound) {
-  		return new JukitoModule() {
-  			@Override protected void configureTest() { }
-  		};
-  	} else {
-  		return new TestModule() {
-				@Override protected void configureTest() { }
-			};
-  	}
-	}
+    if (testModule != null) {
+      return testModule;
+    }
 
-	private JukitoModule createJukitoModule(
-			Class<? extends Module>[] moduleClasses) throws InstantiationException,
-			IllegalAccessException {
-		final Module[] modules = new Module[moduleClasses.length];
-		for (int i = 0; i < modules.length; i++) {
-			modules[i] = moduleClasses[i].newInstance();
-		}
-		return new JukitoModule() {
-			@Override protected void configureTest() {
-				for (Module m : modules)
-					install(m);
-			}
-		};
-	}
+    if (useAutomockingIfNoEnvironmentFound) {
+      return new JukitoModule() {
+        @Override protected void configureTest() { }
+      };
+    } else {
+      return new TestModule() {
+        @Override protected void configureTest() { }
+      };
+    }
+  }
 
-	@Override
+  private JukitoModule createJukitoModule(Class<? extends Module>[] moduleClasses)
+      throws InstantiationException, IllegalAccessException {
+    final Module[] modules = new Module[moduleClasses.length];
+    for (int i = 0; i < modules.length; i++) {
+      modules[i] = moduleClasses[i].newInstance();
+    }
+    return new JukitoModule() {
+      @Override
+      protected void configureTest() {
+        for (Module m : modules) {
+          install(m);
+        }
+      }
+    };
+  }
+
+  @Override
   public void run(final RunNotifier notifier) {
     // add listener that validates framework usage at the end of each test
     notifier.addListener(new FrameworkUsageValidator(notifier));

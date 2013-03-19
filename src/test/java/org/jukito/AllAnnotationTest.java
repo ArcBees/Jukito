@@ -16,15 +16,15 @@
 
 package org.jukito;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.AfterClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Test that methods with some parameters annotated with {@literal @}{@link All} behave correctly.
@@ -53,20 +53,27 @@ public class AllAnnotationTest {
   }
 
   static class TestDataA implements TestData {
-    public String getData() { return "A"; }
+    public String getData() {
+      return "A";
+    }
   }
 
   static class TestDataB implements TestData {
-    public String getData() { return "B"; }
+    public String getData() {
+      return "B";
+    }
   }
 
   static class TestDataInstance {
     private final String data;
+
     public TestDataInstance(String data) {
       this.data = data;
     }
 
-    public String getData() { return data; }
+    public String getData() {
+      return data;
+    }
   }
 
   /**

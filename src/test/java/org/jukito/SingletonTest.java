@@ -16,19 +16,19 @@
 
 package org.jukito;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.google.inject.Inject;
 
 import org.junit.AfterClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.google.inject.Inject;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 /**
  * Test that the various flavours of singletons work correctly.
@@ -53,9 +53,11 @@ public class SingletonTest {
   @TestSingleton
   static class Registry {
     public Map<Class<?>, Integer> registrationCount = new HashMap<Class<?>, Integer>();
+
     public void register(Class<?> clazz) {
       registrationCount.put(clazz, getCount(clazz) + 1);
     }
+
     public int getCount(Class<?> clazz) {
       Integer value = registrationCount.get(clazz);
       if (value == null) {
@@ -129,7 +131,8 @@ public class SingletonTest {
     void dummy();
   }
 
-  @Inject Registry registry;
+  @Inject
+  Registry registry;
 
   @Test
   public void onlyEagerSingletonShouldBeRegistered() {

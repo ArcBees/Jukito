@@ -16,16 +16,16 @@
 
 package org.jukito;
 
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.FactoryProvider;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Test that make sure old-style Guice 2.0 assisted injection is supported.
@@ -99,21 +99,23 @@ public class OldStyleAssistedInjectTest {
     }
   }
 
-  static interface Amount {
+  interface Amount {
     String toString();
   }
 
   // Interface Configuration should be mocked because it is a dependency
   // of RealPaymentAmout. The mocked version of {@ocde shouldAlwaysHideAmounts()}
   // will always return {@code false}.
-  static interface Configuration {
+  interface Configuration {
     boolean shouldAlwaysHideAmounts();
   }
 
   // Class InjectedClass should be bound automatically
   // because it is a dependency of RealPaymentAmount
   static class InjectedClass {
-    @Inject @Named("moneySymbol") String moneySymbol;
+    @Inject
+    @Named("moneySymbol")
+    String moneySymbol;
   }
 
   static class RealPaymentAmount implements Payment {
@@ -123,8 +125,8 @@ public class OldStyleAssistedInjectTest {
 
     @Inject
     public RealPaymentAmount(Configuration configuration,
-        InjectedClass injectedClass,
-        @Assisted Amount amount) {
+                             InjectedClass injectedClass,
+                             @Assisted Amount amount) {
       this.configuration = configuration;
       this.injectedClass = injectedClass;
       this.amount = amount;
@@ -139,7 +141,9 @@ public class OldStyleAssistedInjectTest {
     }
   }
 
-  @Inject @Named("factory1") PaymentFactory factory1;
+  @Inject
+  @Named("factory1")
+  PaymentFactory factory1;
 
   @Test
   public void shouldInjectFactoryInClass() {

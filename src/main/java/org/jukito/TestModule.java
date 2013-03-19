@@ -16,8 +16,6 @@
 
 package org.jukito;
 
-import java.lang.reflect.Constructor;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
@@ -26,6 +24,8 @@ import com.google.inject.binder.ScopedBindingBuilder;
 import com.google.inject.internal.UniqueAnnotations;
 import com.google.inject.name.Names;
 import com.google.inject.spi.InjectionPoint;
+
+import java.lang.reflect.Constructor;
 
 /**
  * A guice {@link com.google.inject.Module Module} with a bit of syntactic sugar to bind within

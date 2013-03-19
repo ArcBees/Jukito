@@ -16,12 +16,12 @@
 
 package org.jukito;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 /**
  * Test that the {@link JukitoModule#forceMock} method works as expected.
@@ -43,19 +43,65 @@ public class ForceMockTest {
     }
   }
 
-  interface Base1 { int t1(); }
-  static class Child11  implements Base1 { public int t1() { return 11; } }
-  static class Child111 extends Child11  { public int t1() { return 111; } }
-  static class Child12  implements Base1 { public int t1() { return 12; } }
+  interface Base1 {
+    int t1();
+  }
 
-  interface Base2 { int t2(); }
-  static class Child21  implements Base2 { public int t2() { return 21; } }
-  static class Child211 extends Child21 { public int t2() { return 211; } }
-  static class Child22  implements Base2 { public int t2() { return 22; } }
+  static class Child11 implements Base1 {
+    public int t1() {
+      return 11;
+    }
+  }
 
-  interface Base3 { int t3(); }
-  static class Child31  implements Base3 { public int t3() { return 31; } }
-  static class Child311 extends Child31 { public int t3() { return 311; } }
+  static class Child111 extends Child11 {
+    public int t1() {
+      return 111;
+    }
+  }
+
+  static class Child12 implements Base1 {
+    public int t1() {
+      return 12;
+    }
+  }
+
+  interface Base2 {
+    int t2();
+  }
+
+  static class Child21 implements Base2 {
+    public int t2() {
+      return 21;
+    }
+  }
+
+  static class Child211 extends Child21 {
+    public int t2() {
+      return 211;
+    }
+  }
+
+  static class Child22 implements Base2 {
+    public int t2() {
+      return 22;
+    }
+  }
+
+  interface Base3 {
+    int t3();
+  }
+
+  static class Child31 implements Base3 {
+    public int t3() {
+      return 31;
+    }
+  }
+
+  static class Child311 extends Child31 {
+    public int t3() {
+      return 311;
+    }
+  }
 
   @Test
   public void injectForceMock(
