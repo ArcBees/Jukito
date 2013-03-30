@@ -20,6 +20,7 @@ import com.google.inject.Binding;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Key;
+import com.google.inject.Module;
 import com.google.inject.Scope;
 import com.google.inject.internal.Errors;
 import com.google.inject.spi.DefaultBindingScopingVisitor;
@@ -73,53 +74,21 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
     ensureInjector();
   }
 
-  @SuppressWarnings("unchecked")
   private void ensureInjector()
       throws InstantiationException, IllegalAccessException {
-    Class<?> testClass = getTestClass().getJavaClass();
     if (injector != null) {
       return;
     }
-    Class<? extends TestModule> testModuleClass = null;
-    TestModule testModule;
-    TestModule testModuleForCollection;
-    JukitoModule jukitoModule = null; // Only non-null if it's a JukitoModule
-    for (Class<?> subclass : testClass.getDeclaredClasses()) {
-      if (TestModule.class.isAssignableFrom(subclass)) {
-        assert testModuleClass == null :
-            "More than one TestModule inner class found within test class \""
-                + testClass.getName() + "\".";
-        testModuleClass = (Class<? extends TestModule>) subclass;
-      }
-    }
-    if (testModuleClass == null) {
-      if (useAutomockingIfNoEnvironmentFound) {
-        testModule = new JukitoModule() {
-          @Override
-          protected void configureTest() {
-          }
-        };
-        testModuleForCollection = new JukitoModule() {
-          @Override
-          protected void configureTest() {
-          }
-        };
-      } else {
-        testModule = new TestModule() {
-          @Override
-          protected void configureTest() {
-          }
-        };
-      }
-    } else {
-      testModule = testModuleClass.newInstance();
-      testModuleForCollection = testModuleClass.newInstance();
-    }
+    Class<?> testClass = getTestClass().getJavaClass();
+    TestModule testModule = getTestModule(testClass);
     testModule.setTestClass(testClass);
+
+    JukitoModule jukitoModule = null; // Only non-null if it's a JukitoModule
     if (testModule instanceof JukitoModule) {
       jukitoModule = (JukitoModule) testModule;
 
       // Create a module just for the purpose of collecting bindings
+      TestModule testModuleForCollection = getTestModule(testClass);
       BindingsCollector collector = new BindingsCollector(testModuleForCollection);
       collector.collectBindings();
       jukitoModule.setBindingsObserved(collector.getBindingsObserved());
@@ -131,6 +100,53 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
       collector.collectBindings();
       jukitoModule.printReport(collector.getBindingsObserved());
     }
+  }
+
+  private TestModule getTestModule(Class<?> testClass) throws InstantiationException, IllegalAccessException {
+    UseModules useModules = testClass.getAnnotation(UseModules.class);
+    if (useModules != null) {
+      Class<? extends Module>[] moduleClasses = useModules.value();
+      return createJukitoModule(moduleClasses);
+    }
+
+    TestModule testModule = null;
+    for (Class<?> innerClass : testClass.getDeclaredClasses()) {
+      if (TestModule.class.isAssignableFrom(innerClass)) {
+        assert testModule == null :
+            "More than one TestModule inner class found within test class \""
+                + testClass.getName() + "\".";
+        testModule = (TestModule) innerClass.newInstance();
+      }
+    }
+    if (testModule != null) {
+      return testModule;
+    }
+
+    if (useAutomockingIfNoEnvironmentFound) {
+      return new JukitoModule() {
+        @Override protected void configureTest() { }
+      };
+    } else {
+      return new TestModule() {
+        @Override protected void configureTest() { }
+      };
+    }
+  }
+
+  private JukitoModule createJukitoModule(Class<? extends Module>[] moduleClasses)
+      throws InstantiationException, IllegalAccessException {
+    final Module[] modules = new Module[moduleClasses.length];
+    for (int i = 0; i < modules.length; i++) {
+      modules[i] = moduleClasses[i].newInstance();
+    }
+    return new JukitoModule() {
+      @Override
+      protected void configureTest() {
+        for (Module m : modules) {
+          install(m);
+        }
+      }
+    };
   }
 
   @Override
@@ -154,7 +170,7 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
 
   @Override
   protected Statement withBefores(FrameworkMethod method, Object target,
-                                  Statement statement) {
+      Statement statement) {
     try {
       ensureInjector();
     } catch (Exception e) {
@@ -168,7 +184,7 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
 
   @Override
   protected Statement withAfters(FrameworkMethod method, Object target,
-                                 Statement statement) {
+      Statement statement) {
     try {
       ensureInjector();
     } catch (Exception e) {
@@ -253,11 +269,11 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
 
   private void instantiateEagerTestSingletons() {
     DefaultBindingScopingVisitor<Boolean> isEagerTestScopeSingleton =
-        new DefaultBindingScopingVisitor<Boolean>() {
-          public Boolean visitScope(Scope scope) {
-            return scope == TestScope.EAGER_SINGLETON;
-          }
-        };
+      new DefaultBindingScopingVisitor<Boolean>() {
+      public Boolean visitScope(Scope scope) {
+        return scope == TestScope.EAGER_SINGLETON;
+      }
+    };
     for (Binding<?> binding : injector.getBindings().values()) {
       boolean instantiate = false;
       if (binding != null) {
@@ -305,7 +321,7 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
    * <li>is not static (given {@code isStatic is true}).
    */
   protected void validatePublicVoidMethods(Class<? extends Annotation> annotation,
-                                           boolean isStatic, List<Throwable> errors) {
+      boolean isStatic, List<Throwable> errors) {
     List<FrameworkMethod> methods = getTestClass().getAnnotatedMethods(annotation);
 
     for (FrameworkMethod eachTestMethod : methods) {
