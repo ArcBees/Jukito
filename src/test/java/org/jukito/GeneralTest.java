@@ -16,15 +16,6 @@
 
 package org.jukito;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-
-import java.util.logging.Logger;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Key;
@@ -33,6 +24,15 @@ import com.google.inject.Stage;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import java.util.logging.Logger;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 /**
  * Test various general behaviors.
@@ -65,8 +65,10 @@ public class GeneralTest {
       bind(Key.get(TestClass.class, Value3.class)).toInstance(new TestClass(MyEnum.VALUE3));
       bind(Key.get(TestClass.class, Names.named("VALUE2"))).to(TestClass.class).in(
           TestSingleton.class);
-      bind(new TypeLiteral<ParameterizedTestClass<Integer>>() { }).in(TestScope.SINGLETON);
-      bind(new TypeLiteral<ParameterizedTestClass<Double>>() { }).to(
+      bind(new TypeLiteral<ParameterizedTestClass<Integer>>() {
+      }).in(TestScope.SINGLETON);
+      bind(new TypeLiteral<ParameterizedTestClass<Double>>() {
+      }).to(
           ParameterizedTestClassDouble.class).in(TestScope.SINGLETON);
       bindNamedMock(ClassWithUninstanciableDependency3.class, "UninstanciableDependency3a");
       bind(ClassWithUninstanciableDependency3.class).annotatedWith(
@@ -92,9 +94,11 @@ public class GeneralTest {
 
   static class MyIntegerImpl implements MyInteger {
     private final int value;
+
     MyIntegerImpl(int value) {
       this.value = value;
     }
+
     @Override
     public int getValue() {
       return value;
@@ -109,6 +113,7 @@ public class GeneralTest {
 
   static class TestClass {
     private final MyEnum value;
+
     @Inject
     public TestClass(@Named("VALUE2") MyEnum value) {
       this.value = value;
@@ -117,6 +122,7 @@ public class GeneralTest {
 
   static class ParameterizedTestClass<T> {
     final T value;
+
     @Inject
     public ParameterizedTestClass(@Named("200") T value) {
       this.value = value;
@@ -135,6 +141,7 @@ public class GeneralTest {
     public ParameterizedTestClassString() {
       super("default constructor");
     }
+
     public ParameterizedTestClassString(@Named("HelloWorld") String value) {
       super(value);
     }
@@ -142,10 +149,12 @@ public class GeneralTest {
 
   static class TestClassWithMethodInjection {
     private int value;
+
     @Inject
     public TestClassWithMethodInjection(@OneHundred Integer value) {
       this.value = value;
     }
+
     @Inject
     public void setValue(@Named("200") Integer value) {
       this.value = value;
@@ -158,10 +167,12 @@ public class GeneralTest {
 
   static class TestClassWithOptionalInjection {
     private int value;
+
     @Inject
     public TestClassWithOptionalInjection(@OneHundred Integer value) {
       this.value = value;
     }
+
     @Inject(optional = true)
     public void setValue(NonBoundInterface obj) {
       value = obj.getValue(); // Should never be called, NonBoundInterface should not be mocked
@@ -170,20 +181,27 @@ public class GeneralTest {
 
   // This class will cause an error if bound
   static class UninstanciableClass {
-    private UninstanciableClass() { }
-    public int getValue() { return 360; }
+    private UninstanciableClass() {
+    }
+
+    public int getValue() {
+      return 360;
+    }
   }
 
   @TestMockSingleton
   static class ClassWithUninstanciableDependency1 {
     private final UninstanciableClass dependency;
+
     @Inject
     public ClassWithUninstanciableDependency1(UninstanciableClass dependency) {
       this.dependency = dependency;
     }
+
     public int getValue() {
       return 42;
     }
+
     public UninstanciableClass getDependency() {
       return dependency;
     }
@@ -191,7 +209,9 @@ public class GeneralTest {
 
   abstract static class ClassWithUninstanciableDependency2 {
     @Inject
-    public ClassWithUninstanciableDependency2(UninstanciableClass dependency) { }
+    public ClassWithUninstanciableDependency2(UninstanciableClass dependency) {
+    }
+
     public int getValue() {
       return 42;
     }
@@ -199,7 +219,9 @@ public class GeneralTest {
 
   static class ClassWithUninstanciableDependency3 {
     @Inject
-    public ClassWithUninstanciableDependency3(UninstanciableClass dependency) { }
+    public ClassWithUninstanciableDependency3(UninstanciableClass dependency) {
+    }
+
     public int getValue() {
       return 42;
     }
@@ -221,10 +243,12 @@ public class GeneralTest {
 
   static class TestGenericClassInjectedWithTypeLiteral<U> {
     private final Class<? super U> injectedType;
+
     @Inject
     public TestGenericClassInjectedWithTypeLiteral(TypeLiteral<U> typeLiteral) {
       injectedType = typeLiteral.getRawType();
     }
+
     public Class<? super U> getInjectedType() {
       return injectedType;
     }

@@ -18,13 +18,13 @@ package org.jukito;
 
 import com.google.inject.Inject;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 /**
  * Test that methods with some parameters annotated with {@literal @}{@link All} behave correctly.
@@ -53,8 +53,10 @@ public class BindSpyTest {
   }
 
   static class SimpleClass {
+    @Inject
+    CompositionMockB mockB;
+
     private CompositionMockA mockA;
-    @Inject CompositionMockB mockB;
 
     @Inject
     SimpleClass(CompositionMockA mockA) {
@@ -68,8 +70,10 @@ public class BindSpyTest {
     }
   }
 
-  @Inject CompositionMockA mockA;
-  @Inject CompositionMockA mockB;
+  @Inject
+  CompositionMockA mockA;
+  @Inject
+  CompositionMockA mockB;
 
   @Test
   public void testStubbingSpiedInstance(SimpleClass simpleClass) {

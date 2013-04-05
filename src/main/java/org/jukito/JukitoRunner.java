@@ -16,11 +16,13 @@
 
 package org.jukito;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
+import com.google.inject.Binding;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Key;
+import com.google.inject.Scope;
+import com.google.inject.internal.Errors;
+import com.google.inject.spi.DefaultBindingScopingVisitor;
 
 import org.junit.After;
 import org.junit.Before;
@@ -32,32 +34,30 @@ import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.Statement;
 import org.mockito.internal.runners.util.FrameworkUsageValidator;
 
-import com.google.inject.Binding;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Key;
-import com.google.inject.Scope;
-import com.google.inject.internal.Errors;
-import com.google.inject.spi.DefaultBindingScopingVisitor;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * TODO: Rework this documentation
- * <p />
+ * <p/>
  * This class implements the mockito runner but allows Guice dependency
  * injection. To setup the guice environment, the test class can have an inner
  * static class deriving from {@link TestModule}. This last class will let you bind
  * {@link TestSingleton} and {@link TestEagerSingleton} and the runner will make sure these
  * singletons are reset at every invocation of a test case.
- * <p />
+ * <p/>
  * This code not very clean as it is cut & paste from
  * {@link org.mockito.internal.runners.JUnit45AndHigherRunnerImpl}, but it's
  * unclear how we could make otherwise.
- * <p />
+ * <p/>
  * Most of the code here is inspired from: <a href=
  * "http://cowwoc.blogspot.com/2008/10/integrating-google-guice-into-junit4.html"
  * > http://cowwoc.blogspot.com/2008/10/integrating-google-guice-into-junit4.
  * html</a>
- * <p />
+ * <p/>
  * Depends on Mockito.
  *
  * @author Philippe Beaudoin
@@ -87,20 +87,29 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
     for (Class<?> subclass : testClass.getDeclaredClasses()) {
       if (TestModule.class.isAssignableFrom(subclass)) {
         assert testModuleClass == null :
-          "More than one TestModule inner class found within test class \""
-          + testClass.getName() + "\".";
+            "More than one TestModule inner class found within test class \""
+                + testClass.getName() + "\".";
         testModuleClass = (Class<? extends TestModule>) subclass;
       }
     }
     if (testModuleClass == null) {
       if (useAutomockingIfNoEnvironmentFound) {
         testModule = new JukitoModule() {
-          @Override protected void configureTest() { } };
+          @Override
+          protected void configureTest() {
+          }
+        };
         testModuleForCollection = new JukitoModule() {
-          @Override protected void configureTest() { } };
+          @Override
+          protected void configureTest() {
+          }
+        };
       } else {
         testModule = new TestModule() {
-          @Override protected void configureTest() { } };
+          @Override
+          protected void configureTest() {
+          }
+        };
       }
     } else {
       testModule = testModuleClass.newInstance();
@@ -145,7 +154,7 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
 
   @Override
   protected Statement withBefores(FrameworkMethod method, Object target,
-      Statement statement) {
+                                  Statement statement) {
     try {
       ensureInjector();
     } catch (Exception e) {
@@ -159,7 +168,7 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
 
   @Override
   protected Statement withAfters(FrameworkMethod method, Object target,
-      Statement statement) {
+                                 Statement statement) {
     try {
       ensureInjector();
     } catch (Exception e) {
@@ -244,11 +253,11 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
 
   private void instantiateEagerTestSingletons() {
     DefaultBindingScopingVisitor<Boolean> isEagerTestScopeSingleton =
-      new DefaultBindingScopingVisitor<Boolean>() {
-      public Boolean visitScope(Scope scope) {
-        return scope == TestScope.EAGER_SINGLETON;
-      }
-    };
+        new DefaultBindingScopingVisitor<Boolean>() {
+          public Boolean visitScope(Scope scope) {
+            return scope == TestScope.EAGER_SINGLETON;
+          }
+        };
     for (Binding<?> binding : injector.getBindings().values()) {
       boolean instantiate = false;
       if (binding != null) {
@@ -296,7 +305,7 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
    * <li>is not static (given {@code isStatic is true}).
    */
   protected void validatePublicVoidMethods(Class<? extends Annotation> annotation,
-      boolean isStatic, List<Throwable> errors) {
+                                           boolean isStatic, List<Throwable> errors) {
     List<FrameworkMethod> methods = getTestClass().getAnnotatedMethods(annotation);
 
     for (FrameworkMethod eachTestMethod : methods) {

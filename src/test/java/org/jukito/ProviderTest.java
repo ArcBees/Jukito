@@ -16,21 +16,21 @@
 
 package org.jukito;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertSame;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
 import com.google.inject.Inject;
 import com.google.inject.Key;
 import com.google.inject.Provider;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertSame;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 /**
  * Test that providers injected by the tester module behaves correctly.
@@ -73,10 +73,13 @@ public class ProviderTest {
     }
   }
 
-  interface Mock { }
+  interface Mock {
+  }
 
   static class Instance {
-    @Inject Instance() { }
+    @Inject
+    Instance() {
+    }
   }
 
   interface Parent {
@@ -89,14 +92,17 @@ public class ProviderTest {
     }
   }
 
-  interface MockInChildB { }
+  interface MockInChildB {
+  }
 
   interface MockInProviderB {
     void test();
   }
 
   static class ChildB implements Parent {
-    @Inject MockInChildB mockB;
+    @Inject
+    MockInChildB mockB;
+
     public String getValue() {
       return "childB";
     }
@@ -131,7 +137,9 @@ public class ProviderTest {
   }
 
   static class UninstanciableClass {
-    private UninstanciableClass() { }
+    private UninstanciableClass() {
+    }
+
     public int getValue() {
       return 42;
     }
@@ -157,10 +165,12 @@ public class ProviderTest {
 
   static class ClassWithMockedDependency1 {
     private final DependencyShouldBeMocked1 dependency;
+
     @Inject
     public ClassWithMockedDependency1(DependencyShouldBeMocked1 dependency) {
       this.dependency = dependency;
     }
+
     public DependencyShouldBeMocked1 getDependency() {
       return dependency;
     }
@@ -168,10 +178,12 @@ public class ProviderTest {
 
   static class MyProvider1 implements Provider<ClassWithMockedDependency1> {
     final Provider<ClassWithMockedDependency1> provider;
+
     @Inject
     public MyProvider1(Provider<ClassWithMockedDependency1> provider) {
       this.provider = provider;
     }
+
     @Override
     public ClassWithMockedDependency1 get() {
       return provider.get();
@@ -184,10 +196,12 @@ public class ProviderTest {
 
   static class ClassWithMockedDependency2 {
     private final DependencyShouldBeMocked2 dependency;
+
     @Inject
     public ClassWithMockedDependency2(DependencyShouldBeMocked2 dependency) {
       this.dependency = dependency;
     }
+
     public DependencyShouldBeMocked2 getDependency() {
       return dependency;
     }
@@ -195,10 +209,12 @@ public class ProviderTest {
 
   static class MyProvider2 implements Provider<ClassWithMockedDependency2> {
     final Provider<ClassWithMockedDependency2> provider;
+
     @Inject
     public MyProvider2(Provider<ClassWithMockedDependency2> provider) {
       this.provider = provider;
     }
+
     @Override
     public ClassWithMockedDependency2 get() {
       return provider.get();
@@ -207,6 +223,7 @@ public class ProviderTest {
 
   static class ProvidedViaMethod {
     final String value;
+
     ProvidedViaMethod(String value) {
       this.value = value;
     }

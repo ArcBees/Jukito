@@ -16,6 +16,27 @@
 
 package org.jukito;
 
+import com.google.inject.ConfigurationException;
+import com.google.inject.Injector;
+import com.google.inject.Key;
+import com.google.inject.MembersInjector;
+import com.google.inject.Provider;
+import com.google.inject.Singleton;
+import com.google.inject.Stage;
+import com.google.inject.TypeLiteral;
+import com.google.inject.assistedinject.Assisted;
+import com.google.inject.internal.Errors;
+import com.google.inject.spi.Dependency;
+import com.google.inject.spi.HasDependencies;
+import com.google.inject.spi.InjectionPoint;
+import com.google.inject.internal.ProviderMethod;
+import com.google.inject.internal.ProviderMethodsModule;
+
+import org.jukito.BindingsCollector.BindingInfo;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
 import java.io.IOException;
 import java.io.Writer;
 import java.lang.reflect.Method;
@@ -30,27 +51,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
-
-import org.jukito.BindingsCollector.BindingInfo;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import com.google.inject.ConfigurationException;
-import com.google.inject.Injector;
-import com.google.inject.Key;
-import com.google.inject.MembersInjector;
-import com.google.inject.Provider;
-import com.google.inject.Singleton;
-import com.google.inject.Stage;
-import com.google.inject.TypeLiteral;
-import com.google.inject.assistedinject.Assisted;
-import com.google.inject.internal.Errors;
-import com.google.inject.internal.ProviderMethod;
-import com.google.inject.internal.ProviderMethodsModule;
-import com.google.inject.spi.Dependency;
-import com.google.inject.spi.HasDependencies;
-import com.google.inject.spi.InjectionPoint;
 
 /**
  * A guice {@link com.google.inject.Module Module} with a bit of syntactic sugar
@@ -217,13 +217,13 @@ public abstract class JukitoModule extends TestModule {
   }
 
   private void addNeededKey(Set<Key<?>> keysObserved, Set<Key<?>> keysNeeded,
-      Key<?> keyNeeded, boolean asTestSingleton) {
+                            Key<?> keyNeeded, boolean asTestSingleton) {
     keysNeeded.add(keyNeeded);
     bindIfConcrete(keysObserved, keyNeeded, asTestSingleton);
   }
 
   private <T> void bindIfConcrete(Set<Key<?>> keysObserved,
-      Key<T> key, boolean asTestSingleton) {
+                                  Key<T> key, boolean asTestSingleton) {
     TypeLiteral<?> typeToBind = key.getTypeLiteral();
     Class<?> rawType = typeToBind.getRawType();
     if (!keysObserved.contains(key) && canBeInjected(typeToBind)
@@ -318,7 +318,7 @@ public abstract class JukitoModule extends TestModule {
   }
 
   private <T> void addDependencies(Key<T> key, Set<Key<?>> keysObserved,
-      Set<Key<?>> keysNeeded) {
+                                   Set<Key<?>> keysNeeded) {
     TypeLiteral<T> type = key.getTypeLiteral();
     if (!canBeInjected(type)) {
       return;
@@ -333,7 +333,7 @@ public abstract class JukitoModule extends TestModule {
   }
 
   private void addInjectionPointDependencies(InjectionPoint injectionPoint,
-      Set<Key<?>> keysObserved, Set<Key<?>> keysNeeded) {
+                                             Set<Key<?>> keysObserved, Set<Key<?>> keysNeeded) {
     // Do not consider dependencies coming from optional injections
     if (injectionPoint.isOptional()) {
       return;
@@ -345,7 +345,7 @@ public abstract class JukitoModule extends TestModule {
   }
 
   private void addKeyDependency(Key<?> key, Set<Key<?>> keysObserved,
-      Set<Key<?>> keysNeeded) {
+                                Set<Key<?>> keysNeeded) {
     Key<?> newKey = key;
     if (Provider.class.isAssignableFrom(key.getTypeLiteral().getRawType())) {
       Type providedType = (
@@ -404,7 +404,7 @@ public abstract class JukitoModule extends TestModule {
    * @throws IOException If something goes wrong when writing.
    */
   private Set<Key<?>> outputBindings(Writer reportWriter, List<BindingInfo> bindings,
-      Set<Key<?>> keysToSkip) throws IOException {
+                                     Set<Key<?>> keysToSkip) throws IOException {
 
     Set<Key<?>> reportedKeys = new HashSet<Key<?>>(bindings.size());
     for (BindingInfo bindingInfo : bindings) {
