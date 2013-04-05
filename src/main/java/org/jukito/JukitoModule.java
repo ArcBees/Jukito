@@ -26,11 +26,11 @@ import com.google.inject.Stage;
 import com.google.inject.TypeLiteral;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.internal.Errors;
+import com.google.inject.internal.ProviderMethod;
+import com.google.inject.internal.ProviderMethodsModule;
 import com.google.inject.spi.Dependency;
 import com.google.inject.spi.HasDependencies;
 import com.google.inject.spi.InjectionPoint;
-import com.google.inject.internal.ProviderMethod;
-import com.google.inject.internal.ProviderMethodsModule;
 
 import org.jukito.BindingsCollector.BindingInfo;
 import org.junit.After;
