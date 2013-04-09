@@ -21,7 +21,6 @@ import static org.mockito.Mockito.mock;
 
 /**
  * @author Przemysław Gałązka
- * @since 08-02-2013
  */
 public class ModuleWithProvidesMethods extends JukitoModule {
 
