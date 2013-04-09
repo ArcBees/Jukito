@@ -22,7 +22,6 @@ import static org.mockito.Mockito.verify;
 
 /**
  * @author Przemysław Gałązka
- * @since 08-02-2013
  */
 @RunWith(JukitoRunner.class)
 public class RespectProvidesAnnotationInModuleTest {
