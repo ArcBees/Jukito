@@ -24,10 +24,6 @@ import static org.mockito.Mockito.mock;
  */
 public class ModuleWithProvidesMethods extends JukitoModule {
 
-    public ModuleWithProvidesMethods() {
-        // Workaround for http://code.google.com/p/jukito/issues/detail?id=40
-        setTestClass(RespectProvidesAnnotationInModuleTest.class);
-    }
 
     @Override
     protected void configureTest() {
