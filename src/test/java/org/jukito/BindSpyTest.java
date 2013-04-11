@@ -28,8 +28,6 @@ import static org.mockito.Mockito.verify;
 
 /**
  * Test that binding spy works correctly
- *
- * @author Philippe Beaudoin
  */
 @RunWith(JukitoRunner.class)
 public class BindSpyTest {
