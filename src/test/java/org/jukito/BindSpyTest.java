@@ -27,7 +27,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 /**
- * Test that methods with some parameters annotated with {@literal @}{@link All} behave correctly.
+ * Test that binding spy works correctly
  *
  * @author Philippe Beaudoin
  */
