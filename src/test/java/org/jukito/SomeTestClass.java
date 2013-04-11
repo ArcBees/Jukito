@@ -24,4 +24,8 @@ public class SomeTestClass {
     public void someInitMethod() {
         // nothing
     }
+
+    public void crazyMethod() {
+        // nothing special here
+    }
 }
