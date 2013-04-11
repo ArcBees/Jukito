@@ -24,7 +24,6 @@ import static org.mockito.Mockito.mock;
  */
 public class ModuleWithProvidesMethods extends JukitoModule {
 
-
     @Override
     protected void configureTest() {
     }
