@@ -15,6 +15,7 @@
  */
 package org.jukito;
 
+import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 
 import static org.mockito.Mockito.mock;
@@ -22,13 +23,10 @@ import static org.mockito.Mockito.mock;
 /**
  * @author Przemysław Gałązka
  */
-public class ModuleWithProvidesMethods extends JukitoModule {
-
-    @Override
-    protected void configureTest() {
-    }
+public class ModuleWithProvidesMethods extends AbstractModule {
 
     @Provides
+    @TestSingleton
     SomeTestClass create() {
         SomeTestClass mock = mock(SomeTestClass.class);
         mock.someInitMethod();
@@ -36,7 +34,6 @@ public class ModuleWithProvidesMethods extends JukitoModule {
     }
 
     @Override
-    protected void bindScopes() {
-        // Workaround for http://code.google.com/p/jukito/issues/detail?id=40
+    protected void configure() {
     }
 }
