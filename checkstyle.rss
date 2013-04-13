@@ -8,10 +8,10 @@
     <language>en-us</language>
     <copyright>&#169;2010 - 2013 ArcBees Inc.</copyright>
     <item>
-      <title>File: 36,
+      <title>File: 42,
              Errors: 0,
-             Warnings: 2,
-             Infos: 0
+             Warnings: 0,
+             Infos: 3
       </title>
             <link>http://jukito.org/checkstyle.html</link>
       <description>
@@ -27,6 +27,20 @@
             </tr>
           </thead>
           <tbody>
+                          <tr>
+                <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.UseModules.java">org/jukito/UseModules.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
                           <tr>
                 <td>
                   <a href="http://jukito.org/checkstyle.html#org.jukito.ParentTestClassTest.java">org/jukito/ParentTestClassTest.java</a>
@@ -225,7 +239,35 @@
               </tr>
                           <tr>
                 <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.RespectProvidesAnnotationInModuleTest.java">org/jukito/RespectProvidesAnnotationInModuleTest.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="http://jukito.org/checkstyle.html#org.jukito.SpyProvider.java">org/jukito/SpyProvider.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.SomeTestClass.java">org/jukito/SomeTestClass.java</a>
                 </td>
                 <td>
                   0
@@ -270,7 +312,21 @@
                   <a href="http://jukito.org/checkstyle.html#org.jukito.BindSpyTest.java">org/jukito/BindSpyTest.java</a>
                 </td>
                 <td>
+                  1
+                </td>
+                <td>
                   0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.UseModulesTest.java">org/jukito/UseModulesTest.java</a>
+                </td>
+                <td>
+                  1
                 </td>
                 <td>
                   0
@@ -393,6 +449,34 @@
               </tr>
                           <tr>
                 <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.RespectTestScopeWhenUsingAbstractModuleTest.java">org/jukito/RespectTestScopeWhenUsingAbstractModuleTest.java</a>
+                </td>
+                <td>
+                  1
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.ModuleWithProvidesMethods.java">org/jukito/ModuleWithProvidesMethods.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="http://jukito.org/checkstyle.html#org.jukito.ForceMockTest.java">org/jukito/ForceMockTest.java</a>
                 </td>
                 <td>
@@ -421,7 +505,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://jukito.org/checkstyle.html#org.jukito.JukitoModule.java">org/jukito/JukitoModule.java</a>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.GeneralTest.java">org/jukito/GeneralTest.java</a>
                 </td>
                 <td>
                   0
@@ -435,7 +519,7 @@
               </tr>
                           <tr>
                 <td>
-                  <a href="http://jukito.org/checkstyle.html#org.jukito.GeneralTest.java">org/jukito/GeneralTest.java</a>
+                  <a href="http://jukito.org/checkstyle.html#org.jukito.JukitoModule.java">org/jukito/JukitoModule.java</a>
                 </td>
                 <td>
                   0
@@ -483,7 +567,7 @@
                   0
                 </td>
                 <td>
-                  2
+                  0
                 </td>
                 <td>
                   0
