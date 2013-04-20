@@ -42,6 +42,7 @@ public class MultiInjectorsTest {
 
     @AfterClass
     public static void tearDown() throws Exception {
+//        uncomment to see the test fail
 //        assertEquals(calls, 2);
 //        assertThat(calls, is(2));
     }

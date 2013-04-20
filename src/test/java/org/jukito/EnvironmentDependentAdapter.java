@@ -18,7 +18,6 @@ package org.jukito;
 
 /**
  * @author Przemysław Gałązka
- * @since 11-04-2013
  */
 public interface EnvironmentDependentAdapter {
 
