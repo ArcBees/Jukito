@@ -16,18 +16,19 @@
 
 package org.jukito;
 
+import com.google.inject.Module;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 /**
- * Sample core component under test in different environments
+ * Annotation used for declaration of modules which are installed and used separately in different applications
+ * but test for it collaborators are the same and thus run for against Environment Dependent Modules
  */
-public class SomeCoreComponent {
-
-    private EnvironmentDependentComponent someComponent;
-
-    public SomeCoreComponent(EnvironmentDependentComponent someComponent) {
-        this.someComponent = someComponent;
-    }
-
-    public void run() {
-        someComponent.hello();
-    }
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface EnvironmentDependentModules {
+  Class<? extends Module>[] value();
 }

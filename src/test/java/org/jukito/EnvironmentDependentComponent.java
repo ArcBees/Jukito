@@ -17,17 +17,8 @@
 package org.jukito;
 
 /**
- * Sample core component under test in different environments
+ * @author Przemysław Gałązka
  */
-public class SomeCoreComponent {
-
-    private EnvironmentDependentComponent someComponent;
-
-    public SomeCoreComponent(EnvironmentDependentComponent someComponent) {
-        this.someComponent = someComponent;
-    }
-
-    public void run() {
-        someComponent.hello();
-    }
+public interface EnvironmentDependentComponent {
+    void hello();
 }

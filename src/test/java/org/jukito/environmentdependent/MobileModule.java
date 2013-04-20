@@ -14,20 +14,23 @@
  * the License.
  */
 
-package org.jukito;
+package org.jukito.environmentdependent;
+
+import com.google.inject.AbstractModule;
+
+import org.jukito.EnvironmentDependentComponent;
 
 /**
- * Sample core component under test in different environments
+ *  Sample Environment Dependent Module
  */
-public class SomeCoreComponent {
-
-    private EnvironmentDependentComponent someComponent;
-
-    public SomeCoreComponent(EnvironmentDependentComponent someComponent) {
-        this.someComponent = someComponent;
-    }
-
-    public void run() {
-        someComponent.hello();
+public class MobileModule extends AbstractModule {
+    @Override
+    protected void configure() {
+        bind(EnvironmentDependentComponent.class).toInstance(new EnvironmentDependentComponent() {
+            @Override
+            public void hello() {
+                System.err.println("MobileModule");
+            }
+        });
     }
 }
