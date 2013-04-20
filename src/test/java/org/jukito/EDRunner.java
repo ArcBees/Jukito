@@ -103,7 +103,7 @@ public class EDRunner extends ParentRunner {
         return Guice.createInjector(finalModule);
     }
 
-    // TODO refactor to common user module discovery method (JukitoRunner user similar code)
+    // TODO refactor to common user module discovery method (JukitoRunner uses similar code now)
     private Module[] getDeclaredModulesForTest(Class<?> testClass) {
         UseModules useModules = testClass.getAnnotation(UseModules.class);
         Class<? extends Module>[] moduleClasses = useModules.value();

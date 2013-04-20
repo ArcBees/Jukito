@@ -16,9 +16,6 @@
 
 package org.jukito;
 
-/**
- * @author Przemysław Gałązka
- */
 public interface EnvironmentDependentComponent {
     void hello();
 }
