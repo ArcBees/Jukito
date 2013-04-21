@@ -30,5 +30,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface EnvironmentDependentModules {
-  Class<? extends Module>[] value();
+    Class<? extends Module>[] value();
 }
