@@ -14,17 +14,23 @@
  * the License.
  */
 
-package org.jukito;
+package org.jukito.environmentdependent;
+
+import com.google.inject.AbstractModule;
+
+import org.jukito.EnvironmentDependentComponent;
 
 /**
- * @author Przemysław Gałązka
+ *  Sample Environment Dependent Module
  */
-public class SomeTestClass {
-    public void someInitMethod() {
-        // nothing
-    }
-
-    public void crazyMethod() {
-        // nothing special here
+public class TabletModule extends AbstractModule {
+    @Override
+    protected void configure() {
+        bind(EnvironmentDependentComponent.class).toInstance(new EnvironmentDependentComponent() {
+            @Override
+            public void hello() {
+                System.err.println("TabletModule");
+            }
+        });
     }
 }
