@@ -74,6 +74,13 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
     ensureInjector();
   }
 
+    public JukitoRunner(Class<?> klass, Injector injector) throws InitializationError,
+            InvocationTargetException, InstantiationException, IllegalAccessException {
+        // refactor needed here cos ensureInjector is run without reason here.
+        super(klass);
+        this.injector = injector;
+    }
+
   private void ensureInjector()
       throws InstantiationException, IllegalAccessException {
     if (injector != null) {
