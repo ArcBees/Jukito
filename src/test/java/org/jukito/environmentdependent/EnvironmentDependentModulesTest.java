@@ -36,14 +36,12 @@ import org.junit.runner.RunWith;
 @UseModules(SomeCoreModule.class)
 @RunWith(EDRunner.class)
 public class EnvironmentDependentModulesTest {
-
     @Test
     public void shouldRunAsManyTimesAsManyInjectorsWereCreated(SomeCoreComponent coreComponent) throws Exception {
         coreComponent.run();
     }
 
     public static class SomeCoreModule extends AbstractModule {
-
         @Provides
         SomeCoreComponent createCalculator(EnvironmentDependentComponent dependentComponent) {
             return new SomeCoreComponent(dependentComponent);

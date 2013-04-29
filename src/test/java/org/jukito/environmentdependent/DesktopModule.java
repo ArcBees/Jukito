@@ -25,7 +25,6 @@ import org.jukito.EnvironmentDependentComponent;
 public class DesktopModule extends AbstractModule {
     @Override
     protected void configure() {
-
         bind(EnvironmentDependentComponent.class).toInstance(new EnvironmentDependentComponent() {
             @Override
             public void hello() {

@@ -34,7 +34,6 @@ import java.util.List;
  * via dedicated Injectors per test run.
  */
 public class EDRunner extends ParentRunner {
-
     private List<Runner> runnersList;
 
     public EDRunner(Class<?> testClass) throws Exception {
@@ -55,7 +54,6 @@ public class EDRunner extends ParentRunner {
 
     protected List<Injector> calculateInjectors(Class<?> testClass)
             throws IllegalAccessException, InstantiationException {
-
         List<Injector> result = new ArrayList<Injector>();
 
         EnvironmentDependentModules environmentDependentModules
@@ -73,13 +71,27 @@ public class EDRunner extends ParentRunner {
         return result;
     }
 
+    @Override
+    protected List getChildren() {
+        return runnersList;
+    }
+
+    @Override
+    protected Description describeChild(Object child) {
+        return ((JukitoRunner) child).getDescription();
+    }
+
+    @Override
+    protected void runChild(Object child, RunNotifier notifier) {
+        ((JukitoRunner) child).run(notifier);
+    }
+
     private Injector buildInjector(Class<? extends Module> edModuleClazz, final Class<?> testClass)
             throws InstantiationException, IllegalAccessException {
 
         final Module environmentDependentModule = edModuleClazz.newInstance();
 
         final AbstractModule testModule = new AbstractModule() {
-
             @Override
             protected void configure() {
                 for (Module declaredModule : getDeclaredModulesForTest(testClass)) {
@@ -116,20 +128,5 @@ public class EDRunner extends ParentRunner {
             }
         }
         return modules;
-    }
-
-    @Override
-    protected List getChildren() {
-        return runnersList;
-    }
-
-    @Override
-    protected Description describeChild(Object child) {
-        return ((JukitoRunner) child).getDescription();
-    }
-
-    @Override
-    protected void runChild(Object child, RunNotifier notifier) {
-        ((JukitoRunner) child).run(notifier);
     }
 }
