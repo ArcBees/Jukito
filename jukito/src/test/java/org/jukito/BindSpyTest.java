@@ -97,5 +97,4 @@ public class BindSpyTest {
         verify(mockB).test();
         assertEquals("Default string", result);
     }
-
 }

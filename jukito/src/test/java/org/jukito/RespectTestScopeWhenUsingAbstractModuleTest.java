@@ -28,8 +28,6 @@ import static org.mockito.Mockito.verify;
 
 /**
  * Test for respecting {@literal @}{@link org.jukito.TestSingleton} when user modules subclass AbstractModule
- *
- * @author Przemysław Gałązka
  */
 @RunWith(JukitoRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)

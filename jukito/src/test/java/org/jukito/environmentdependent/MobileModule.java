@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+
 package org.jukito.environmentdependent;
 
 import com.google.inject.AbstractModule;
@@ -22,13 +23,13 @@ import org.jukito.EnvironmentDependentComponent;
 /**
  * Sample Environment Dependent Module
  */
-public class DesktopModule extends AbstractModule {
+public class MobileModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(EnvironmentDependentComponent.class).toInstance(new EnvironmentDependentComponent() {
             @Override
             public void hello() {
-                System.err.println("DesktopModule");
+                System.err.println("MobileModule");
             }
         });
     }

@@ -20,9 +20,6 @@ import com.google.inject.Provides;
 
 import static org.mockito.Mockito.mock;
 
-/**
- * @author Przemysław Gałązka
- */
 public class ModuleWithProvidesMethods extends AbstractModule {
 
     @Provides

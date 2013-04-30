@@ -26,8 +26,6 @@ import java.lang.annotation.Target;
  * a mock within the {@link TestScope#SINGLETON} scope. It is meant to be
  * used on inner static classes of the test class or its parents
  * and shouldn't be used on top-level classes.
- *
- * @author Philippe Beaudoin
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)

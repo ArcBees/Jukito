@@ -36,7 +36,6 @@ import static org.mockito.Mockito.spy;
  * Depends on Mockito.
  *
  * @param <T> The class to provide.
- * @author Philippe Beaudoin
  */
 class SpyProvider<T> implements Provider<T>, HasDependencies {
 

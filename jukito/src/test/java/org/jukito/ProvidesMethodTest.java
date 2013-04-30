@@ -33,10 +33,6 @@ import static org.mockito.Mockito.verify;
 
 /**
  * Test that @Provides methods in the tester module behave correctly.
- *
- * @author Trask Stalnaker
- * @author tpeierls@gmail.com
- * @author Philippe Beaudoin
  */
 @RunWith(JukitoRunner.class)
 public class ProvidesMethodTest {

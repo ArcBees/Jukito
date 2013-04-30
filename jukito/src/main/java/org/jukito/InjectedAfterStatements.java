@@ -29,13 +29,10 @@ import java.util.List;
  * A {@link Statement} invoking a list of methods with parameters by filling-in
  * these parameters with injected instances. The methods are called after the
  * provided {@code prev} {@link Statement}.
- *
- * @author Philippe Beaudoin
  */
 public class InjectedAfterStatements extends Statement {
 
     private final Statement prev;
-
     private final List<Statement> afters;
 
     public InjectedAfterStatements(Statement prev, List<FrameworkMethod> afters,

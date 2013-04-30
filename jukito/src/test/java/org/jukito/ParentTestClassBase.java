@@ -31,8 +31,6 @@ import static org.mockito.Mockito.verify;
 
 /**
  * This parent test class is used by {@link ParentTestClassTest}.
- *
- * @author Philippe Beaudoin
  */
 @Ignore("Tests in this base class are not meant to be run independantly.")
 public class ParentTestClassBase {

@@ -31,8 +31,6 @@ import java.lang.annotation.Target;
  * If more than one parameter is annotated with {@literal @}{@link All} then
  * all combinations will be used. Therefore, be careful when using it on more than
  * two or three parameters as it can result in a combinatorial explosion.
- *
- * @author Philippe Beaudoin
  */
 @BindingAnnotation
 @Retention(RetentionPolicy.RUNTIME)

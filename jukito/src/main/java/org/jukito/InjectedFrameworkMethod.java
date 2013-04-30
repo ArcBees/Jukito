@@ -26,8 +26,6 @@ import java.util.List;
 /**
  * This class is an extension of {@link FrameworkMethod} that makes it possible to specify
  * which {@link Binding} to use for parameters marked with {@literal @}{@link All}.
- *
- * @author Philippe Beaudoin
  */
 public class InjectedFrameworkMethod extends FrameworkMethod {
 

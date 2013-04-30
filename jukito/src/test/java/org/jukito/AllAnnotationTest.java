@@ -28,8 +28,6 @@ import static org.junit.Assert.assertTrue;
 
 /**
  * Test that methods with some parameters annotated with {@literal @}{@link org.jukito.All} behave correctly.
- *
- * @author Philippe Beaudoin
  */
 @RunWith(JukitoRunner.class)
 public class AllAnnotationTest {

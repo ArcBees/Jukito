@@ -29,9 +29,6 @@ import static org.junit.Assert.assertEquals;
 
 /**
  * Test that make sure old-style Guice 2.0 assisted injection is supported.
- *
- * @author Christian Goudreau
- * @author Philippe Beaudoin
  */
 @SuppressWarnings("deprecation")
 @RunWith(JukitoRunner.class)

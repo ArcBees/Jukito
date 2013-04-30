@@ -36,8 +36,6 @@ import java.util.List;
 /**
  * A number of useful static methods to manipulate Guice object. Most are
  * taken from the source code of Guice, but cannot be accessed in there.
- *
- * @author Philippe Beaudoin
  */
 public class GuiceUtils {
 
@@ -109,5 +107,4 @@ public class GuiceUtils {
         }
         return result;
     }
-
 }

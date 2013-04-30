@@ -28,8 +28,6 @@ import java.lang.annotation.Target;
  * within the {@link TestScope#SINGLETON} scope. It is meant to be
  * used on inner static classes ofx the test class or its parents
  * and shouldn't be used on top-level classes.
- *
- * @author Philippe Beaudoin
  */
 @ScopeAnnotation
 @Retention(RetentionPolicy.RUNTIME)

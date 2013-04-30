@@ -21,15 +21,15 @@ import com.google.inject.AbstractModule;
 import org.jukito.EnvironmentDependentComponent;
 
 /**
- *  Sample Environment Dependent Module
+ * Sample Environment Dependent Module
  */
-public class MobileModule extends AbstractModule {
+public class DesktopModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(EnvironmentDependentComponent.class).toInstance(new EnvironmentDependentComponent() {
             @Override
             public void hello() {
-                System.err.println("MobileModule");
+                System.err.println("DesktopModule");
             }
         });
     }

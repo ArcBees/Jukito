@@ -20,10 +20,7 @@ import com.google.inject.Singleton;
 
 /**
  * A class annotated with @Singleton not defined within test class.
- *
- * @author Philippe Beaudoin
  */
 @Singleton
 public class ExternalSingleton {
-
 }

@@ -52,8 +52,6 @@ import java.lang.annotation.Target;
  *   }
  *   // Test methods
  * }</pre>
- *
- * @author Julian Lettner
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

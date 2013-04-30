@@ -33,8 +33,6 @@ import static org.junit.Assert.assertEquals;
 
 /**
  * Tests that new Guice 3.0 assisted injection works in Jukito.
- *
- * @author Philippe Beaudoin
  */
 @RunWith(JukitoRunner.class)
 public class ReportWriterTest {

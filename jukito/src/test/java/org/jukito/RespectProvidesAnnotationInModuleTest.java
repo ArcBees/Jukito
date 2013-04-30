@@ -20,9 +20,6 @@ import org.junit.runner.RunWith;
 
 import static org.mockito.Mockito.verify;
 
-/**
- * @author Przemysław Gałązka
- */
 @RunWith(JukitoRunner.class)
 public class RespectProvidesAnnotationInModuleTest {
 

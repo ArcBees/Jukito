@@ -25,8 +25,6 @@ import static org.mockito.Mockito.verify;
 
 /**
  * Test that the {@link org.jukito.JukitoModule#forceMock} method works as expected.
- *
- * @author Philippe Beaudoin
  */
 @RunWith(JukitoRunner.class)
 public class ForceMockTest {
@@ -130,5 +128,4 @@ public class ForceMockTest {
         assertEquals(31, child31.t3());
         verify(child311, never()).t3();
     }
-
 }

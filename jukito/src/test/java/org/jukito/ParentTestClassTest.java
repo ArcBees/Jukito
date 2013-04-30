@@ -27,8 +27,6 @@ import static org.mockito.Mockito.verify;
 
 /**
  * Test that inheritance of test classes works correctly.
- *
- * @author Philippe Beaudoin
  */
 @RunWith(JukitoRunner.class)
 public class ParentTestClassTest extends ParentTestClassBase {
@@ -69,3 +67,4 @@ public class ParentTestClassTest extends ParentTestClassBase {
         assertTrue(Bookkeeper.parentTestShouldRunExecuted);
     }
 }
+

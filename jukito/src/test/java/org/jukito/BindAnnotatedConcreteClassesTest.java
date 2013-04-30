@@ -27,8 +27,6 @@ import static org.junit.Assert.assertSame;
 /**
  * Test that annotated concrete classes can be correctly bound.
  * See http://code.google.com/p/jukito/issues/detail?id=12
- *
- * @author Philippe Beaudoin
  */
 @RunWith(JukitoRunner.class)
 public class BindAnnotatedConcreteClassesTest {

@@ -60,12 +60,11 @@ import java.util.logging.Logger;
  * not explicitly provided is bound as a {@link TestScope#SINGLETON}.
  * <p/>
  * Depends on Mockito.
- *
- * @author Philippe Beaudoin
  */
 public abstract class JukitoModule extends TestModule {
 
     protected List<BindingInfo> bindingsObserved = Collections.emptyList();
+
     private final Set<Class<?>> forceMock = new HashSet<Class<?>>();
     private final Set<Class<?>> dontForceMock = new HashSet<Class<?>>();
     private final List<Key<?>> keysNeedingTransitiveDependencies = new ArrayList<Key<?>>();

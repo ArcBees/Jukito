@@ -30,8 +30,6 @@ import static org.mockito.Mockito.when;
 
 /**
  * Test exercising Guice's install() mechanism.
- *
- * @author Philippe Beaudoin
  */
 @RunWith(JukitoRunner.class)
 public class InstallTest {
@@ -110,5 +108,4 @@ public class InstallTest {
         assertEquals(15, foo.calc());
         assertEquals(5, bar.calc());
     }
-
 }

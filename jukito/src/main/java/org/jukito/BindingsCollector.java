@@ -193,5 +193,4 @@ public class BindingsCollector {
             return scopeAnnotation.getCanonicalName();
         }
     }
-
 }

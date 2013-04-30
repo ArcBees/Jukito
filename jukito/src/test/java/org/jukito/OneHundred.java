@@ -23,8 +23,6 @@ import java.lang.annotation.RetentionPolicy;
 
 /**
  * An annotation used in a test class.
- *
- * @author Philippe Beaudoin
  */
 @BindingAnnotation
 @Retention(RetentionPolicy.RUNTIME)

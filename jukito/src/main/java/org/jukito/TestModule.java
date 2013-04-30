@@ -32,8 +32,6 @@ import java.lang.reflect.Constructor;
  * typical test scopes. Depends on mockito.
  * <p/>
  * Depends on Mockito.
- *
- * @author Philippe Beaudoin
  */
 public abstract class TestModule extends AbstractModule {
 

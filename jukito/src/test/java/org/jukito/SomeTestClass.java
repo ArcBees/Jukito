@@ -16,9 +16,6 @@
 
 package org.jukito;
 
-/**
- * @author Przemysław Gałązka
- */
 public class SomeTestClass {
     public void someInitMethod() {
         // nothing

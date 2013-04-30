@@ -28,13 +28,10 @@ import java.util.List;
  * A {@link Statement} invoking a list of methods with parameters by filling-in
  * these parameters with injected instances. The methods are called before the
  * provided {@code next} {@link Statement}.
- *
- * @author Philippe Beaudoin
  */
 public class InjectedBeforeStatements extends Statement {
 
     private final Statement next;
-
     private final List<Statement> befores;
 
     public InjectedBeforeStatements(Statement next, List<FrameworkMethod> befores,

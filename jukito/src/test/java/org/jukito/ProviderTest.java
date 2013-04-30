@@ -34,8 +34,6 @@ import static org.mockito.Mockito.verify;
 
 /**
  * Test that providers injected by the tester module behaves correctly.
- *
- * @author Philippe Beaudoin
  */
 @RunWith(JukitoRunner.class)
 public class ProviderTest {

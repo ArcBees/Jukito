@@ -30,7 +30,6 @@ import static org.mockito.Mockito.mock;
  * Depends on Mockito.
  *
  * @param <T> The class to provide.
- * @author Philippe Beaudoin
  */
 public class MockProvider<T> implements Provider<T> {
 
@@ -49,5 +48,4 @@ public class MockProvider<T> implements Provider<T> {
     public T get() {
         return mock(classToProvide);
     }
-
 }

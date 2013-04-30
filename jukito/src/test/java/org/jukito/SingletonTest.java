@@ -32,8 +32,6 @@ import static org.mockito.Mockito.verify;
 
 /**
  * Test that the various flavours of singletons work correctly.
- *
- * @author Philippe Beaudoin
  */
 @RunWith(JukitoRunner.class)
 public class SingletonTest {
@@ -183,5 +181,4 @@ public class SingletonTest {
         assertEquals(1, Bookkeeper.numberOfTimesEagerSingletonIsInstantiated);
         assertNotSame(Bookkeeper.singleton1, Bookkeeper.singleton2);
     }
-
 }

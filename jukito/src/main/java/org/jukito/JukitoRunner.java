@@ -60,8 +60,6 @@ import java.util.List;
  * html</a>
  * <p/>
  * Depends on Mockito.
- *
- * @author Philippe Beaudoin
  */
 public class JukitoRunner extends BlockJUnit4ClassRunner {
 

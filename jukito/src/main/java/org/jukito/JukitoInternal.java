@@ -26,8 +26,6 @@ import java.lang.annotation.Target;
 /**
  * An internal binding annotation used when binding {@link SpyProvider}.
  * See {@link TestModule#bindSpy(Class)}.
- *
- * @author Philippe Beaudoin
  */
 @BindingAnnotation
 @Retention(RetentionPolicy.RUNTIME)

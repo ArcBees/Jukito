@@ -28,8 +28,6 @@ import java.util.Map;
  * test cases running with the {@link JukitoRunner}. Depends on mockito.
  * <p/>
  * Depends on Mockito.
- *
- * @author Philippe Beaudoin
  */
 public class TestScope {
 
@@ -94,5 +92,4 @@ public class TestScope {
         SINGLETON.clear();
         EAGER_SINGLETON.clear();
     }
-
 }

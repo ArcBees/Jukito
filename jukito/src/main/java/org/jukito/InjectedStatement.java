@@ -32,8 +32,6 @@ import java.util.List;
 /**
  * A {@link Statement} invoking a method with parameters by filling-in these
  * parameters with injected instances.
- *
- * @author Philippe Beaudoin
  */
 class InjectedStatement extends Statement {
 

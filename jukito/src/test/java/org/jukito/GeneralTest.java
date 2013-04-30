@@ -36,8 +36,6 @@ import static org.mockito.Mockito.verify;
 
 /**
  * Test various general behaviors.
- *
- * @author Philippe Beaudoin
  */
 @RunWith(JukitoRunner.class)
 public class GeneralTest {

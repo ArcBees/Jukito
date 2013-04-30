@@ -29,8 +29,6 @@ import static org.mockito.Mockito.verify;
 
 /**
  * Test that various form of automatic discovery of transitive dependencies work.
- *
- * @author Philippe Beaudoin
  */
 @RunWith(JukitoRunner.class)
 public class TransitiveDependencyTest {
