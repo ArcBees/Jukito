@@ -16,15 +16,6 @@
 
 package org.jukito;
 
-/**
- * @author Przemysław Gałązka
- */
-public class SomeTestClass {
-    public void someInitMethod() {
-        // nothing
-    }
-
-    public void crazyMethod() {
-        // nothing special here
-    }
+public interface EnvironmentDependentComponent {
+    void hello();
 }

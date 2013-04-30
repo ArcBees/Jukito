@@ -16,15 +16,19 @@
 
 package org.jukito;
 
-/**
- * @author Przemysław Gałązka
- */
-public class SomeTestClass {
-    public void someInitMethod() {
-        // nothing
-    }
+import com.google.inject.Module;
 
-    public void crazyMethod() {
-        // nothing special here
-    }
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+/**
+ * Annotation used for declaration of modules which are installed and used separately in different applications
+ * but test for it collaborators are the same and thus run for against Environment Dependent Modules
+ */
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface EnvironmentDependentModules {
+    Class<? extends Module>[] value();
 }

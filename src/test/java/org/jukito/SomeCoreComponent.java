@@ -17,14 +17,16 @@
 package org.jukito;
 
 /**
- * @author Przemysław Gałązka
+ * Sample core component under test in different environments
  */
-public class SomeTestClass {
-    public void someInitMethod() {
-        // nothing
+public class SomeCoreComponent {
+    private EnvironmentDependentComponent someComponent;
+
+    public SomeCoreComponent(EnvironmentDependentComponent someComponent) {
+        this.someComponent = someComponent;
     }
 
-    public void crazyMethod() {
-        // nothing special here
+    public void run() {
+        someComponent.hello();
     }
 }
