@@ -16,14 +16,14 @@
 
 package org.jukito;
 
-import static junit.framework.Assert.assertNotNull;
+import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
-import com.google.inject.Inject;
-import com.google.inject.Provider;
+import static junit.framework.Assert.assertNotNull;
 
 /**
  * Test which ensures that a class which is a provider may also be binded
