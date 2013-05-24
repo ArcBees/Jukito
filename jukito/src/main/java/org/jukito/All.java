@@ -36,4 +36,11 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.PARAMETER)
 public @interface All {
+    String DEFAULT = "__ALL__";
+
+    /**
+     * Used in conjunction with {@link org.jukito.JukitoModule#bindManyNamed(Class, String, Class[])} and related
+     * methods to retrieve all objects binded with the given name.
+     */
+    String value() default DEFAULT;
 }

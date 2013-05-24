@@ -224,8 +224,20 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
             for (Key<?> key : keys) {
                 if (All.class.equals(key.getAnnotationType())) {
                     List<Binding<?>> bindings = new ArrayList<Binding<?>>();
-                    for (Binding<?> binding : injector.findBindingsByType(key.getTypeLiteral())) {
-                        bindings.add(binding);
+                    String bindingName = ((All) key.getAnnotation()).value();
+                    if (All.DEFAULT.equals(bindingName)) {
+                        // If the annotation is with the default name bind all bindings
+                        for (Binding<?> binding : injector.findBindingsByType(key.getTypeLiteral())) {
+                            bindings.add(binding);
+                        }
+                    } else {
+                        // Else bind only those bindings which have a key with the same name
+                        for (Binding<?> binding : injector.findBindingsByType(key.getTypeLiteral())) {
+                            String name = NamedUniqueAnnotations.getName(binding.getKey().getAnnotation());
+                            if (name.equals(bindingName)) {
+                                bindings.add(binding);
+                            }
+                        }
                     }
                     bindingsToUseForParameters.add(bindings);
                 }

@@ -21,7 +21,6 @@ import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
 import com.google.inject.binder.LinkedBindingBuilder;
 import com.google.inject.binder.ScopedBindingBuilder;
-import com.google.inject.internal.UniqueAnnotations;
 import com.google.inject.name.Names;
 import com.google.inject.spi.InjectionPoint;
 
@@ -205,8 +204,28 @@ public abstract class TestModule extends AbstractModule {
      * @param instances All the instances to bind.
      */
     protected <T, V extends T> void bindManyInstances(Class<T> clazz, V... instances) {
+        bindManyNamedInstances(clazz, All.DEFAULT, instances);
+    }
+
+    /**
+     * This method binds many different instances to the same class or interface. Use this only
+     * if the instances are totally stateless. That is, they are immutable and have
+     * no mutable dependencies (e.g. a {@link String} or a simple POJO). For more
+     * complex classes use {@link #bindMany}.
+     * <p />
+     * The specified {@link Class} will be bound to all the different instances, each
+     * binding using a different unique but named annotation.
+     * <p />
+     * This method is useful when combined with the {@literal @}{@link All} annotation with
+     * a name parameter.
+     *
+     * @param clazz The {@link Class} to which the instances will be bound.
+     * @param name The name to which to bind the instances.
+     * @param instances All the instances to bind.
+     */
+    protected <T, V extends T> void bindManyNamedInstances(Class<T> clazz, String name, V... instances) {
         for (V instance : instances) {
-            bind(clazz).annotatedWith(UniqueAnnotations.create()).toInstance(instance);
+            bind(clazz).annotatedWith(NamedUniqueAnnotations.create(name)).toInstance(instance);
         }
     }
 
@@ -225,8 +244,28 @@ public abstract class TestModule extends AbstractModule {
      * @param instances All the instances to bind.
      */
     protected <T, V extends T> void bindManyInstances(TypeLiteral<T> type, V... instances) {
+        bindManyNamedInstances(type, All.DEFAULT, instances);
+    }
+
+    /**
+     * This method binds many different instances to the same class or interface. Use this only
+     * if the instances are totally stateless. That is, they are immutable and have
+     * no mutable dependencies (e.g. a {@link String} or a simple POJO). For more
+     * complex classes use {@link #bindMany}.
+     * <p />
+     * The specified {@link Class} will be bound to all the different instances, each
+     * binding using a different unique but named annotation.
+     * <p />
+     * This method is useful when combined with the {@literal @}{@link All} annotation with
+     * a name.
+     *
+     * @param type The {@link Class} to which the instances will be bound.
+     * @param name The name to which to bind the instances.
+     * @param instances All the instances to bind.
+     */
+    protected <T, V extends T> void bindManyNamedInstances(TypeLiteral<T> type, String name, V... instances) {
         for (V instance : instances) {
-            bind(type).annotatedWith(UniqueAnnotations.create()).toInstance(instance);
+            bind(type).annotatedWith(NamedUniqueAnnotations.create(name)).toInstance(instance);
         }
     }
 
@@ -240,13 +279,28 @@ public abstract class TestModule extends AbstractModule {
      * @param boundClasses All the classes to bind.
      */
     protected <T> void bindMany(Class<T> clazz, Class<? extends T>... boundClasses) {
+        bindManyNamed(clazz, All.DEFAULT, boundClasses);
+    }
+
+    /**
+     * This method binds many different type literals to the same type literal. All the
+     * classes will be bound within the {@link TestScope#SINGLETON} scope.
+     * <p />
+     * This method is useful when combined with the {@literal @}{@link All} annotation with
+     * a name.
+     *
+     * @param clazz The {@link Class} to which the instances will be bound.
+     * @param name The name to which to bind the instances.
+     * @param boundClasses All the types to bind.
+     */
+     protected <T> void bindManyNamed(Class<T> clazz, String name, Class<? extends T>... boundClasses) {
         for (Class<? extends T> boundClass : boundClasses) {
-            bind(clazz).annotatedWith(UniqueAnnotations.create()).to(boundClass).in(TestScope.SINGLETON);
+            bind(clazz).annotatedWith(NamedUniqueAnnotations.create(name)).to(boundClass).in(TestScope.SINGLETON);
         }
     }
 
     /**
-     * This method binds many different type litterals to the same type litteral. All the
+     * This method binds many different type literals to the same type literal. All the
      * classes will be bound within the {@link TestScope#SINGLETON} scope.
      * <p/>
      * This method is useful when combined with the {@literal @}{@link All} annotation.
@@ -254,10 +308,25 @@ public abstract class TestModule extends AbstractModule {
      * @param type       The {@link Class} to which the instances will be bound.
      * @param boundTypes All the types to bind.
      */
-    protected <T, V extends T> void bindMany(TypeLiteral<T> type,
-                                             TypeLiteral<? extends T>... boundTypes) {
+    protected <T> void bindMany(TypeLiteral<T> type, TypeLiteral<? extends T>... boundTypes) {
+        bindManyNamed(type, All.DEFAULT, boundTypes);
+    }
+
+    /**
+     * This method binds many different type literals to the same type literal. All the
+     * classes will be bound within the {@link TestScope#SINGLETON} scope.
+     * <p />
+     * This method is useful when combined with the {@literal @}{@link All} annotation with
+     * a name.
+     *
+     * @param type The {@link Class} to which the instances will be bound.
+     * @param name The name to which to bind the instances.
+     * @param boundTypes All the types to bind.
+     */
+     protected <T> void bindManyNamed(TypeLiteral<T> type, String name,
+             TypeLiteral<? extends T>... boundTypes) {
         for (TypeLiteral<? extends T> boundType : boundTypes) {
-            bind(type).annotatedWith(UniqueAnnotations.create()).to(boundType).in(TestScope.SINGLETON);
+            bind(type).annotatedWith(NamedUniqueAnnotations.create(name)).to(boundType).in(TestScope.SINGLETON);
         }
     }
 
