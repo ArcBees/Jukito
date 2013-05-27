@@ -346,7 +346,7 @@ public abstract class JukitoModule extends TestModule {
     private void addKeyDependency(Key<?> key, Set<Key<?>> keysObserved,
                                   Set<Key<?>> keysNeeded) {
         Key<?> newKey = key;
-        if (Provider.class.isAssignableFrom(key.getTypeLiteral().getRawType())) {
+        if (Provider.class.equals(key.getTypeLiteral().getRawType())) {
             Type providedType = (
                     (ParameterizedType) key.getTypeLiteral().getType()).getActualTypeArguments()[0];
             if (key.getAnnotation() != null) {
