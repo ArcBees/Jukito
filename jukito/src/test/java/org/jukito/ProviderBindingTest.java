@@ -26,15 +26,10 @@ import org.mockito.Mockito;
 import static junit.framework.Assert.assertNotNull;
 
 /**
- * Test which ensures that a class which is a provider may also be binded
- * independently.
+ * Test which ensures that a class which is a provider may also be binded independently.
  */
 @RunWith(JukitoRunner.class)
 public class ProviderBindingTest {
-
-    /**
-     * Module for test.
-     */
     public static class Module extends JukitoModule {
         @Override
         protected void configureTest() {
@@ -48,25 +43,23 @@ public class ProviderBindingTest {
         assertNotNull(service);
         assertNotNull(myService);
     }
-}
 
-class ServiceAndProvider implements Provider<MyService> {
-
-    @Override
-    public MyService get() {
-        return Mockito.mock(MyService.class);
+    interface MyService {
     }
 
-    public void doSomethingVeryImportant() {
-        // nop
+    static class ServiceAndProvider implements Provider<MyService> {
+        @Override
+        public MyService get() {
+            return Mockito.mock(MyService.class);
+        }
+
+        public void doSomethingVeryImportant() {
+            // nop
+        }
     }
 
-}
-
-interface MyService {
-}
-
-class OtherService {
-    @Inject
-    public ServiceAndProvider service;
+    static class OtherService {
+        @Inject
+        public ServiceAndProvider service;
+    }
 }
