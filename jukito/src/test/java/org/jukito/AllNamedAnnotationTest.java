@@ -32,21 +32,23 @@ import static org.junit.Assert.assertTrue;
 @RunWith(JukitoRunner.class)
 public class AllNamedAnnotationTest {
 
-    /**
-     * Jukito test module.
-     */
+    public static final String FIRST = "first";
+    public static final String SECOND = "second";
+
     static class Module extends JukitoModule {
         @SuppressWarnings("unchecked")
         @Override
         protected void configureTest() {
-            bindManyNamedInstances(String.class, "first", "A", "B");
-            bindManyNamedInstances(String.class, "second", "C", "D");
-            bindManyNamedInstances(TestDataInstance.class, "first", new TestDataInstance("A"),
+            bindManyNamedInstances(String.class, FIRST, "A", "B");
+            bindManyNamedInstances(String.class, SECOND, "C", "D");
+            bindManyNamedInstances(TestDataInstance.class, FIRST, new TestDataInstance("A"),
                     new TestDataInstance("B"));
-            bindManyNamedInstances(TestDataInstance.class, "second", new TestDataInstance("C"),
+            bindManyNamedInstances(TestDataInstance.class, SECOND, new TestDataInstance("C"),
                     new TestDataInstance("D"));
-            bindManyNamed(TestData.class, "first", TestDataA.class, TestDataB.class);
-            bindManyNamed(TestData.class, "second", TestDataC.class, TestDataD.class);
+            bindManyNamed(TestData.class, FIRST, TestDataA.class, TestDataB.class);
+            bindManyNamed(TestData.class, SECOND, TestDataC.class, TestDataD.class);
+
+            bindManyNamedInstances(Integer.class, null, 1, 2, 3, 5);
         }
     }
 
@@ -91,21 +93,23 @@ public class AllNamedAnnotationTest {
         static List<String> stringsProcessed = new ArrayList<String>();
         static List<String> dataProcessed = new ArrayList<String>();
         static List<String> dataInstanceProcessed = new ArrayList<String>();
+
+        static List<Integer> integerProcessed = new ArrayList<Integer>();
     }
 
     @Test
-    public void testAllWithNamedInstance(@All("first") String string1, @All("second") String string2) {
+    public void testAllWithNamedInstance(@All(FIRST) String string1, @All(SECOND) String string2) {
         Bookkeeper.namedStringsProcessed.add(string1 + string2);
     }
 
     @Test
-    public void testAllWithNamedClass(@All("first") TestData data1, @All("second") TestData data2) {
+    public void testAllWithNamedClass(@All(FIRST) TestData data1, @All(SECOND) TestData data2) {
         Bookkeeper.namedDataProcessed.add(data1.getData() + data2.getData());
     }
 
     @Test
     public void testAllWithNamedClassInstance(
-            @All("first") TestDataInstance data1, @All("second") TestDataInstance data2) {
+            @All(FIRST) TestDataInstance data1, @All(SECOND) TestDataInstance data2) {
         Bookkeeper.namedDataInstanceProcessed.add(data1.getData() + data2.getData());
     }
 
@@ -122,6 +126,11 @@ public class AllNamedAnnotationTest {
     @Test
     public void testAllWithClassInstance(@All TestDataInstance data1, @All TestDataInstance data2) {
         Bookkeeper.dataInstanceProcessed.add(data1.getData() + data2.getData());
+    }
+
+    @Test
+    public void testAllWithNullAsName(@All Integer i) {
+        Bookkeeper.integerProcessed.add(i);
     }
 
     @AfterClass
@@ -197,5 +206,11 @@ public class AllNamedAnnotationTest {
         assertTrue(Bookkeeper.dataInstanceProcessed.contains("DC"));
         assertTrue(Bookkeeper.dataInstanceProcessed.contains("DD"));
         assertEquals(16, Bookkeeper.dataInstanceProcessed.size());
+
+        assertTrue(Bookkeeper.integerProcessed.contains(1));
+        assertTrue(Bookkeeper.integerProcessed.contains(2));
+        assertTrue(Bookkeeper.integerProcessed.contains(3));
+        assertTrue(Bookkeeper.integerProcessed.contains(5));
+        assertEquals(4, Bookkeeper.integerProcessed.size());
     }
 }

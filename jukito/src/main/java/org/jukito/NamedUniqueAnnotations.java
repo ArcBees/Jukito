@@ -34,68 +34,69 @@ class NamedUniqueAnnotations {
         if (annotation instanceof Internal) {
             return ((Internal) annotation).name();
         }
-        return All.DEFAULT;
+        return null;
     }
 
     /**
      * Returns an annotation instance that is not equal to any other annotation
      * instances, for use in creating distinct {@link com.google.inject.Key}s.
+     *
+     * @param name name to group multiple annotations. Each annotation is still unique even if it belongs to a group.
      */
     public static Annotation create(String name) {
-        return create(nextUniqueValue.getAndIncrement(), name);
-    }
-
-    private static Annotation create(final int value, final String name) {
-        return new Internal() {
-            public int value() {
-                return value;
-            }
-
-            public String name() {
-                return name;
-            }
-
-            public Class<? extends Annotation> annotationType() {
-                return Internal.class;
-            }
-
-            @Override
-            public String toString() {
-                return "@" + Internal.class.getName() + "(name=" + name + ", value=" + value + ")";
-            }
-
-            @Override
-            public boolean equals(Object o) {
-                if (this == o) {
-                    return true;
-                }
-                if (o instanceof Internal) {
-                    Internal other = (Internal) o;
-                    if (other.value() != value()) {
-                        return false;
-                    }
-                    if (name() == null) {
-                        return other.name() == null;
-                    }
-                    return name().equals(other.name());
-                }
-                return false;
-            }
-
-            @Override
-            public int hashCode() {
-                if (name == null) {
-                    return (127 * "value".hashCode()) ^ value;
-                }
-                return (127 * name.hashCode()) ^ value;
-            }
-        };
+        int unique = nextUniqueValue.getAndIncrement();
+        String nonNullName = name == null ? All.DEFAULT : name;
+        return new InternalImpl(unique, nonNullName);
     }
 
     @Retention(RUNTIME)
     @BindingAnnotation
     private @interface Internal {
-        int value();
         String name();
+        int value();
+    }
+
+    private static class InternalImpl implements Internal {
+        private final int value;
+        private final String name;
+
+        public InternalImpl(int value, String name) {
+            this.value = value;
+            this.name = name;
+        }
+
+        public int value() {
+            return value;
+        }
+
+        public String name() {
+            return name;
+        }
+
+        public Class<? extends Annotation> annotationType() {
+            return Internal.class;
+        }
+
+        @Override
+        public String toString() {
+            return "@" + Internal.class.getName() + "(name=" + name + ", value=" + value + ")";
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o instanceof Internal) {
+                Internal other = (Internal) o;
+                return value() == other.value() && name().equals(other.name());
+            }
+            return false;
+        }
+
+        @Override
+        public int hashCode() {
+            return (127 * name.hashCode()) ^ value;
+        }
     }
 }

@@ -202,6 +202,8 @@ public abstract class TestModule extends AbstractModule {
      *
      * @param clazz     The {@link Class} to which the instances will be bound.
      * @param instances All the instances to bind.
+     *
+     * @see {@link All}
      */
     protected <T, V extends T> void bindManyInstances(Class<T> clazz, V... instances) {
         bindManyNamedInstances(clazz, All.DEFAULT, instances);
@@ -222,6 +224,8 @@ public abstract class TestModule extends AbstractModule {
      * @param clazz The {@link Class} to which the instances will be bound.
      * @param name The name to which to bind the instances.
      * @param instances All the instances to bind.
+     *
+     * @see {@link All}
      */
     protected <T, V extends T> void bindManyNamedInstances(Class<T> clazz, String name, V... instances) {
         for (V instance : instances) {
@@ -242,6 +246,8 @@ public abstract class TestModule extends AbstractModule {
      *
      * @param type      The {@link TypeLiteral} to which the instances will be bound.
      * @param instances All the instances to bind.
+     *
+     * @see {@link All}
      */
     protected <T, V extends T> void bindManyInstances(TypeLiteral<T> type, V... instances) {
         bindManyNamedInstances(type, All.DEFAULT, instances);
@@ -262,6 +268,8 @@ public abstract class TestModule extends AbstractModule {
      * @param type The {@link Class} to which the instances will be bound.
      * @param name The name to which to bind the instances.
      * @param instances All the instances to bind.
+     *
+     * @see {@link All}
      */
     protected <T, V extends T> void bindManyNamedInstances(TypeLiteral<T> type, String name, V... instances) {
         for (V instance : instances) {
@@ -277,6 +285,8 @@ public abstract class TestModule extends AbstractModule {
      *
      * @param clazz        The {@link Class} to which the instances will be bound.
      * @param boundClasses All the classes to bind.
+     *
+     * @see {@link All}
      */
     protected <T> void bindMany(Class<T> clazz, Class<? extends T>... boundClasses) {
         bindManyNamed(clazz, All.DEFAULT, boundClasses);
@@ -292,6 +302,8 @@ public abstract class TestModule extends AbstractModule {
      * @param clazz The {@link Class} to which the instances will be bound.
      * @param name The name to which to bind the instances.
      * @param boundClasses All the types to bind.
+     *
+     * @see {@link All}
      */
      protected <T> void bindManyNamed(Class<T> clazz, String name, Class<? extends T>... boundClasses) {
         for (Class<? extends T> boundClass : boundClasses) {
@@ -307,6 +319,8 @@ public abstract class TestModule extends AbstractModule {
      *
      * @param type       The {@link Class} to which the instances will be bound.
      * @param boundTypes All the types to bind.
+     *
+     * @see {@link All}
      */
     protected <T> void bindMany(TypeLiteral<T> type, TypeLiteral<? extends T>... boundTypes) {
         bindManyNamed(type, All.DEFAULT, boundTypes);
@@ -322,6 +336,8 @@ public abstract class TestModule extends AbstractModule {
      * @param type The {@link Class} to which the instances will be bound.
      * @param name The name to which to bind the instances.
      * @param boundTypes All the types to bind.
+     *
+     * @see {@link All}
      */
      protected <T> void bindManyNamed(TypeLiteral<T> type, String name,
              TypeLiteral<? extends T>... boundTypes) {
