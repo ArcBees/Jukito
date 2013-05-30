@@ -22,6 +22,7 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.Scope;
+import com.google.inject.TypeLiteral;
 import com.google.inject.internal.Errors;
 import com.google.inject.spi.DefaultBindingScopingVisitor;
 
@@ -224,7 +225,7 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
             for (Key<?> key : keys) {
                 if (All.class.equals(key.getAnnotationType())) {
                     All allAnnotation = (All) key.getAnnotation();
-                    com.google.inject.TypeLiteral<?> typeLiteral = key.getTypeLiteral();
+                    TypeLiteral<?> typeLiteral = key.getTypeLiteral();
                     List<Binding<?>> bindings = getBindingsForParameterWithAllAnnotation(allAnnotation, typeLiteral);
                     bindingsToUseForParameters.add(bindings);
                 }
@@ -244,7 +245,7 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
      * @param typeLiteral the type of the bindings.
      * @return the computed list.
      */
-    private List<Binding<?>> getBindingsForParameterWithAllAnnotation(All allAnnotation, com.google.inject.TypeLiteral<?> typeLiteral) {
+    private List<Binding<?>> getBindingsForParameterWithAllAnnotation(All allAnnotation, TypeLiteral<?> typeLiteral) {
         List<Binding<?>> result = new ArrayList<Binding<?>>();
         String bindingName = allAnnotation.value();
         if (All.DEFAULT.equals(bindingName)) {
