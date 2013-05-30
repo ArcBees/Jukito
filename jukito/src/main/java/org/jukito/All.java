@@ -31,9 +31,24 @@ import java.lang.annotation.Target;
  * If more than one parameter is annotated with {@literal @}{@link All} then
  * all combinations will be used. Therefore, be careful when using it on more than
  * two or three parameters as it can result in a combinatorial explosion.
+ * <p/>
+ * Using the additional parameter {@link #value()} a subset of all bound values
+ * can be specified to be run in the test function.
+ *
+ * @see {@link TestModule#bindMany}
+ * @see {@link TestModule#bindManyInstances}
+ * @see {@link TestModule#bindManyNamed}
+ * @see {@link TestModule#bindManyNamedInstances}
  */
 @BindingAnnotation
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.PARAMETER)
 public @interface All {
+    String DEFAULT = "__ALL__";
+
+    /**
+     * Used in conjunction with {@link org.jukito.JukitoModule#bindManyNamed(Class, String, Class[])} and related
+     * methods to retrieve all objects binded with the given name.
+     */
+    String value() default DEFAULT;
 }
