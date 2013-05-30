@@ -223,32 +223,42 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
             List<List<Binding<?>>> bindingsToUseForParameters = new ArrayList<List<Binding<?>>>();
             for (Key<?> key : keys) {
                 if (All.class.equals(key.getAnnotationType())) {
-                    String bindingName = ((All) key.getAnnotation()).value();
-                    List<Binding<?>> bindings = new ArrayList<Binding<?>>();
-                    if (All.DEFAULT.equals(bindingName)) {
-                        // If the annotation is with the default name bind all bindings
-                        for (Binding<?> binding : injector.findBindingsByType(key.getTypeLiteral())) {
-                            bindings.add(binding);
-                        }
-                    } else {
-                        // Else bind only those bindings which have a key with the same name
-                        for (Binding<?> binding : injector.findBindingsByType(key.getTypeLiteral())) {
-                            String name = NamedUniqueAnnotations.getName(binding.getKey().getAnnotation());
-                            if (bindingName.equals(name)) {
-                                bindings.add(binding);
-                            }
-                        }
-                    }
+                    All allAnnotation = (All) key.getAnnotation();
+                    com.google.inject.TypeLiteral<?> typeLiteral = key.getTypeLiteral();
+                    List<Binding<?>> bindings = getBindingsForParameterWithAllAnnotation(allAnnotation, typeLiteral);
                     bindingsToUseForParameters.add(bindings);
                 }
             }
-
             // Add an injected method for every combination of binding
             addAllBindingAssignations(bindingsToUseForParameters, 0,
                     new ArrayList<Binding<?>>(bindingsToUseForParameters.size()),
                     javaMethod, result);
         }
+        return result;
+    }
 
+    /**
+     * Computes a list of all bindings which match a {@link All} annotation.
+     *
+     * @param allAnnotation the annotation to match
+     * @param typeLiteral the type of the bindings.
+     * @return the computed list.
+     */
+    private List<Binding<?>> getBindingsForParameterWithAllAnnotation(All allAnnotation, com.google.inject.TypeLiteral<?> typeLiteral) {
+        List<Binding<?>> result = new ArrayList<Binding<?>>();
+        String bindingName = allAnnotation.value();
+        if (All.DEFAULT.equals(bindingName)) {
+            // If the annotation is with the default name bind all bindings
+            result.addAll(injector.findBindingsByType(typeLiteral));
+        } else {
+            // Else bind only those bindings which have a key with the same name
+            for (Binding<?> binding : injector.findBindingsByType(typeLiteral)) {
+                String name = NamedUniqueAnnotations.getName(binding.getKey().getAnnotation());
+                if (bindingName.equals(name)) {
+                    result.add(binding);
+                }
+            }
+        }
         return result;
     }
 
