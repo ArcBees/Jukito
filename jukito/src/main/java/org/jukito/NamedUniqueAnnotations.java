@@ -30,11 +30,18 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 class NamedUniqueAnnotations {
     private static final AtomicInteger nextUniqueValue = new AtomicInteger(1);
 
-    public static String getName(Annotation annotation) {
+    /**
+     * Returns if a NamedUniqueAnnotations matches a binding name
+     *
+     * @param bindingName the name to match.
+     * @param annotation the annotation to match the name to.
+     * @return if the annotation matches the bindingName.
+     */
+    public static boolean matches(String bindingName, java.lang.annotation.Annotation annotation) {
         if (annotation instanceof Internal) {
-            return ((Internal) annotation).name();
+            return ((Internal) annotation).name().equals(bindingName);
         }
-        return null;
+        return false;
     }
 
     /**

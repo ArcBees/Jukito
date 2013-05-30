@@ -253,8 +253,7 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
         } else {
             // Else bind only those bindings which have a key with the same name
             for (Binding<?> binding : injector.findBindingsByType(typeLiteral)) {
-                String name = NamedUniqueAnnotations.getName(binding.getKey().getAnnotation());
-                if (bindingName.equals(name)) {
+                if (NamedUniqueAnnotations.matches(bindingName, binding.getKey().getAnnotation())) {
                     result.add(binding);
                 }
             }
