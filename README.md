@@ -12,7 +12,7 @@ The combined power of JUnit, Guice and Mockito. Plus it sounds like a cool marti
 * [GWTP](https://github.com/ArcBees/GWTP) - Find out more about the GWT-Platform.
 
 ##Latest Release
-* 1.1.3
+* 1.2
 
 ##Maven
 * [Maven Central Jars](http://search.maven.org/#search%7Cga%7C1%7Corg.jukito) - Download jars from Maven Central.
@@ -21,7 +21,7 @@ The combined power of JUnit, Guice and Mockito. Plus it sounds like a cool marti
   <dependency>
         <groupId>org.jukito</groupId>
         <artifactId>jukito</artifactId>
-        <version>1.1.3</version>
+        <version>1.2</version>
         <scope>test</scope>
   </dependency>
   ```
