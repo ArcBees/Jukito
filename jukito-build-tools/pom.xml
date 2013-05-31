@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.jukito</groupId>
         <artifactId>jukito-parent</artifactId>
-        <version>1.1.3-SNAPSHOT</version>
+        <version>1.3-SNAPSHOT</version>
     </parent>
 
     <artifactId>jukito-build-tools</artifactId>
