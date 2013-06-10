@@ -238,6 +238,16 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
         return result;
     }
 
+    @Override
+    protected String testName(FrameworkMethod method) {
+        org.jukito.Description annotation = method.getMethod().getAnnotation(org.jukito.Description.class);
+        if (annotation != null) {
+            return annotation.value();
+        } else {
+            return super.testName(method);
+        }
+    }
+
     /**
      * Computes a list of all bindings which match a {@link All} annotation.
      *
