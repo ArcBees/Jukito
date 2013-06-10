@@ -17,6 +17,10 @@
             <artifactId>jukito-build-tools</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+        </dependency>
 
         <!-- Test dependencies -->
         <dependency>
@@ -25,5 +29,6 @@
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
 </project>
