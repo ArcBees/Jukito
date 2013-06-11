@@ -27,7 +27,7 @@ import javax.inject.Inject;
 import static org.mockito.Mockito.verify;
 
 /**
- * A simple test with one real DOC ( binding via module installation.
+ * A simple test with one real DOC (binding via module installation).
  *
  * @author Przemysław Gałązka
  * @since 10-06-2013
