@@ -11,7 +11,7 @@ import static org.mockito.Mockito.verify;
 
 
 /**
- * A simple test with one mock (engine) and one real object (FordMustang)
+ * A simple test with one real DOC (binding in test)
  *
  * @author Przemysław Gałązka
  * @since 10-06-2013
