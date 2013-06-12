@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 ArcBees Inc.
+ * Copyright 2013 ArcBees Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -20,39 +20,37 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * @author Przemysław Gałązka
- * @since 10-06-2013
+ * Simple test with @Description in place.
  */
 @RunWith(JukitoRunner.class)
 public class TestTestDescriptions {
-
     @Test
     @Description("some nice test description")
     public void testA() throws Exception {
-        //-------------------- GIVEN -------------------------------------------------------------------
+        // Given
 
-        //-------------------- WHEN --------------------------------------------------------------------
+        // When
 
-        //-------------------- THEN --------------------------------------------------------------------
+        // Then
     }
 
     @Test
     @Description("some nice ultra long test description, some nice ultra long test description," +
             "some nice ultra long test description, some nice ultra long test description")
     public void testB() throws Exception {
-        //-------------------- GIVEN -------------------------------------------------------------------
+        // Given
 
-        //-------------------- WHEN --------------------------------------------------------------------
+        // When
 
-        //-------------------- THEN --------------------------------------------------------------------
+        // Then
     }
 
     @Test
     public void testWithoutDescription() throws Exception {
-        //-------------------- GIVEN -------------------------------------------------------------------
+        // Given
 
-        //-------------------- WHEN --------------------------------------------------------------------
+        // When
 
-        //-------------------- THEN --------------------------------------------------------------------
+        // Then
     }
 }
