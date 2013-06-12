@@ -16,6 +16,9 @@
 
 package org.jukito;
 
+/**
+ * Sample class doing totally nothing.
+ */
 public class SomeTestClass {
     public void someInitMethod() {
         // nothing
