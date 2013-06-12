@@ -17,7 +17,7 @@
 package org.jukito;
 
 /**
- * Sample core component under test in different environments
+ * Sample core component under test in different environments.
  */
 public class SomeCoreComponent {
     private EnvironmentDependentComponent someComponent;

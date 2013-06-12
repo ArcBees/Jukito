@@ -27,7 +27,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 /**
- * Test for respecting {@literal @}{@link org.jukito.TestSingleton} when user modules subclass AbstractModule
+ * Test for respecting {@literal @}{@link org.jukito.TestSingleton}
+ * when user modules subclass AbstractModule.
  */
 @RunWith(JukitoRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -78,7 +79,7 @@ public class RespectTestScopeWhenUsingAbstractModuleTest {
     }
 
     /**
-     * @author Przemysław Gałązka
+     * JukitoModule.
      */
     public static class A extends JukitoModule {
         @Override
