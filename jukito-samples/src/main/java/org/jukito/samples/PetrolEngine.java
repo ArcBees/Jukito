@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 ArcBees Inc.
+ * Copyright 2013 ArcBees Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,10 +16,6 @@
 
 package org.jukito.samples;
 
-/**
- * @author Przemysław Gałązka
- * @since 10-06-2013
- */
 public class PetrolEngine implements Engine {
     @Override
     public void initiateIgnition() {

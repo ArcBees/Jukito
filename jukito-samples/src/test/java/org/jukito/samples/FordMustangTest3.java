@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 ArcBees Inc.
+ * Copyright 2013 ArcBees Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -28,24 +28,20 @@ import static org.mockito.Mockito.verify;
 
 /**
  * A simple test with one real DOC (binding via module installation).
- *
- * @author Przemysław Gałązka
- * @since 10-06-2013
  */
 @RunWith(JukitoRunner.class)
 public class FordMustangTest3 {
-
     @Inject
     FordMustang sut;
 
     @Test
     public void shouldInitiateIgnitionWhenCarStart() throws Exception {
-        //-------------------- GIVEN -------------------------------------------------------------------
+        // Given
 
-        //-------------------- WHEN --------------------------------------------------------------------
+        // When
         sut.startEngine();
 
-        //-------------------- THEN --------------------------------------------------------------------
+        // Then
         verify(sut.getEngine()).initiateIgnition();
     }
 
