@@ -25,7 +25,6 @@ import org.junit.runner.RunWith;
 
 import static org.mockito.Mockito.verify;
 
-
 /**
  * A simple test with one real DOC (binding in test)
  */
