@@ -20,6 +20,9 @@ import com.google.inject.Provides;
 
 import static org.mockito.Mockito.mock;
 
+/**
+ * Simple module with factory method.
+ */
 public class ModuleWithProvidesMethods extends AbstractModule {
 
     @Provides
