@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 ArcBees Inc.
+ * Copyright 2013 ArcBees Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -31,7 +31,7 @@ import org.junit.runner.RunWith;
 /**
  * This test is run as many times as many Environment Dependent Modules you declare.
  * Every Environment Dependent Module is installed in separated Injector
- * with default core modules you declare in @UseModules
+ * with default core modules you declare in @UseModules.
  */
 @EnvironmentDependentModules({MobileModule.class, DesktopModule.class, TabletModule.class})
 @UseModules(SomeCoreModule.class)
@@ -42,6 +42,9 @@ public class EnvironmentDependentModulesTest {
         coreComponent.run();
     }
 
+    /**
+     * SomeCoreModule.
+     */
     public static class SomeCoreModule extends AbstractModule {
         @Provides
         SomeCoreComponent createCalculator(EnvironmentDependentComponent dependentComponent) {

@@ -24,8 +24,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation used for declaration of modules which are installed and used separately in different applications
- * but test for it collaborators are the same and thus run for against Environment Dependent Modules
+ * Annotation used for declaration of modules which are installed
+ * and used separately in different applications
+ * but test for it collaborators are the same and thus
+ * run for against Environment Dependent Modules.
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
