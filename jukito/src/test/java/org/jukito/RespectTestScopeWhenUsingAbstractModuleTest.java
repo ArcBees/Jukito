@@ -78,9 +78,6 @@ public class RespectTestScopeWhenUsingAbstractModuleTest {
         verify(someTestClassOne, times(2)).crazyMethod();
     }
 
-    /**
-     * JukitoModule.
-     */
     public static class A extends JukitoModule {
         @Override
         protected void configureTest() {
