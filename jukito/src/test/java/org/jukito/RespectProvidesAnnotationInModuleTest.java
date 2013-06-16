@@ -39,10 +39,6 @@ public class RespectProvidesAnnotationInModuleTest {
         verify(someTestClass).someInitMethod();
     }
 
-    /**
-     * @author Przemysław Gałązka
-     * @since 05-04-2013
-     */
     public static class A extends JukitoModule {
         @Override
         protected void configureTest() {
