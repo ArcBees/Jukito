@@ -20,9 +20,12 @@ import org.junit.runner.RunWith;
 
 import static org.mockito.Mockito.verify;
 
+/**
+ * Test proving that factory methods are called when defined in external module
+ * and installed in JukitoModule.
+ */
 @RunWith(JukitoRunner.class)
 public class RespectProvidesAnnotationInModuleTest {
-
     @Test
     public void shouldRespectProvidesAnnotationUsedInModule(SomeTestClass someTestClass) throws Exception {
         //-------------------- GIVEN -------------------------------------------------------------------
@@ -36,10 +39,6 @@ public class RespectProvidesAnnotationInModuleTest {
         verify(someTestClass).someInitMethod();
     }
 
-    /**
-     * @author Przemysław Gałązka
-     * @since 05-04-2013
-     */
     public static class A extends JukitoModule {
         @Override
         protected void configureTest() {

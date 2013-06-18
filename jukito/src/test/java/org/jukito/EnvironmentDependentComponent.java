@@ -16,6 +16,9 @@
 
 package org.jukito;
 
+/**
+ * Sample interface which have implementations bound in different guice context (Injectors).
+ */
 public interface EnvironmentDependentComponent {
     void hello();
 }
