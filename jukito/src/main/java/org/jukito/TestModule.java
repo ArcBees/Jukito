@@ -99,7 +99,7 @@ public abstract class TestModule extends AbstractModule {
     protected <T> ScopedBindingBuilder bindSpy(Class<T> klass) {
         return bindNewSpyProvider(Key.get(klass));
     }
-
+    
     /**
      * Binds a concrete object type so that spies of instances are returned
      * instead of instances themselves. You will usually want to bind this in the
@@ -113,6 +113,43 @@ public abstract class TestModule extends AbstractModule {
             TypeLiteral<T> typeLiteral) {
         return bindNewSpyProvider(Key.get(typeLiteral));
     }
+    
+    /**
+     * Binds a concrete instance so that spies of this instance are returned
+     * instead of the object itself. Each spy is an independent spy but the
+     * underlying instance will be the same, so if the object is mutable,
+     * your tests can be polluted!
+     * 
+     * You will usually want to bind this in the {@link TestSingleton} scope.
+     * 
+     * @param <T>      The type of the interface to bind
+     * @param klass    The class to bind
+     * @param instance The instance to bind this class to.
+     * @return A {@link ScopedBindingBuilder}.
+     */
+    protected <T> ScopedBindingBuilder bindSpy(Class<T> klass, T instance) {
+    	return bindNewSpyInstanceProvider(Key.get(klass), instance);
+    }
+    
+    /**
+     * Binds a concrete instance so that spies of this instance are returned
+     * instead of the object itself. Each spy is an independent spy but the
+     * underlying instance will be the same, so if the object is mutable,
+     * your tests can be polluted!
+     * 
+     * You will usually want to bind this in the
+     * {@link TestSingleton} scope. 
+     *
+     * @param <T>         The type of the interface to bind, a parameterized type
+     * @param typeLiteral The {@link TypeLiteral} corresponding to the parameterized type to bind.
+     * @param instance    The instance to bind this class to.
+     * @return A {@link ScopedBindingBuilder}.
+     */
+    protected <T> ScopedBindingBuilder bindSpy(
+            TypeLiteral<T> typeLiteral, T instance) {
+        return bindNewSpyInstanceProvider(Key.get(typeLiteral), instance);
+    }
+   
 
     /**
      * Binds an interface annotated with a {@link com.google.inject.name.Named @Named} to a
@@ -173,6 +210,47 @@ public abstract class TestModule extends AbstractModule {
                                                     String name) {
         return bindNewSpyProvider(Key.get(typeLiteral, Names.named(name)));
     }
+    
+    /**
+     * Binds a concrete instance annotated with a
+     * {@link com.google.inject.name.Named @Named} so that spies of this instance are returned
+     * instead of the object itself. Each spy is an independent spy but the
+     * underlying instance will be the same, so if the object is mutable,
+     * your tests can be polluted!
+     * 
+     * You will usually want to bind this in the {@link TestSingleton} scope.
+     *
+     * @param <T>   The type of the interface to bind
+     * @param klass The class to bind
+     * @param instance The instance to bind this class to.
+     * @param name  The name used with the {@link com.google.inject.name.Named @Named} annotation.
+     * 
+     * @return A {@link ScopedBindingBuilder}.
+     */
+    protected <T> ScopedBindingBuilder bindNamedSpy(Class<T> klass, T instance,
+    		                                        String name) {
+        return bindNewSpyInstanceProvider(Key.get(klass, Names.named(name)), instance);
+    }
+
+    /**
+     * Binds a concrete instance annotated with a
+     * {@link com.google.inject.name.Named @Named} so that spies of this instance are returned
+     * instead of the object itself. Each spy is an independent spy but the
+     * underlying instance will be the same, so if the object is mutable,
+     * your tests can be polluted!
+     * 
+     * You will usually want to bind this in the {@link TestSingleton} scope.
+     *
+     * @param <T>         The type of the interface to bind
+     * @param typeLiteral The {@link TypeLiteral} corresponding to the parameterized type to bind.
+     * @param instance The instance to bind this class to.
+     * @param name        The name used with the {@link com.google.inject.name.Named @Named} annotation.
+     * @return A {@link ScopedBindingBuilder}.
+     */
+    protected <T> ScopedBindingBuilder bindNamedSpy(TypeLiteral<T> typeLiteral,
+                                                    T instance, String name) {
+        return bindNewSpyInstanceProvider(Key.get(typeLiteral, Names.named(name)), instance);
+    }
 
     @SuppressWarnings("unchecked")
     private <T> ScopedBindingBuilder bindNewMockProvider(Key<T> key) {
@@ -187,6 +265,10 @@ public abstract class TestModule extends AbstractModule {
         Key<T> relayingKey = Key.get(type, JukitoInternal.class);
         bind(relayingKey).toConstructor((Constructor<T>) constructorInjectionPoint.getMember());
         return bind(key).toProvider(new SpyProvider<T>(getProvider(relayingKey), relayingKey));
+    }
+    
+    private <T> ScopedBindingBuilder bindNewSpyInstanceProvider(Key<T> key, T instance) {
+    	return bind(key).toProvider(new SpyInstanceProvider<T>(instance));
     }
 
     /**
