@@ -19,11 +19,13 @@ package org.jukito;
 import org.junit.AfterClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -92,6 +94,11 @@ public class AllAnnotationTest {
     @Test
     public void testAllWithClass(@All TestData data1, @All TestData data2) {
         Bookkeeper.dataProcessed.add(data1.getData() + data2.getData());
+    }
+
+    @Test
+    public void testAllDoesNotIncludeMock(@All TestData d1, TestData d2) {
+        assertFalse(Mockito.mockingDetails(d1).isMock());
     }
 
     @Test
