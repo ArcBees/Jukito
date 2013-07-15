@@ -23,6 +23,7 @@ import com.google.inject.internal.Errors;
 
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
+import org.mockito.Mockito;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -68,7 +69,13 @@ class InjectedStatement extends Statement {
                 if (!bindingIter.hasNext()) {
                     throw new AssertionError("Expected more bindings to fill @All parameters.");
                 }
-                injectedParameters.add(injector.getInstance(bindingIter.next().getKey()));
+
+                Object obj = injector.getInstance(bindingIter.next().getKey());
+                if (Mockito.mockingDetails(obj).isMock()) {
+                    return;
+                }
+
+                injectedParameters.add(obj);
             }
         }
 
