@@ -297,6 +297,10 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
         }
 
         for (Binding<?> binding : bindingsToUseForParameters.get(index)) {
+            if (binding.getKey().getAnnotation() == null) {
+                continue;
+            }
+
             currentAssignation.add(binding);
             if (currentAssignation.size() != index + 1) {
                 throw new AssertionError("Size of currentAssignation list is wrong.");
