@@ -298,6 +298,8 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
 
         for (Binding<?> binding : bindingsToUseForParameters.get(index)) {
             if (binding.getKey().getAnnotation() == null) {
+                // As TestModule.bindMany() annotates the bindings, the un-annotated bindings are typically unwanted
+                // mocks automatically bound by Jukito.
                 continue;
             }
 
