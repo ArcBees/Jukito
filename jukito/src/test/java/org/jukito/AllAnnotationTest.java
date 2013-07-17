@@ -19,11 +19,13 @@ package org.jukito;
 import org.junit.AfterClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -43,6 +45,7 @@ public class AllAnnotationTest {
             bindManyInstances(TestDataInstance.class, new TestDataInstance("A"),
                     new TestDataInstance("B"));
             bindMany(TestData.class, TestDataA.class, TestDataB.class);
+            bindMany(Node.class, NodeA.class);
         }
     }
 
@@ -72,6 +75,12 @@ public class AllAnnotationTest {
         public String getData() {
             return data;
         }
+    }
+
+    interface Node {
+    }
+
+    static class NodeA implements Node {
     }
 
     /**
@@ -118,5 +127,10 @@ public class AllAnnotationTest {
         assertTrue(Bookkeeper.dataInstanceProcessed.contains("BA"));
         assertTrue(Bookkeeper.dataInstanceProcessed.contains("BB"));
         assertEquals(4, Bookkeeper.dataInstanceProcessed.size());
+    }
+
+    @Test
+    public void testAllDoesNotIncludeMock(@All Node node, Node neighbour) {
+        assertFalse(Mockito.mockingDetails(node).isMock());
     }
 }
