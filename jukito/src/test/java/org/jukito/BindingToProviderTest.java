@@ -23,6 +23,8 @@ import org.junit.runner.RunWith;
 
 import javax.inject.Provider;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * A test to make sure injecting a Provider in a @Provides method.
  * See https://github.com/ArcBees/Jukito/issues/34
@@ -35,17 +37,30 @@ public class BindingToProviderTest {
      */
     public static class MyModule extends JukitoModule {
         @Provides
-        public final Object getObject(Provider<Object> op) {
-            return null;
+        public final MyClass getObject(Provider<String> provider) {
+            return new MyClass("abc" + provider.get());
         }
 
         @Override
         protected void configureTest() {
+            bind(String.class).toInstance("def");
+        }
+    }
+
+    static class MyClass {
+        private final String string;
+
+        MyClass(String string) {
+            this.string = string;
+        }
+
+        String getString() {
+            return string;
         }
     }
 
     @Test
-    public void foo() {
-        System.out.println("done");
+    public void foo(MyClass obj) {
+        assertEquals("abcdef", obj.getString());
     }
 }
