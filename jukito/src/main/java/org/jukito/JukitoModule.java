@@ -202,7 +202,9 @@ public abstract class JukitoModule extends TestModule {
                     && !isAssistedInjection(key)) {
                 Object primitiveInstance = getDummyInstanceOfPrimitiveType(rawType);
                 if (primitiveInstance == null) {
-                    bind(key).toProvider(new MockProvider(rawType)).in(TestScope.SINGLETON);
+                    if (rawType != Provider.class) {
+                        bind(key).toProvider(new MockProvider(rawType)).in(TestScope.SINGLETON);
+                    }
                 } else {
                     bindKeyToInstance(key, primitiveInstance);
                 }

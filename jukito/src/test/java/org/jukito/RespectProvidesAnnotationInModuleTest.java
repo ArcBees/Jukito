@@ -39,6 +39,9 @@ public class RespectProvidesAnnotationInModuleTest {
         verify(someTestClass).someInitMethod();
     }
 
+    /**
+     * Guice test module.
+     */
     public static class A extends JukitoModule {
         @Override
         protected void configureTest() {

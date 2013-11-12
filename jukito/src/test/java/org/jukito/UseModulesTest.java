@@ -29,6 +29,9 @@ import org.mockito.Mockito;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+/**
+ * Test to check that method injection works fine with external modules.
+ */
 @RunWith(JukitoRunner.class)
 @UseModules({AbcModule.class, DefModule.class})
 public class UseModulesTest {
