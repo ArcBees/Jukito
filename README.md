@@ -75,30 +75,15 @@ As you see here, Jukito lets you define your very own test module, where you can
 ##Getting Started
 [Read the wiki](https://github.com/ArcBees/Jukito/wiki) to find out everything Jukito has to offer, and [join the discussion](http://groups.google.com/group/jukito)!
 
-##Moving From
-* https://code.google.com/p/jukito/ - Previous Jukito home.
+##Latest Release
+* 1.2
 
-##Reference
+##Links
 * [Jukito Custom Google Search](http://www.google.com/cse/home?cx=011138278718949652927:turyqq9pl64) - Search GWTP documentation, wiki and thread collections.
 * [Jukito WebSite Source](https://github.com/ArcBees/jukito-website) - Jukito website source.
 * [Jukito Google Group](https://groups.google.com/forum/?fromgroups#!forum/jukito) - Find help here.
 * [Jukito Previous Repo](https://code.google.com/p/jukito/) - Previous home of Jukito.
-* [GWTP](https://github.com/ArcBees/GWTP) - Find out more about the GWT-Platform.
-
-##Latest Release
-* 1.2
-
-##Maven
-* [Maven Central Jars](http://search.maven.org/#search%7Cga%7C1%7Corg.jukito) - Download jars from Maven Central.
-
-  ```xml
-  <dependency>
-        <groupId>org.jukito</groupId>
-        <artifactId>jukito</artifactId>
-        <version>1.2</version>
-        <scope>test</scope>
-  </dependency>
-  ```
+* [GWTP](https://github.com/ArcBees/GWTP) - Find out more about GWT-Platform.
 
 ##Thanks to
 [![Arcbees.com](http://arcbees-ads.appspot.com/ad.png)](http://arcbees.com)
