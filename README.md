@@ -72,7 +72,8 @@ public class CalculatorTest {
 
 As you see here, Jukito lets you define your very own test module, where you can bind classes just like a regular Guice module. It doesn't stop there, however. The `bindMany` methods let you bind different classes or instances to the same interface. Combined with the powerful `@All` annotation this lets you easily run a single test on a whole suite of test examples. The code above will run a total of six tests!
 
-Read the [GettingStarted](https://github.com/ArcBees/Jukito/wiki/Getting-started) page to find out everything Jukito has to offer, and [join the discussion](http://groups.google.com/group/jukito)!
+##Getting Started
+[Read the wiki](https://github.com/ArcBees/Jukito/wiki) to find out everything Jukito has to offer, and [join the discussion](http://groups.google.com/group/jukito)!
 
 ##Moving From
 * https://code.google.com/p/jukito/ - Previous Jukito home.
