@@ -99,9 +99,6 @@ Read the [GettingStarted](https://github.com/ArcBees/Jukito/wiki/Getting-started
   </dependency>
   ```
 
-##Javadocs
-* [Javadocs](http://arcbees.github.com/Jukito/javadoc/apidocs/index.html)
-
 ##Thanks to
 [![Arcbees.com](http://arcbees-ads.appspot.com/ad.png)](http://arcbees.com)
 
