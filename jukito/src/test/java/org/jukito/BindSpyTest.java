@@ -27,7 +27,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 /**
- * Test that binding spy works correctly
+ * Test that binding spy works correctly.
  */
 @RunWith(JukitoRunner.class)
 public class BindSpyTest {

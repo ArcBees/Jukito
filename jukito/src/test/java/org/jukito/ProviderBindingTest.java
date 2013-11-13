@@ -30,6 +30,10 @@ import static junit.framework.Assert.assertNotNull;
  */
 @RunWith(JukitoRunner.class)
 public class ProviderBindingTest {
+
+    /**
+     * Guice test module.
+     */
     public static class Module extends JukitoModule {
         @Override
         protected void configureTest() {

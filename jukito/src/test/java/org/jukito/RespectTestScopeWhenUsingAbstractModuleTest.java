@@ -78,6 +78,9 @@ public class RespectTestScopeWhenUsingAbstractModuleTest {
         verify(someTestClassOne, times(2)).crazyMethod();
     }
 
+    /**
+     * Guice test module.
+     */
     public static class A extends JukitoModule {
         @Override
         protected void configureTest() {

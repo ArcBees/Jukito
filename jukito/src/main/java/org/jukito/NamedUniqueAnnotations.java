@@ -31,7 +31,7 @@ class NamedUniqueAnnotations {
     private static final AtomicInteger nextUniqueValue = new AtomicInteger(1);
 
     /**
-     * Returns if a NamedUniqueAnnotations matches a binding name
+     * Returns if a NamedUniqueAnnotations matches a binding name.
      *
      * @param bindingName the name to match.
      * @param annotation the annotation to match the name to.
