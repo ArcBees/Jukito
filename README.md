@@ -6,7 +6,7 @@
 
 So you started using dependency injection because somebody told you it would make your tests simpler? But as you gaze at your deep hierarchy of test classes, "simple" is not exactly the word you think of. Plus, creating a new mock whenever you add a parameter to an injected constructor gets old very quickly.
 
-You are not alone! And Jukito was created specifically for people like you. Read on, or [get started](https://github.com/ArcBees/Jukito/wiki/Getting-started) right away!
+You are not alone! And Jukito was created specifically for people like you. Read on, or [get started](https://github.com/ArcBees/Jukito/wiki) right away!
 
 If you use [Google Guice](http://code.google.com/p/google-guice/), or if your GWT application uses [Gin](http://code.google.com/p/google-gin/), then Jukito is the perfect antidote to your unit testing headaches. Now you can write tests like this:
 
