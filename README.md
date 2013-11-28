@@ -1,7 +1,7 @@
 ![Jukito] (http://i.imgur.com/sRnKp.png "Jukito") 
 
 ###The combined power of JUnit, Guice and Mockito. Plus it sounds like a cool martial art.
-[![Donate](https://www.paypal.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=SDCQSKDTWZYCQ)
+
 -----
 
 So you started using dependency injection because somebody told you it would make your tests simpler? But as you gaze at your deep hierarchy of test classes, "simple" is not exactly the word you think of. Plus, creating a new mock whenever you add a parameter to an injected constructor gets old very quickly.
