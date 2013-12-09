@@ -84,6 +84,7 @@ public class AssistedInjectTest {
                 result += localeInfo.getMoneySign();
             }
             SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+            formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
             result += " on " + formatter.format(date);
 
             return result;
