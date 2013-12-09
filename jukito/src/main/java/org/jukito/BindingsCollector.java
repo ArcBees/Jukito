@@ -121,7 +121,7 @@ public class BindingsCollector {
             }
             return null;
         }
-        
+
         @Override
         public Void visit(Message message) {
             messages.add(message);
@@ -193,6 +193,10 @@ public class BindingsCollector {
         }
     }
 
+    /**
+     * This visitor collects the bindings for PrivateModules. Because the child
+     * elements are private, the bound keys are not recorded.
+     */
     public class GuicePrivateBindingVisitor<T> extends GuiceBindingVisitor<T> {
 
         @Override
