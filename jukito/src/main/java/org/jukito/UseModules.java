@@ -53,7 +53,7 @@ import java.lang.annotation.Target;
  *   // Test methods
  * }</pre>
  */
-@Target(ElementType.TYPE)
+@Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UseModules {
     Class<? extends Module>[] value();
