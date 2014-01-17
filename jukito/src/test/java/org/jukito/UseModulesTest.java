@@ -22,6 +22,8 @@ import org.jukito.UseModulesTest.Abc;
 import org.jukito.UseModulesTest.AbcImpl;
 import org.jukito.UseModulesTest.Def;
 import org.jukito.UseModulesTest.DefImpl;
+import org.jukito.UseModulesTest.Klm;
+import org.jukito.UseModulesTest.KlmImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -34,7 +36,7 @@ import static org.junit.Assert.assertTrue;
  */
 @RunWith(JukitoRunner.class)
 @UseModules({AbcModule.class, DefModule.class})
-public class UseModulesTest {
+public class UseModulesTest extends UseModulesTestBase {
     interface Abc {
     }
 
@@ -44,16 +46,23 @@ public class UseModulesTest {
     interface Ghj {
     }
 
+    interface Klm {
+    }
+
     static class AbcImpl implements Abc {
     }
 
     static class DefImpl implements Def {
     }
 
+    static class KlmImpl implements Klm {
+    }
+
     @Test
-    public void testInjectionWithExternalModules(Abc abc, Def def) {
+    public void testInjectionWithExternalModules(Abc abc, Def def, Klm klm) {
         assertTrue(abc instanceof AbcImpl);
         assertTrue(def instanceof DefImpl);
+        assertTrue(klm instanceof KlmImpl);
     }
 
     @Test
@@ -61,6 +70,12 @@ public class UseModulesTest {
         assertNotNull(ghj);
         assertTrue(Mockito.mockingDetails(ghj).isMock());
     }
+}
+
+@UseModules({DefModule.class, KlmModule.class})
+abstract class UseModulesTestBase {
+    // KlmModule should get installed
+    // DefModule should be ignored because subClass has it
 }
 
 class AbcModule extends AbstractModule {
@@ -74,5 +89,12 @@ class DefModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(Def.class).to(DefImpl.class);
+    }
+}
+
+class KlmModule extends AbstractModule {
+    @Override
+    protected void configure() {
+        bind(Klm.class).to(KlmImpl.class);
     }
 }
