@@ -55,7 +55,20 @@ public class UseModulesTest extends UseModulesTestBase {
     static class DefImpl implements Def {
     }
 
+    static class AbcImpl2 implements Abc {
+    }
+
+    static class DefImpl2 implements Def {
+    }
+
     static class KlmImpl implements Klm {
+    }
+
+    @Test
+    @UseModules(XyzModule.class)
+    public void testInjectionUsingMethodModules(Abc abc, Def def) {
+        assertTrue(abc instanceof AbcImpl2);
+        assertTrue(def instanceof DefImpl2);
     }
 
     @Test
@@ -69,6 +82,14 @@ public class UseModulesTest extends UseModulesTestBase {
     public void testAutoMockingForMissingBindings(Ghj ghj) {
         assertNotNull(ghj);
         assertTrue(Mockito.mockingDetails(ghj).isMock());
+    }
+}
+
+class XyzModule extends AbstractModule {
+    @Override
+    protected void configure() {
+        bind(Abc.class).to(UseModulesTest.AbcImpl2.class);
+        bind(Def.class).to(UseModulesTest.DefImpl2.class);
     }
 }
 

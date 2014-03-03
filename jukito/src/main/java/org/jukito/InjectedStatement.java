@@ -17,8 +17,10 @@
 package org.jukito;
 
 import com.google.inject.Binding;
+import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Key;
+import com.google.inject.Module;
 import com.google.inject.internal.Errors;
 
 import org.junit.runners.model.FrameworkMethod;
@@ -48,6 +50,25 @@ class InjectedStatement extends Statement {
     @Override
     public void evaluate() throws Throwable {
         Method javaMethod = method.getMethod();
+        Injector methodInjector = injector;
+
+        UseModules useModules = javaMethod.getAnnotation(UseModules.class);
+        if (useModules != null) {
+            Class<? extends Module>[] moduleClasses = useModules.value();
+            final Module[] modules = new Module[moduleClasses.length];
+            for (int i = 0; i < modules.length; i++) {
+                modules[i] = moduleClasses[i].newInstance();
+            }
+            JukitoModule jukitoModule = new JukitoModule() {
+                @Override
+                protected void configureTest() {
+                    for (Module m : modules) {
+                        install(m);
+                    }
+                }
+            };
+            methodInjector = Guice.createInjector(jukitoModule);
+        }
 
         Errors errors = new Errors(javaMethod);
         List<Key<?>> keys = GuiceUtils.getMethodKeys(javaMethod, errors);
@@ -63,12 +84,12 @@ class InjectedStatement extends Statement {
         List<Object> injectedParameters = new ArrayList<Object>();
         for (Key<?> key : keys) {
             if (!All.class.equals(key.getAnnotationType())) {
-                injectedParameters.add(injector.getInstance(key));
+                injectedParameters.add(methodInjector.getInstance(key));
             } else {
                 if (!bindingIter.hasNext()) {
                     throw new AssertionError("Expected more bindings to fill @All parameters.");
                 }
-                injectedParameters.add(injector.getInstance(bindingIter.next().getKey()));
+                injectedParameters.add(methodInjector.getInstance(bindingIter.next().getKey()));
             }
         }
 
