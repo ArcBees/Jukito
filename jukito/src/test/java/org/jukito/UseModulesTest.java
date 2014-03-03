@@ -72,7 +72,7 @@ public class UseModulesTest extends UseModulesTestBase {
     }
 }
 
-@UseModules({DefModule.class, KlmModule.class})
+@UseModules({ DefModule.class, KlmModule.class })
 abstract class UseModulesTestBase {
     // KlmModule should get installed
     // DefModule should be ignored because subClass has it
