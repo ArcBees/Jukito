@@ -16,8 +16,6 @@
 
 package org.jukito;
 
-import com.google.inject.AbstractModule;
-
 import org.jukito.UseModulesTest.Abc;
 import org.jukito.UseModulesTest.AbcImpl;
 import org.jukito.UseModulesTest.Def;
@@ -27,6 +25,8 @@ import org.jukito.UseModulesTest.KlmImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+
+import com.google.inject.AbstractModule;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -55,20 +55,41 @@ public class UseModulesTest extends UseModulesTestBase {
     static class DefImpl implements Def {
     }
 
+    static class AbcImpl2 implements Abc {
+    }
+
+    static class DefImpl2 implements Def {
+    }
+
     static class KlmImpl implements Klm {
     }
 
     @Test
-    public void testInjectionWithExternalModules(Abc abc, Def def, Klm klm) {
+    @UseModules(XyzModule.class)
+    public void testInjectionUsingMethodModules(Abc abc, Def def, Klm klm) {
+        assertTrue(abc instanceof AbcImpl2);
+        assertTrue(def instanceof DefImpl2);
+        assertTrue(klm instanceof KlmImpl);
+    }
+
+    @Test
+    public void testInjectionWithExternalModules(Abc abc, Def def) {
         assertTrue(abc instanceof AbcImpl);
         assertTrue(def instanceof DefImpl);
-        assertTrue(klm instanceof KlmImpl);
     }
 
     @Test
     public void testAutoMockingForMissingBindings(Ghj ghj) {
         assertNotNull(ghj);
         assertTrue(Mockito.mockingDetails(ghj).isMock());
+    }
+}
+
+class XyzModule extends AbstractModule {
+    @Override
+    protected void configure() {
+        bind(Abc.class).to(UseModulesTest.AbcImpl2.class);
+        bind(Def.class).to(UseModulesTest.DefImpl2.class);
     }
 }
 

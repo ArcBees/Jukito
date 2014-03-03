@@ -16,12 +16,12 @@
 
 package org.jukito;
 
-import com.google.inject.Module;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
+import com.google.inject.Module;
 
 /**
  * This annotation can be used on a test class together with
@@ -53,7 +53,7 @@ import java.lang.annotation.Target;
  *   // Test methods
  * }</pre>
  */
-@Target(ElementType.TYPE)
+@Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UseModules {
     Class<? extends Module>[] value();
