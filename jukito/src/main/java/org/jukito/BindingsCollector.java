@@ -30,6 +30,7 @@ import com.google.inject.spi.Elements;
 import com.google.inject.spi.InstanceBinding;
 import com.google.inject.spi.LinkedKeyBinding;
 import com.google.inject.spi.Message;
+import com.google.inject.spi.PrivateElements;
 import com.google.inject.spi.ProviderBinding;
 import com.google.inject.spi.ProviderInstanceBinding;
 import com.google.inject.spi.ProviderKeyBinding;
@@ -38,6 +39,7 @@ import com.google.inject.spi.UntargettedBinding;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Collects all the bindings from a Guice module, so that Jukito can identify missing
@@ -102,6 +104,24 @@ public class BindingsCollector {
             return null;
         }
 
+        @SuppressWarnings("unchecked")
+        @Override
+        public Void visit(PrivateElements privateElements) {
+
+            Set<Key<?>> exposedKeys = privateElements.getExposedKeys();
+            for (Element element : privateElements.getElements()) {
+                if (element instanceof Binding<?>) {
+                    Binding<?> bindingElement = (Binding<?>) element;
+                    if (exposedKeys.contains(bindingElement.getKey())) {
+                        @SuppressWarnings("rawtypes")
+                        GuicePrivateBindingVisitor bindingVisitor = new GuicePrivateBindingVisitor();
+                        bindingElement.acceptTargetVisitor(bindingVisitor);
+                    }
+                }
+            }
+            return null;
+        }
+
         @Override
         public Void visit(Message message) {
             messages.add(message);
@@ -114,7 +134,7 @@ public class BindingsCollector {
      */
     public class GuiceBindingVisitor<T> extends DefaultBindingTargetVisitor<T, Void> {
 
-        private Void addBindingInfo(Binding<? extends T> binding, Key<?> boundKey, Object instance) {
+        protected Void addBindingInfo(Binding<? extends T> binding, Key<?> boundKey, Object instance) {
             bindingsObserved.add(BindingInfo.create(binding, boundKey, instance));
             return null;
         }
@@ -170,6 +190,18 @@ public class BindingsCollector {
         @Override
         public Void visit(ConstructorBinding<? extends T> constructorBinding) {
             return addBinding(constructorBinding);
+        }
+    }
+
+    /**
+     * This visitor collects the bindings for PrivateModules. Because the child
+     * elements are private, the bound keys are not recorded.
+     */
+    public class GuicePrivateBindingVisitor<T> extends GuiceBindingVisitor<T> {
+
+        @Override
+        public Void visit(LinkedKeyBinding<? extends T> linkedKeyBinding) {
+            return addBindingInfo(linkedKeyBinding, null, null);
         }
     }
 
