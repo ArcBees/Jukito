@@ -66,16 +66,16 @@ public class UseModulesTest extends UseModulesTestBase {
 
     @Test
     @UseModules(XyzModule.class)
-    public void testInjectionUsingMethodModules(Abc abc, Def def, Klm klm) {
+    public void testInjectionUsingMethodModules(Abc abc, Def def) {
         assertTrue(abc instanceof AbcImpl2);
         assertTrue(def instanceof DefImpl2);
-        assertTrue(klm instanceof KlmImpl);
     }
 
     @Test
-    public void testInjectionWithExternalModules(Abc abc, Def def) {
+    public void testInjectionWithExternalModules(Abc abc, Def def, Klm klm) {
         assertTrue(abc instanceof AbcImpl);
         assertTrue(def instanceof DefImpl);
+        assertTrue(klm instanceof KlmImpl);
     }
 
     @Test
