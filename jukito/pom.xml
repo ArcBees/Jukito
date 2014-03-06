@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.jukito</groupId>
         <artifactId>jukito-parent</artifactId>
-        <version>1.4</version>
+        <version>1.5-SNAPSHOT</version>
     </parent>
 
     <artifactId>jukito</artifactId>
