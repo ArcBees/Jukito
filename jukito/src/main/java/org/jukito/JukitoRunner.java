@@ -83,6 +83,18 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
         this.injector = injector;
     }
 
+    /**
+     * Creates an injector from a test module.
+     * Override this to use something like Netflix Governator.
+     *
+     * @param testModule the test module
+     * @return a newly created injector
+     */
+    protected Injector createInjector(TestModule testModule)
+    {
+        return Guice.createInjector(testModule);
+    }
+
     private void ensureInjector()
             throws InstantiationException, IllegalAccessException {
         if (injector != null) {
@@ -102,7 +114,7 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
             collector.collectBindings();
             jukitoModule.setBindingsObserved(collector.getBindingsObserved());
         }
-        injector = Guice.createInjector(testModule);
+        injector = this.createInjector(testModule);
         if (jukitoModule != null && jukitoModule.getReportWriter() != null) {
             // An output report is desired
             BindingsCollector collector = new BindingsCollector(jukitoModule);
