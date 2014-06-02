@@ -90,8 +90,7 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
      * @param testModule the test module
      * @return a newly created injector
      */
-    protected Injector createInjector(TestModule testModule)
-    {
+    protected Injector createInjector(TestModule testModule) {
         return Guice.createInjector(testModule);
     }
 
