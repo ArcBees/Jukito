@@ -182,8 +182,7 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
                 for (Class<? extends Module> mClass : moduleClasses) {
                     try {
                         install(mClass.newInstance());
-                    }
-                    catch (Exception e) {
+                    } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
                 }
