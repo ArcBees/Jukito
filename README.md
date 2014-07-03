@@ -89,5 +89,3 @@ As you see here, Jukito lets you define your very own test module, where you can
 [![Arcbees.com](http://arcbees-ads.appspot.com/ad.png)](http://arcbees.com)
 
 [![IntelliJ](https://lh6.googleusercontent.com/--QIIJfKrjSk/UJJ6X-UohII/AAAAAAAAAVM/cOW7EjnH778/s800/banner_IDEA.png)](http://www.jetbrains.com/idea/index.html)
-
-[![githalytics.com alpha](https://cruel-carlota.gopagoda.com/df7cd27e91474db1118bebbddbeaa3ad "githalytics.com")](http://githalytics.com/ArcBees/Jukito)
