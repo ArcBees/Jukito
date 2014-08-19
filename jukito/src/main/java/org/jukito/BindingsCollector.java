@@ -25,8 +25,10 @@ import com.google.inject.spi.ConvertedConstantBinding;
 import com.google.inject.spi.DefaultBindingScopingVisitor;
 import com.google.inject.spi.DefaultBindingTargetVisitor;
 import com.google.inject.spi.DefaultElementVisitor;
+import com.google.inject.spi.Dependency;
 import com.google.inject.spi.Element;
 import com.google.inject.spi.Elements;
+import com.google.inject.spi.InjectionPoint;
 import com.google.inject.spi.InstanceBinding;
 import com.google.inject.spi.LinkedKeyBinding;
 import com.google.inject.spi.Message;
@@ -34,6 +36,7 @@ import com.google.inject.spi.PrivateElements;
 import com.google.inject.spi.ProviderBinding;
 import com.google.inject.spi.ProviderInstanceBinding;
 import com.google.inject.spi.ProviderKeyBinding;
+import com.google.inject.spi.StaticInjectionRequest;
 import com.google.inject.spi.UntargettedBinding;
 
 import java.lang.annotation.Annotation;
@@ -46,6 +49,7 @@ import java.util.Set;
  * bindings and bind them to mock or instances.
  */
 public class BindingsCollector {
+
     /**
      * Information on a binding, used by Jukito to identify provided keys and needed keys.
      */
@@ -57,7 +61,7 @@ public class BindingsCollector {
         String scope;
 
         public static BindingInfo create(Binding<?> binding, Key<?> boundKey,
-                                         Object instance) {
+                Object instance) {
             BindingInfo bindingInfo = new BindingInfo();
             bindingInfo.key = binding.getKey();
             bindingInfo.boundKey = boundKey;
@@ -65,11 +69,18 @@ public class BindingsCollector {
             bindingInfo.scope = binding.acceptScopingVisitor(new GuiceScopingVisitor());
             return bindingInfo;
         }
+
+        public static BindingInfo create(Key<?> boundKey) {
+            BindingInfo bindingInfo = new BindingInfo();
+            bindingInfo.boundKey = boundKey;
+
+            return bindingInfo;
+        }
     }
 
     private final AbstractModule module;
-    private final List<BindingInfo> bindingsObserved = new ArrayList<BindingInfo>();
-    private final List<Message> messages = new ArrayList<Message>();
+    private final List<BindingInfo> bindingsObserved = new ArrayList<>();
+    private final List<Message> messages = new ArrayList<>();
 
     BindingsCollector(AbstractModule module) {
         this.module = module;
@@ -99,7 +110,7 @@ public class BindingsCollector {
 
         @Override
         public <T> Void visit(com.google.inject.Binding<T> command) {
-            GuiceBindingVisitor<T> bindingVisitor = new GuiceBindingVisitor<T>();
+            GuiceBindingVisitor<T> bindingVisitor = new GuiceBindingVisitor<>();
             command.acceptTargetVisitor(bindingVisitor);
             return null;
         }
@@ -107,7 +118,6 @@ public class BindingsCollector {
         @SuppressWarnings("unchecked")
         @Override
         public Void visit(PrivateElements privateElements) {
-
             Set<Key<?>> exposedKeys = privateElements.getExposedKeys();
             for (Element element : privateElements.getElements()) {
                 if (element instanceof Binding<?>) {
@@ -123,9 +133,31 @@ public class BindingsCollector {
         }
 
         @Override
+        public Void visit(StaticInjectionRequest staticInjectionRequest) {
+            for (InjectionPoint injectionPoint : staticInjectionRequest.getInjectionPoints()) {
+                addInjectionPointDependencies(injectionPoint);
+            }
+
+            return super.visit(staticInjectionRequest);
+        }
+
+        @Override
         public Void visit(Message message) {
             messages.add(message);
             return null;
+        }
+
+        private void addInjectionPointDependencies(InjectionPoint injectionPoint) {
+            // Do not consider dependencies coming from optional injections.
+            if (injectionPoint.isOptional()) {
+                return;
+            }
+
+            for (Dependency<?> dependency : injectionPoint.getDependencies()) {
+                Key<?> key = dependency.getKey();
+
+                bindingsObserved.add(BindingInfo.create(key));
+            }
         }
     }
 

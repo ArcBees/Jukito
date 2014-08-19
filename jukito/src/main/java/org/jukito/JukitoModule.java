@@ -65,10 +65,10 @@ public abstract class JukitoModule extends TestModule {
 
     protected List<BindingInfo> bindingsObserved = Collections.emptyList();
 
-    private final Set<Class<?>> forceMock = new HashSet<Class<?>>();
-    private final Set<Class<?>> dontForceMock = new HashSet<Class<?>>();
-    private final List<Key<?>> keysNeedingTransitiveDependencies = new ArrayList<Key<?>>();
-    private final Map<Class<?>, Object> primitiveTypes = new HashMap<Class<?>, Object>();
+    private final Set<Class<?>> forceMock = new HashSet<>();
+    private final Set<Class<?>> dontForceMock = new HashSet<>();
+    private final List<Key<?>> keysNeedingTransitiveDependencies = new ArrayList<>();
+    private final Map<Class<?>, Object> primitiveTypes = new HashMap<>();
 
     public JukitoModule() {
         primitiveTypes.put(String.class, "");
@@ -112,8 +112,8 @@ public abstract class JukitoModule extends TestModule {
         bindScopes();
         configureTest();
 
-        Set<Key<?>> keysObserved = new HashSet<Key<?>>(bindingsObserved.size());
-        Set<Key<?>> keysNeeded = new HashSet<Key<?>>(bindingsObserved.size());
+        Set<Key<?>> keysObserved = new HashSet<>(bindingsObserved.size());
+        Set<Key<?>> keysNeeded = new HashSet<>(bindingsObserved.size());
 
         for (BindingInfo bindingInfo : bindingsObserved) {
             if (bindingInfo.key != null) {
@@ -178,6 +178,7 @@ public abstract class JukitoModule extends TestModule {
         // Concrete classes bound in this way are bound in @TestSingleton.
         if (testClass != null) {
             Set<InjectionPoint> injectionPoints = InjectionPoint.forInstanceMethodsAndFields(testClass);
+
             for (InjectionPoint injectionPoint : injectionPoints) {
                 Errors errors = new Errors(injectionPoint);
                 List<Dependency<?>> dependencies = injectionPoint.getDependencies();
@@ -218,13 +219,13 @@ public abstract class JukitoModule extends TestModule {
     }
 
     private void addNeededKey(Set<Key<?>> keysObserved, Set<Key<?>> keysNeeded,
-                              Key<?> keyNeeded, boolean asTestSingleton) {
+            Key<?> keyNeeded, boolean asTestSingleton) {
         keysNeeded.add(keyNeeded);
         bindIfConcrete(keysObserved, keyNeeded, asTestSingleton);
     }
 
     private <T> void bindIfConcrete(Set<Key<?>> keysObserved,
-                                    Key<T> key, boolean asTestSingleton) {
+            Key<T> key, boolean asTestSingleton) {
         TypeLiteral<?> typeToBind = key.getTypeLiteral();
         Class<?> rawType = typeToBind.getRawType();
         if (!keysObserved.contains(key) && canBeInjected(typeToBind)
@@ -304,7 +305,7 @@ public abstract class JukitoModule extends TestModule {
             // if the Enum is empty.
             try {
                 instance = ((Object[]) klass.getMethod("values").invoke(null))[0];
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
         return instance;
@@ -319,7 +320,7 @@ public abstract class JukitoModule extends TestModule {
     }
 
     private <T> void addDependencies(Key<T> key, Set<Key<?>> keysObserved,
-                                     Set<Key<?>> keysNeeded) {
+            Set<Key<?>> keysNeeded) {
         TypeLiteral<T> type = key.getTypeLiteral();
         if (!canBeInjected(type)) {
             return;
@@ -334,7 +335,7 @@ public abstract class JukitoModule extends TestModule {
     }
 
     private void addInjectionPointDependencies(InjectionPoint injectionPoint,
-                                               Set<Key<?>> keysObserved, Set<Key<?>> keysNeeded) {
+            Set<Key<?>> keysObserved, Set<Key<?>> keysNeeded) {
         // Do not consider dependencies coming from optional injections
         if (injectionPoint.isOptional()) {
             return;
@@ -346,7 +347,7 @@ public abstract class JukitoModule extends TestModule {
     }
 
     private void addKeyDependency(Key<?> key, Set<Key<?>> keysObserved,
-                                  Set<Key<?>> keysNeeded) {
+            Set<Key<?>> keysNeeded) {
         Key<?> newKey = key;
         if (Provider.class.equals(key.getTypeLiteral().getRawType())) {
             Type providedType = (
@@ -405,9 +406,9 @@ public abstract class JukitoModule extends TestModule {
      * @throws IOException If something goes wrong when writing.
      */
     private Set<Key<?>> outputBindings(Writer reportWriter, List<BindingInfo> bindings,
-                                       Set<Key<?>> keysToSkip) throws IOException {
+            Set<Key<?>> keysToSkip) throws IOException {
 
-        Set<Key<?>> reportedKeys = new HashSet<Key<?>>(bindings.size());
+        Set<Key<?>> reportedKeys = new HashSet<>(bindings.size());
         for (BindingInfo bindingInfo : bindings) {
             if (keysToSkip.contains(bindingInfo.key)) {
                 continue;
@@ -423,7 +424,7 @@ public abstract class JukitoModule extends TestModule {
                     reportWriter.append(bindingInfo.boundKey.toString());
                 }
             } else if (bindingInfo.boundInstance != null) {
-                reportWriter.append("Instance of " + bindingInfo.boundInstance.getClass().getCanonicalName());
+                reportWriter.append("Instance of ").append(bindingInfo.boundInstance.getClass().getCanonicalName());
             } else {
                 reportWriter.append("NOTHING!?");
             }
