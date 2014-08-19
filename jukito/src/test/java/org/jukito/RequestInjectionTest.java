@@ -33,7 +33,6 @@ public class RequestInjectionTest {
     }
 
     static class RequestInjection {
-
         @Inject
         Dummy dummy;
 
