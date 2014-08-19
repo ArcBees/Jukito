@@ -111,7 +111,6 @@ public class EDRunner extends ParentRunner {
         BindingsCollector collector = new BindingsCollector(finalModule);
         collector.collectBindings();
         finalModule.setBindingsObserved(collector.getBindingsObserved());
-        finalModule.setStaticInjectionPointsObserved(collector.getStaticInjectionPointsObserved());
 
         return Guice.createInjector(finalModule);
     }

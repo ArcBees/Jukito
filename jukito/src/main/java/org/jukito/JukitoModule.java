@@ -64,7 +64,6 @@ import java.util.logging.Logger;
 public abstract class JukitoModule extends TestModule {
 
     protected List<BindingInfo> bindingsObserved = Collections.emptyList();
-    protected Set<InjectionPoint> staticInjectionPointsObserved = new HashSet<>();
 
     private final Set<Class<?>> forceMock = new HashSet<>();
     private final Set<Class<?>> dontForceMock = new HashSet<>();
@@ -92,16 +91,6 @@ public abstract class JukitoModule extends TestModule {
      */
     public void setBindingsObserved(List<BindingInfo> bindingsObserved) {
         this.bindingsObserved = bindingsObserved;
-    }
-
-    /**
-     * Attach this {@link JukitoModule} to a list of the injection points that were
-     * observed by a preliminary run of {@link BindingsCollector}.
-     *
-     * @param staticInjectionPointsObserved The observed injection points.
-     */
-    public void setStaticInjectionPointsObserved(Set<InjectionPoint> staticInjectionPointsObserved) {
-        this.staticInjectionPointsObserved = staticInjectionPointsObserved;
     }
 
     /**
@@ -149,13 +138,6 @@ public abstract class JukitoModule extends TestModule {
         List<ProviderMethod<?>> providerMethodList = providerMethodsModule.getProviderMethods(binder());
         for (ProviderMethod<?> providerMethod : providerMethodList) {
             keysObserved.add(providerMethod.getKey());
-        }
-
-        // Adding all unbound dependencies found through requestStaticInjection
-        for (InjectionPoint injectionPoint : staticInjectionPointsObserved) {
-            for (Dependency<?> dependency : injectionPoint.getDependencies()) {
-                addNeededKey(keysObserved, keysNeeded, dependency.getKey(), true);
-            }
         }
 
         // Make sure needed keys from Guice bindings are bound as mock or to instances

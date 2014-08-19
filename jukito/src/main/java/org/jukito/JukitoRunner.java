@@ -112,7 +112,6 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
             BindingsCollector collector = new BindingsCollector(testModuleForCollection);
             collector.collectBindings();
             jukitoModule.setBindingsObserved(collector.getBindingsObserved());
-            jukitoModule.setStaticInjectionPointsObserved(collector.getStaticInjectionPointsObserved());
         }
         injector = this.createInjector(testModule);
         if (jukitoModule != null && jukitoModule.getReportWriter() != null) {
