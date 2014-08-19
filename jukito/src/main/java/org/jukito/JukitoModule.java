@@ -191,12 +191,13 @@ public abstract class JukitoModule extends TestModule {
             }
         }
 
-        // Recursively add the dependencies of all the bindings observed
+        // Recursively add the dependencies of all the bindings observed. Warning, we can't use for each here
+        // since it would result into concurrency issues.
         for (int i = 0; i < keysNeedingTransitiveDependencies.size(); ++i) {
             addDependencies(keysNeedingTransitiveDependencies.get(i), keysObserved, keysNeeded);
         }
 
-        // Bind all keys needed but not observed as mocks
+        // Bind all keys needed but not observed as mocks.
         for (Key<?> key : keysNeeded) {
             Class<?> rawType = key.getTypeLiteral().getRawType();
             if (!keysObserved.contains(key) && !isCoreGuiceType(rawType)
