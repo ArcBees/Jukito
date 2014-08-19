@@ -16,26 +16,6 @@
 
 package org.jukito;
 
-import java.io.IOException;
-import java.io.Writer;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.logging.Logger;
-
-import org.jukito.BindingsCollector.BindingInfo;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
 import com.google.inject.ConfigurationException;
 import com.google.inject.Injector;
 import com.google.inject.Key;
@@ -52,6 +32,26 @@ import com.google.inject.spi.Dependency;
 import com.google.inject.spi.HasDependencies;
 import com.google.inject.spi.InjectionPoint;
 
+import org.jukito.BindingsCollector.BindingInfo;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.IOException;
+import java.io.Writer;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.logging.Logger;
+
 /**
  * A guice {@link com.google.inject.Module Module} with a bit of syntactic sugar
  * to bind within typical test scopes. Depends on mockito. This module
@@ -64,7 +64,7 @@ import com.google.inject.spi.InjectionPoint;
 public abstract class JukitoModule extends TestModule {
 
     protected List<BindingInfo> bindingsObserved = Collections.emptyList();
-    protected Set<InjectionPoint> staticInjectionPointsObserved;
+    protected Set<InjectionPoint> staticInjectionPointsObserved = new HashSet<>();
 
     private final Set<Class<?>> forceMock = new HashSet<>();
     private final Set<Class<?>> dontForceMock = new HashSet<>();
@@ -210,8 +210,8 @@ public abstract class JukitoModule extends TestModule {
         }
 
         // Recursively add the dependencies of all the bindings observed
-        for (Key<?> keysNeedingTransitiveDependency : keysNeedingTransitiveDependencies) {
-            addDependencies(keysNeedingTransitiveDependency, keysObserved, keysNeeded);
+        for (int i = 0; i < keysNeedingTransitiveDependencies.size(); ++i) {
+            addDependencies(keysNeedingTransitiveDependencies.get(i), keysObserved, keysNeeded);
         }
 
         // Bind all keys needed but not observed as mocks

@@ -16,12 +16,6 @@
 
 package org.jukito;
 
-import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.Binding;
 import com.google.inject.Key;
@@ -43,6 +37,12 @@ import com.google.inject.spi.ProviderInstanceBinding;
 import com.google.inject.spi.ProviderKeyBinding;
 import com.google.inject.spi.StaticInjectionRequest;
 import com.google.inject.spi.UntargettedBinding;
+
+import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Collects all the bindings from a Guice module, so that Jukito can identify missing

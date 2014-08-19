@@ -16,19 +16,22 @@
 
 package org.jukito;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import com.google.inject.Provides;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.google.inject.Provides;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mockingDetails;
 
+/**
+ * Test class for request static injection.
+ */
 @RunWith(JukitoRunner.class)
 public class RequestStaticInjectionTest {
     interface Dummy {
