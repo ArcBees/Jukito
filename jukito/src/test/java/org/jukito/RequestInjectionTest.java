@@ -54,7 +54,7 @@ public class RequestInjectionTest {
     RequestInjection requestInjection;
 
     @Test
-    public void thisTestShouldRun() {
+    public void dummyShouldBeMocked() {
         Dummy dummy = requestInjection.getDummy();
 
         assertTrue(mockingDetails(dummy).isMock());
