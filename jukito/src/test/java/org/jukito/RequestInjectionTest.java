@@ -22,6 +22,7 @@ import org.junit.runner.RunWith;
 import javax.inject.Inject;
 
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mockingDetails;
 
 /**
  * Test class for request injection.
@@ -32,8 +33,13 @@ public class RequestInjectionTest {
     }
 
     static class RequestInjection {
+
         @Inject
-        private Dummy dummy;
+        Dummy dummy;
+
+        public Dummy getDummy() {
+            return dummy;
+        }
     }
 
     static class Module extends JukitoModule {
@@ -49,6 +55,8 @@ public class RequestInjectionTest {
 
     @Test
     public void thisTestShouldRun() {
-        assertTrue(true);
+        Dummy dummy = requestInjection.getDummy();
+
+        assertTrue(mockingDetails(dummy).isMock());
     }
 }

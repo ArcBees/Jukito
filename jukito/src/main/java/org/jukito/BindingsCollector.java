@@ -25,6 +25,7 @@ import com.google.inject.spi.ConvertedConstantBinding;
 import com.google.inject.spi.DefaultBindingScopingVisitor;
 import com.google.inject.spi.DefaultBindingTargetVisitor;
 import com.google.inject.spi.DefaultElementVisitor;
+import com.google.inject.spi.Dependency;
 import com.google.inject.spi.Element;
 import com.google.inject.spi.Elements;
 import com.google.inject.spi.InjectionPoint;
@@ -40,7 +41,6 @@ import com.google.inject.spi.UntargettedBinding;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -69,11 +69,17 @@ public class BindingsCollector {
             bindingInfo.scope = binding.acceptScopingVisitor(new GuiceScopingVisitor());
             return bindingInfo;
         }
+
+        public static BindingInfo create(Key<?> boundKey) {
+            BindingInfo bindingInfo = new BindingInfo();
+            bindingInfo.boundKey = boundKey;
+
+            return bindingInfo;
+        }
     }
 
     private final AbstractModule module;
     private final List<BindingInfo> bindingsObserved = new ArrayList<>();
-    private final Set<InjectionPoint> staticInjectionPointsObserved = new HashSet<>();
     private final List<Message> messages = new ArrayList<>();
 
     BindingsCollector(AbstractModule module) {
@@ -89,10 +95,6 @@ public class BindingsCollector {
 
     public List<BindingInfo> getBindingsObserved() {
         return bindingsObserved;
-    }
-
-    public Set<InjectionPoint> getStaticInjectionPointsObserved() {
-        return staticInjectionPointsObserved;
     }
 
     /**
@@ -132,7 +134,9 @@ public class BindingsCollector {
 
         @Override
         public Void visit(StaticInjectionRequest staticInjectionRequest) {
-            staticInjectionPointsObserved.addAll(staticInjectionRequest.getInjectionPoints());
+            for (InjectionPoint injectionPoint : staticInjectionRequest.getInjectionPoints()) {
+                addInjectionPointDependencies(injectionPoint);
+            }
 
             return super.visit(staticInjectionRequest);
         }
@@ -141,6 +145,19 @@ public class BindingsCollector {
         public Void visit(Message message) {
             messages.add(message);
             return null;
+        }
+
+        private void addInjectionPointDependencies(InjectionPoint injectionPoint) {
+            // Do not consider dependencies coming from optional injections.
+            if (injectionPoint.isOptional()) {
+                return;
+            }
+
+            for (Dependency<?> dependency : injectionPoint.getDependencies()) {
+                Key<?> key = dependency.getKey();
+
+                bindingsObserved.add(BindingInfo.create(key));
+            }
         }
     }
 

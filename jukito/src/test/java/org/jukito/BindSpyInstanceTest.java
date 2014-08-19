@@ -30,7 +30,7 @@ import static org.mockito.Mockito.verify;
 public class BindSpyInstanceTest {
 
     /**
-     * Guice test module
+     * Guice test module.
      */
     static class Module extends JukitoModule {
         @Override

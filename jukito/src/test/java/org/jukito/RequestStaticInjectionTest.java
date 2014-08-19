@@ -58,8 +58,7 @@ public class RequestStaticInjectionTest {
         @Provides
         @Named("a")
         Dummy createDummy() {
-            return new Dummy() {
-            };
+            return new Dummy() { };
         }
     }
 
