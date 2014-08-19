@@ -41,7 +41,6 @@ import com.google.inject.spi.UntargettedBinding;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -81,7 +80,6 @@ public class BindingsCollector {
 
     private final AbstractModule module;
     private final List<BindingInfo> bindingsObserved = new ArrayList<>();
-    private final Set<InjectionPoint> staticInjectionPointsObserved = new HashSet<>();
     private final List<Message> messages = new ArrayList<>();
 
     BindingsCollector(AbstractModule module) {
@@ -150,7 +148,7 @@ public class BindingsCollector {
         }
 
         private void addInjectionPointDependencies(InjectionPoint injectionPoint) {
-            // Do not consider dependencies coming from optional injections
+            // Do not consider dependencies coming from optional injections.
             if (injectionPoint.isOptional()) {
                 return;
             }
