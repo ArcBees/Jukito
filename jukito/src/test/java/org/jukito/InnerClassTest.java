@@ -19,8 +19,6 @@ package org.jukito;
 import com.google.inject.ConfigurationException;
 import com.google.inject.Inject;
 
-import org.jukito.JukitoModule;
-import org.jukito.JukitoRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -36,7 +34,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(JukitoRunner.class)
 public class InnerClassTest {
     /**
-     * Test module, just bind anything to make sure regular injections still work properly
+     * Test module, just bind anything to make sure regular injections still work properly.
      */
     public static class Module extends JukitoModule {
         @Override
@@ -44,9 +42,9 @@ public class InnerClassTest {
             bind(String.class).toInstance("hello world!");
         }
     }
-    
+
     /**
-     * Verify that when you try to inject an inner class, a ConfigurationException is thrown
+     * Verify that when you try to inject an inner class, a ConfigurationException is thrown.
      * 
      * @param klass
      */
@@ -56,7 +54,7 @@ public class InnerClassTest {
     }
 
     /**
-     * Verify that when you try to inject a static inner class, everything works properly
+     * Verify that when you try to inject a static inner class, everything works properly.
      * 
      * @param klass
      */
@@ -65,6 +63,9 @@ public class InnerClassTest {
         assertEquals("hello world!", klass.toString());
     }
 
+    /**
+     * Dummy inner class with a single inject.
+     */
     public class InnerClass {
         @Inject String test;
 
@@ -73,6 +74,9 @@ public class InnerClassTest {
         }
     }
 
+    /**
+     * Dummy static inner class with a single inject.
+     */
     public static class StaticInnerClass {
         @Inject String test;
 
