@@ -16,23 +16,28 @@
 
 package org.jukito;
 
-import static org.junit.Assert.*;
+import com.google.inject.ConfigurationException;
+import com.google.inject.Inject;
 
 import org.jukito.JukitoModule;
 import org.jukito.JukitoRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.google.inject.ConfigurationException;
-import com.google.inject.Inject;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Test to ensure that injecting inner classes throw a ConfigurationException, instead
  * of simply injecting a mock. Additionally, test that injecting static inner classes
  * still work properly.
+ * 
+ * @author Jared Martin
  */
 @RunWith(JukitoRunner.class)
 public class InnerClassTest {
+    /**
+     * Test module, just bind anything to make sure regular injections still work properly
+     */
     public static class Module extends JukitoModule {
         @Override
         protected void configureTest() {
@@ -40,14 +45,24 @@ public class InnerClassTest {
         }
     }
     
-    @Test(expected=ConfigurationException.class)
-    public void testInnerClass(InnerClass f) {
-        assertEquals("hello world!", f.toString());
+    /**
+     * Verify that when you try to inject an inner class, a ConfigurationException is thrown
+     * 
+     * @param klass
+     */
+    @Test(expected = ConfigurationException.class)
+    public void testInnerClass(InnerClass klass) {
+        assertEquals("hello world!", klass.toString());
     }
-    
+
+    /**
+     * Verify that when you try to inject a static inner class, everything works properly
+     * 
+     * @param klass
+     */
     @Test
-    public void testStaticInnerClass(StaticInnerClass f) {
-        assertEquals("hello world!", f.toString());
+    public void testStaticInnerClass(StaticInnerClass klass) {
+        assertEquals("hello world!", klass.toString());
     }
 
     public class InnerClass {
@@ -57,10 +72,10 @@ public class InnerClassTest {
             return test;
         }
     }
-    
+
     public static class StaticInnerClass {
         @Inject String test;
-        
+
         public String toString() {
             return test;
         }
