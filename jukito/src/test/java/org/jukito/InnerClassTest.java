@@ -40,6 +40,28 @@ public class InnerClassTest {
             bind(String.class).toInstance("hello world!");
         }
     }
+    
+    /**
+     * Dummy inner class with a single inject.
+     */
+    class InnerClass {
+        @Inject String test;
+
+        public String toString() {
+            return test;
+        }
+    }
+
+    /**
+     * Dummy static inner class with a single inject.
+     */
+    static class StaticInnerClass {
+        @Inject String test;
+
+        public String toString() {
+            return test;
+        }
+    }
 
     /**
      * Verify that when you try to inject an inner class, a ConfigurationException is thrown.
@@ -59,27 +81,5 @@ public class InnerClassTest {
     @Test
     public void testStaticInnerClass(StaticInnerClass klass) {
         assertEquals("hello world!", klass.toString());
-    }
-
-    /**
-     * Dummy inner class with a single inject.
-     */
-    public class InnerClass {
-        @Inject String test;
-
-        public String toString() {
-            return test;
-        }
-    }
-
-    /**
-     * Dummy static inner class with a single inject.
-     */
-    public static class StaticInnerClass {
-        @Inject String test;
-
-        public String toString() {
-            return test;
-        }
     }
 }
