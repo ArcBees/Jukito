@@ -40,7 +40,7 @@ public class InnerClassTest {
             bind(String.class).toInstance("hello world!");
         }
     }
-    
+
     /**
      * Dummy inner class with a single inject.
      */
