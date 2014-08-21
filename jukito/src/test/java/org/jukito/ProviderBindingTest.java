@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 ArcBees Inc.
+ * Copyright 2013 ArcBees Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -30,6 +30,10 @@ import static junit.framework.Assert.assertNotNull;
  */
 @RunWith(JukitoRunner.class)
 public class ProviderBindingTest {
+
+    /**
+     * Guice test module.
+     */
     public static class Module extends JukitoModule {
         @Override
         protected void configureTest() {

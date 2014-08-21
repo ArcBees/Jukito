@@ -9,7 +9,7 @@
 
     <groupId>org.jukito</groupId>
     <artifactId>jukito-parent</artifactId>
-    <version>1.3-SNAPSHOT</version>
+    <version>1.5-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Jukito</name>
     <inceptionYear>2010</inceptionYear>
@@ -60,7 +60,7 @@
 
     <scm>
         <connection>scm:git:git://github.com/ArcBees/Jukito.git/</connection>
-        <developerConnection>scm:git:git@github.com:ArcBees/Jukito.git</developerConnection>
+        <developerConnection>scm:git:https://git@github.com/ArcBees/Jukito.git</developerConnection>
         <url>https://github.com/ArcBees/Jukito</url>
     </scm>
 
@@ -85,7 +85,7 @@
     </mailingLists>
 
     <properties>
-        <target.jdk>1.6</target.jdk>
+        <target.jdk>1.7</target.jdk>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 

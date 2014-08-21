@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 ArcBees Inc.
+ * Copyright 2013 ArcBees Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -31,7 +31,7 @@ class NamedUniqueAnnotations {
     private static final AtomicInteger nextUniqueValue = new AtomicInteger(1);
 
     /**
-     * Returns if a NamedUniqueAnnotations matches a binding name
+     * Returns if a NamedUniqueAnnotations matches a binding name.
      *
      * @param bindingName the name to match.
      * @param annotation the annotation to match the name to.

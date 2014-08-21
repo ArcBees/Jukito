@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 ArcBees Inc.
+ * Copyright 2013 ArcBees Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -40,7 +40,10 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * TODO: Rework this documentation
@@ -80,6 +83,17 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
         this.injector = injector;
     }
 
+    /**
+     * Creates an injector from a test module.
+     * Override this to use something like Netflix Governator.
+     *
+     * @param testModule the test module
+     * @return a newly created injector
+     */
+    protected Injector createInjector(TestModule testModule) {
+        return Guice.createInjector(testModule);
+    }
+
     private void ensureInjector()
             throws InstantiationException, IllegalAccessException {
         if (injector != null) {
@@ -99,7 +113,7 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
             collector.collectBindings();
             jukitoModule.setBindingsObserved(collector.getBindingsObserved());
         }
-        injector = Guice.createInjector(testModule);
+        injector = this.createInjector(testModule);
         if (jukitoModule != null && jukitoModule.getReportWriter() != null) {
             // An output report is desired
             BindingsCollector collector = new BindingsCollector(jukitoModule);
@@ -109,10 +123,9 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
     }
 
     private TestModule getTestModule(Class<?> testClass) throws InstantiationException, IllegalAccessException {
-        UseModules useModules = testClass.getAnnotation(UseModules.class);
-        if (useModules != null) {
-            Class<? extends Module>[] moduleClasses = useModules.value();
-            return createJukitoModule(moduleClasses);
+        Set<Class<? extends Module>> useModuleClasses = getUseModuleClasses(testClass);
+        if (!useModuleClasses.isEmpty()) {
+            return createJukitoModule(useModuleClasses);
         }
 
         TestModule testModule = null;
@@ -143,17 +156,35 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
         }
     }
 
-    private JukitoModule createJukitoModule(Class<? extends Module>[] moduleClasses)
-            throws InstantiationException, IllegalAccessException {
-        final Module[] modules = new Module[moduleClasses.length];
-        for (int i = 0; i < modules.length; i++) {
-            modules[i] = moduleClasses[i].newInstance();
+    /**
+     * Gets Guice modules registered with {@link UseModules} from test class and all super classes.
+     *
+     * @param testClass the test class running
+     * @return set of Guice modules
+     */
+    private Set<Class<? extends Module>> getUseModuleClasses(Class<?> testClass) {
+        Class<?> currentClass = testClass;
+        Set<Class<? extends Module>> modules = new HashSet<Class<? extends Module>>();
+        while (currentClass != null) {
+            UseModules useModules = currentClass.getAnnotation(UseModules.class);
+            if (useModules != null) {
+                Collections.addAll(modules, useModules.value());
+            }
+            currentClass = currentClass.getSuperclass();
         }
+        return modules;
+    }
+
+    private JukitoModule createJukitoModule(final Iterable<Class<? extends Module>> moduleClasses) {
         return new JukitoModule() {
             @Override
             protected void configureTest() {
-                for (Module m : modules) {
-                    install(m);
+                for (Class<? extends Module> mClass : moduleClasses) {
+                    try {
+                        install(mClass.newInstance());
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
         };
@@ -297,6 +328,12 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
         }
 
         for (Binding<?> binding : bindingsToUseForParameters.get(index)) {
+            if (binding.getKey().getAnnotation() == null) {
+                // As TestModule.bindMany() annotates the bindings, the un-annotated bindings are typically unwanted
+                // mocks automatically bound by Jukito.
+                continue;
+            }
+
             currentAssignation.add(binding);
             if (currentAssignation.size() != index + 1) {
                 throw new AssertionError("Size of currentAssignation list is wrong.");

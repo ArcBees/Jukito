@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 ArcBees Inc.
+ * Copyright 2014 ArcBees Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -99,7 +99,7 @@ public abstract class TestModule extends AbstractModule {
     protected <T> ScopedBindingBuilder bindSpy(Class<T> klass) {
         return bindNewSpyProvider(Key.get(klass));
     }
-    
+
     /**
      * Binds a concrete object type so that spies of instances are returned
      * instead of instances themselves. You will usually want to bind this in the
@@ -113,32 +113,32 @@ public abstract class TestModule extends AbstractModule {
             TypeLiteral<T> typeLiteral) {
         return bindNewSpyProvider(Key.get(typeLiteral));
     }
-    
+
     /**
      * Binds a concrete instance so that spies of this instance are returned
      * instead of the object itself. Each spy is an independent spy but the
      * underlying instance will be the same, so if the object is mutable,
      * your tests can be polluted!
-     * 
+     * <p/>
      * You will usually want to bind this in the {@link TestSingleton} scope.
-     * 
+     *
      * @param <T>      The type of the interface to bind
      * @param klass    The class to bind
      * @param instance The instance to bind this class to.
      * @return A {@link ScopedBindingBuilder}.
      */
     protected <T> ScopedBindingBuilder bindSpy(Class<T> klass, T instance) {
-    	return bindNewSpyInstanceProvider(Key.get(klass), instance);
+        return bindNewSpyImmutableInstanceProvider(Key.get(klass), instance);
     }
-    
+
     /**
      * Binds a concrete instance so that spies of this instance are returned
      * instead of the object itself. Each spy is an independent spy but the
      * underlying instance will be the same, so if the object is mutable,
      * your tests can be polluted!
-     * 
+     * <p/>
      * You will usually want to bind this in the
-     * {@link TestSingleton} scope. 
+     * {@link TestSingleton} scope.
      *
      * @param <T>         The type of the interface to bind, a parameterized type
      * @param typeLiteral The {@link TypeLiteral} corresponding to the parameterized type to bind.
@@ -147,9 +147,8 @@ public abstract class TestModule extends AbstractModule {
      */
     protected <T> ScopedBindingBuilder bindSpy(
             TypeLiteral<T> typeLiteral, T instance) {
-        return bindNewSpyInstanceProvider(Key.get(typeLiteral), instance);
+        return bindNewSpyImmutableInstanceProvider(Key.get(typeLiteral), instance);
     }
-   
 
     /**
      * Binds an interface annotated with a {@link com.google.inject.name.Named @Named} to a
@@ -210,46 +209,41 @@ public abstract class TestModule extends AbstractModule {
                                                     String name) {
         return bindNewSpyProvider(Key.get(typeLiteral, Names.named(name)));
     }
-    
+
     /**
-     * Binds a concrete instance annotated with a
-     * {@link com.google.inject.name.Named @Named} so that spies of this instance are returned
-     * instead of the object itself. Each spy is an independent spy but the
-     * underlying instance will be the same, so if the object is mutable,
-     * your tests can be polluted!
-     * 
+     * Binds a concrete instance annotated with {@link com.google.inject.name.Named @Named} so that spies of this
+     * instance are returned instead of the object itself. Each spy is an independent spy but the underlying instance
+     * will be the same, so if the object is mutable, your tests can be polluted!
+     * <p/>
      * You will usually want to bind this in the {@link TestSingleton} scope.
      *
-     * @param <T>   The type of the interface to bind
-     * @param klass The class to bind
+     * @param <T>      The type of the interface to bind
+     * @param klass    The class to bind
      * @param instance The instance to bind this class to.
-     * @param name  The name used with the {@link com.google.inject.name.Named @Named} annotation.
-     * 
+     * @param name     The name used with the {@link com.google.inject.name.Named @Named} annotation.
      * @return A {@link ScopedBindingBuilder}.
      */
     protected <T> ScopedBindingBuilder bindNamedSpy(Class<T> klass, T instance,
-    		                                        String name) {
-        return bindNewSpyInstanceProvider(Key.get(klass, Names.named(name)), instance);
+                                                    String name) {
+        return bindNewSpyImmutableInstanceProvider(Key.get(klass, Names.named(name)), instance);
     }
 
     /**
-     * Binds a concrete instance annotated with a
-     * {@link com.google.inject.name.Named @Named} so that spies of this instance are returned
-     * instead of the object itself. Each spy is an independent spy but the
-     * underlying instance will be the same, so if the object is mutable,
-     * your tests can be polluted!
-     * 
+     * Binds a concrete instance annotated with {@link com.google.inject.name.Named @Named} so that spies of this
+     * instance are returned instead of the object itself. Each spy is an independent spy but the underlying instance
+     * will be the same, so if the object is mutable, your tests can be polluted!
+     * <p/>
      * You will usually want to bind this in the {@link TestSingleton} scope.
      *
      * @param <T>         The type of the interface to bind
      * @param typeLiteral The {@link TypeLiteral} corresponding to the parameterized type to bind.
-     * @param instance The instance to bind this class to.
+     * @param instance    The instance to bind this class to.
      * @param name        The name used with the {@link com.google.inject.name.Named @Named} annotation.
      * @return A {@link ScopedBindingBuilder}.
      */
     protected <T> ScopedBindingBuilder bindNamedSpy(TypeLiteral<T> typeLiteral,
                                                     T instance, String name) {
-        return bindNewSpyInstanceProvider(Key.get(typeLiteral, Names.named(name)), instance);
+        return bindNewSpyImmutableInstanceProvider(Key.get(typeLiteral, Names.named(name)), instance);
     }
 
     @SuppressWarnings("unchecked")
@@ -266,9 +260,9 @@ public abstract class TestModule extends AbstractModule {
         bind(relayingKey).toConstructor((Constructor<T>) constructorInjectionPoint.getMember());
         return bind(key).toProvider(new SpyProvider<T>(getProvider(relayingKey), relayingKey));
     }
-    
-    private <T> ScopedBindingBuilder bindNewSpyInstanceProvider(Key<T> key, T instance) {
-    	return bind(key).toProvider(new SpyInstanceProvider<T>(instance));
+
+    private <T> ScopedBindingBuilder bindNewSpyImmutableInstanceProvider(Key<T> key, T instance) {
+        return bind(key).toProvider(new SpyImmutableInstanceProvider<T>(instance));
     }
 
     /**
@@ -284,7 +278,6 @@ public abstract class TestModule extends AbstractModule {
      *
      * @param clazz     The {@link Class} to which the instances will be bound.
      * @param instances All the instances to bind.
-     *
      * @see {@link All}
      */
     protected <T, V extends T> void bindManyInstances(Class<T> clazz, V... instances) {
@@ -296,17 +289,16 @@ public abstract class TestModule extends AbstractModule {
      * if the instances are totally stateless. That is, they are immutable and have
      * no mutable dependencies (e.g. a {@link String} or a simple POJO). For more
      * complex classes use {@link #bindMany}.
-     * <p />
+     * <p/>
      * The specified {@link Class} will be bound to all the different instances, each
      * binding using a different unique but named annotation.
-     * <p />
+     * <p/>
      * This method is useful when combined with the {@literal @}{@link All} annotation with
      * a name parameter.
      *
-     * @param clazz The {@link Class} to which the instances will be bound.
-     * @param name The name to which to bind the instances.
+     * @param clazz     The {@link Class} to which the instances will be bound.
+     * @param name      The name to which to bind the instances.
      * @param instances All the instances to bind.
-     *
      * @see {@link All}
      */
     protected <T, V extends T> void bindManyNamedInstances(Class<T> clazz, String name, V... instances) {
@@ -328,7 +320,6 @@ public abstract class TestModule extends AbstractModule {
      *
      * @param type      The {@link TypeLiteral} to which the instances will be bound.
      * @param instances All the instances to bind.
-     *
      * @see {@link All}
      */
     protected <T, V extends T> void bindManyInstances(TypeLiteral<T> type, V... instances) {
@@ -340,17 +331,16 @@ public abstract class TestModule extends AbstractModule {
      * if the instances are totally stateless. That is, they are immutable and have
      * no mutable dependencies (e.g. a {@link String} or a simple POJO). For more
      * complex classes use {@link #bindMany}.
-     * <p />
+     * <p/>
      * The specified {@link Class} will be bound to all the different instances, each
      * binding using a different unique but named annotation.
-     * <p />
+     * <p/>
      * This method is useful when combined with the {@literal @}{@link All} annotation with
      * a name.
      *
-     * @param type The {@link Class} to which the instances will be bound.
-     * @param name The name to which to bind the instances.
+     * @param type      The {@link Class} to which the instances will be bound.
+     * @param name      The name to which to bind the instances.
      * @param instances All the instances to bind.
-     *
      * @see {@link All}
      */
     protected <T, V extends T> void bindManyNamedInstances(TypeLiteral<T> type, String name, V... instances) {
@@ -367,7 +357,6 @@ public abstract class TestModule extends AbstractModule {
      *
      * @param clazz        The {@link Class} to which the instances will be bound.
      * @param boundClasses All the classes to bind.
-     *
      * @see {@link All}
      */
     protected <T> void bindMany(Class<T> clazz, Class<? extends T>... boundClasses) {
@@ -377,17 +366,16 @@ public abstract class TestModule extends AbstractModule {
     /**
      * This method binds many different type literals to the same type literal. All the
      * classes will be bound within the {@link TestScope#SINGLETON} scope.
-     * <p />
+     * <p/>
      * This method is useful when combined with the {@literal @}{@link All} annotation with
      * a name.
      *
-     * @param clazz The {@link Class} to which the instances will be bound.
-     * @param name The name to which to bind the instances.
+     * @param clazz        The {@link Class} to which the instances will be bound.
+     * @param name         The name to which to bind the instances.
      * @param boundClasses All the types to bind.
-     *
      * @see {@link All}
      */
-     protected <T> void bindManyNamed(Class<T> clazz, String name, Class<? extends T>... boundClasses) {
+    protected <T> void bindManyNamed(Class<T> clazz, String name, Class<? extends T>... boundClasses) {
         for (Class<? extends T> boundClass : boundClasses) {
             bind(clazz).annotatedWith(NamedUniqueAnnotations.create(name)).to(boundClass).in(TestScope.SINGLETON);
         }
@@ -401,7 +389,6 @@ public abstract class TestModule extends AbstractModule {
      *
      * @param type       The {@link Class} to which the instances will be bound.
      * @param boundTypes All the types to bind.
-     *
      * @see {@link All}
      */
     protected <T> void bindMany(TypeLiteral<T> type, TypeLiteral<? extends T>... boundTypes) {
@@ -411,18 +398,17 @@ public abstract class TestModule extends AbstractModule {
     /**
      * This method binds many different type literals to the same type literal. All the
      * classes will be bound within the {@link TestScope#SINGLETON} scope.
-     * <p />
+     * <p/>
      * This method is useful when combined with the {@literal @}{@link All} annotation with
      * a name.
      *
-     * @param type The {@link Class} to which the instances will be bound.
-     * @param name The name to which to bind the instances.
+     * @param type       The {@link Class} to which the instances will be bound.
+     * @param name       The name to which to bind the instances.
      * @param boundTypes All the types to bind.
-     *
      * @see {@link All}
      */
-     protected <T> void bindManyNamed(TypeLiteral<T> type, String name,
-             TypeLiteral<? extends T>... boundTypes) {
+    protected <T> void bindManyNamed(TypeLiteral<T> type, String name,
+                                     TypeLiteral<? extends T>... boundTypes) {
         for (TypeLiteral<? extends T> boundType : boundTypes) {
             bind(type).annotatedWith(NamedUniqueAnnotations.create(name)).to(boundType).in(TestScope.SINGLETON);
         }

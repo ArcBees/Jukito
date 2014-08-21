@@ -1,5 +1,5 @@
 /**
- * Copyright 2011 ArcBees Inc.
+ * Copyright 2013 ArcBees Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -39,6 +39,9 @@ public class RespectProvidesAnnotationInModuleTest {
         verify(someTestClass).someInitMethod();
     }
 
+    /**
+     * Guice test module.
+     */
     public static class A extends JukitoModule {
         @Override
         protected void configureTest() {
