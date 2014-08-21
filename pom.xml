@@ -58,6 +58,45 @@
         </developer>
     </developers>
 
+    <contributors>
+        <contributor>
+            <name>Brandon Donnelson</name>
+        </contributor>
+        <contributor>
+            <name>Przemek Galazka</name>
+        </contributor>
+        <contributor>
+            <name>Simon-Pierre Gingras</name>
+        </contributor>
+        <contributor>
+            <name>Maxime Meriouma-Caron</name>
+        </contributor>
+        <contributor>
+            <name>Alden Quimby</name>
+        </contributor>
+        <contributor>
+            <name>olafleur</name>
+        </contributor>
+        <contributor>
+            <name>Julian Lettner</name>
+        </contributor>
+        <contributor>
+            <name>Adam Piper</name>
+        </contributor>
+        <contributor>
+            <name>Mike Mansell</name>
+        </contributor>
+        <contributor>
+            <name>jclariviere</name>
+        </contributor>
+        <contributor>
+            <name>Christopher Viel</name>
+        </contributor>
+        <contributor>
+            <name>Jared Martin</name>
+        </contributor>
+    </contributors>
+
     <scm>
         <connection>scm:git:git://github.com/ArcBees/Jukito.git/</connection>
         <developerConnection>scm:git:https://git@github.com/ArcBees/Jukito.git</developerConnection>

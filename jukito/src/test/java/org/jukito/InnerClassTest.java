@@ -1,5 +1,5 @@
 /**
- * Copyright 2013 ArcBees Inc.
+ * Copyright 2014 ArcBees Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -28,8 +28,6 @@ import static org.junit.Assert.assertEquals;
  * Test to ensure that injecting inner classes throw a ConfigurationException, instead
  * of simply injecting a mock. Additionally, test that injecting static inner classes
  * still work properly.
- * 
- * @author Jared Martin
  */
 @RunWith(JukitoRunner.class)
 public class InnerClassTest {
