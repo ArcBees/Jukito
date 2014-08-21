@@ -204,7 +204,7 @@ public abstract class JukitoModule extends TestModule {
                     && !isAssistedInjection(key)) {
                 Object primitiveInstance = getDummyInstanceOfPrimitiveType(rawType);
                 if (primitiveInstance == null) {
-                    if (rawType != Provider.class) {
+                    if (rawType != Provider.class && !isInnerClass(rawType)) {
                         bind(key).toProvider(new MockProvider(rawType)).in(TestScope.SINGLETON);
                     }
                 } else {
@@ -212,6 +212,10 @@ public abstract class JukitoModule extends TestModule {
                 }
             }
         }
+    }
+
+    private boolean isInnerClass(Class<?> rawType) {
+        return rawType.isMemberClass() && !Modifier.isStatic(rawType.getModifiers());
     }
 
     @SuppressWarnings("unchecked")
