@@ -98,8 +98,8 @@
     </contributors>
 
     <scm>
-        <connection>scm:git:git://github.com/ArcBees/Jukito.git/</connection>
-        <developerConnection>scm:git:https://github.com/ArcBees/Jukito.git</developerConnection>
+        <connection>scm:git:git@github.com:ArcBees/Jukito.git/</connection>
+        <developerConnection>scm:git:git@github.com:ArcBees/Jukito.git</developerConnection>
         <url>https://github.com/ArcBees/Jukito</url>
     </scm>
 
