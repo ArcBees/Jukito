@@ -86,6 +86,8 @@ As you see here, Jukito lets you define your very own test module, where you can
 * [GWTP](https://github.com/ArcBees/GWTP) - Find out more about GWT-Platform.
 
 ##Thanks to
-[![Arcbees.com](http://arcbees-ads.appspot.com/ad.png)](http://arcbees.com)
+[![Arcbees.com](http://i.imgur.com/HDf1qfq.png)](http://arcbees.com)
+
+[![Atlassian](http://i.imgur.com/BKkj8Rg.png)](https://www.atlassian.com/)
 
 [![IntelliJ](https://lh6.googleusercontent.com/--QIIJfKrjSk/UJJ6X-UohII/AAAAAAAAAVM/cOW7EjnH778/s800/banner_IDEA.png)](http://www.jetbrains.com/idea/index.html)
