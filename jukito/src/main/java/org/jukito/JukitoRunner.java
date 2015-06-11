@@ -73,7 +73,6 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
     public JukitoRunner(Class<?> klass) throws InitializationError,
             InvocationTargetException, InstantiationException, IllegalAccessException {
         super(klass);
-        ensureInjector();
     }
 
     public JukitoRunner(Class<?> klass, Injector injector) throws InitializationError,
