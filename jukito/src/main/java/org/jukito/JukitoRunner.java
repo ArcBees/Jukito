@@ -167,9 +167,10 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
         return modules;
     }
 
-    private TestModule getInnerClassModule(final Class<?> testClass) throws InstantiationException, IllegalAccessException {
+    private TestModule getInnerClassModule(final Class<?> testClass)
+            throws InstantiationException, IllegalAccessException {
         Class<?> currentClass = testClass;
-        while(currentClass != null) {
+        while (currentClass != null) {
             for (final Class<?> innerClass : currentClass.getDeclaredClasses()) {
                 if (TestModule.class.isAssignableFrom(innerClass)) {
                     return (TestModule) innerClass.newInstance();
@@ -194,7 +195,8 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
         return autoBindMocks;
     }
 
-    private TestModule createJukitoModule(final Iterable<Class<? extends Module>> moduleClasses, final boolean autoBindMocks) {
+    private TestModule createJukitoModule(final Iterable<Class<? extends Module>> moduleClasses,
+                                          final boolean autoBindMocks) {
         if (autoBindMocks) {
             return new JukitoModule() {
                 @Override
