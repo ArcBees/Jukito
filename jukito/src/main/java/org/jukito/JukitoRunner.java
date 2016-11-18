@@ -67,7 +67,6 @@ import java.util.Set;
  */
 public class JukitoRunner extends BlockJUnit4ClassRunner {
 
-    private static final boolean useAutomockingIfNoEnvironmentFound = true;
     private Injector injector;
 
     public JukitoRunner(Class<?> klass) throws InitializationError,
@@ -124,24 +123,17 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
 
     private TestModule getTestModule(Class<?> testClass) throws InstantiationException, IllegalAccessException {
         Set<Class<? extends Module>> useModuleClasses = getUseModuleClasses(testClass);
+        final boolean autoBindMocks = getAutoBindMocksValue(testClass);
         if (!useModuleClasses.isEmpty()) {
-            return createJukitoModule(useModuleClasses);
+            return createJukitoModule(useModuleClasses, autoBindMocks);
         }
 
-        TestModule testModule = null;
-        for (Class<?> innerClass : testClass.getDeclaredClasses()) {
-            if (TestModule.class.isAssignableFrom(innerClass)) {
-                assert testModule == null :
-                        "More than one TestModule inner class found within test class \""
-                                + testClass.getName() + "\".";
-                testModule = (TestModule) innerClass.newInstance();
-            }
-        }
+        final TestModule testModule = getInnerClassModule(testClass);
         if (testModule != null) {
             return testModule;
         }
 
-        if (useAutomockingIfNoEnvironmentFound) {
+        if (autoBindMocks) {
             return new JukitoModule() {
                 @Override
                 protected void configureTest() {
@@ -175,19 +167,63 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
         return modules;
     }
 
-    private JukitoModule createJukitoModule(final Iterable<Class<? extends Module>> moduleClasses) {
-        return new JukitoModule() {
-            @Override
-            protected void configureTest() {
-                for (Class<? extends Module> mClass : moduleClasses) {
-                    try {
-                        install(mClass.newInstance());
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
+    private TestModule getInnerClassModule(final Class<?> testClass)
+            throws InstantiationException, IllegalAccessException {
+        Class<?> currentClass = testClass;
+        while (currentClass != null) {
+            for (final Class<?> innerClass : currentClass.getDeclaredClasses()) {
+                if (TestModule.class.isAssignableFrom(innerClass)) {
+                    return (TestModule) innerClass.newInstance();
                 }
             }
-        };
+            currentClass = currentClass.getSuperclass();
+        }
+        return null;
+    }
+
+    private boolean getAutoBindMocksValue(final Class<?> testClass) {
+        boolean autoBindMocks = true;
+        Class<?> currentClass = testClass;
+        while (currentClass != null) {
+            final UseModules useModules = currentClass.getAnnotation(UseModules.class);
+            if (useModules != null) {
+                autoBindMocks = useModules.autoBindMocks();
+                break;
+            }
+            currentClass = currentClass.getSuperclass();
+        }
+        return autoBindMocks;
+    }
+
+    private TestModule createJukitoModule(final Iterable<Class<? extends Module>> moduleClasses,
+                                          final boolean autoBindMocks) {
+        if (autoBindMocks) {
+            return new JukitoModule() {
+                @Override
+                protected void configureTest() {
+                    for (Class<? extends Module> mClass : moduleClasses) {
+                        try {
+                            install(mClass.newInstance());
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }
+            };
+        } else {
+            return new TestModule() {
+                @Override
+                protected void configureTest() {
+                    for (Class<? extends Module> mClass : moduleClasses) {
+                        try {
+                            install(mClass.newInstance());
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }
+            };
+        }
     }
 
     @Override
