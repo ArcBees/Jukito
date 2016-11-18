@@ -56,5 +56,8 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UseModules {
+
     Class<? extends Module>[] value();
+
+    boolean autoBindMocks() default true;
 }
