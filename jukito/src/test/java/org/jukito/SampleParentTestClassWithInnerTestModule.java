@@ -1,5 +1,5 @@
-/**
- * Copyright 2013 ArcBees Inc.
+/*
+ * Copyright 2017 ArcBees Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -28,7 +28,6 @@ public class SampleParentTestClassWithInnerTestModule {
      * this module is discovered by the JukitoRunner.
      */
     public static final class MyModule extends JukitoModule {
-
         @Override
         protected void configureTest() {
             bindManyInstances(String.class, "Hello", "World");

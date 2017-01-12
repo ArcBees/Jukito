@@ -1,5 +1,5 @@
-/**
- * Copyright 2013 ArcBees Inc.
+/*
+ * Copyright 2017 ArcBees Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -21,7 +21,6 @@ import com.google.inject.PrivateModule;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import org.mockito.Mockito;
 
 import javax.inject.Inject;

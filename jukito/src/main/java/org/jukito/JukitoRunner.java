@@ -123,12 +123,12 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
 
     private TestModule getTestModule(Class<?> testClass) throws InstantiationException, IllegalAccessException {
         Set<Class<? extends Module>> useModuleClasses = getUseModuleClasses(testClass);
-        final boolean autoBindMocks = getAutoBindMocksValue(testClass);
+        boolean autoBindMocks = getAutoBindMocksValue(testClass);
         if (!useModuleClasses.isEmpty()) {
             return createJukitoModule(useModuleClasses, autoBindMocks);
         }
 
-        final TestModule testModule = getInnerClassModule(testClass);
+        TestModule testModule = getInnerClassModule(testClass);
         if (testModule != null) {
             return testModule;
         }
@@ -167,11 +167,11 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
         return modules;
     }
 
-    private TestModule getInnerClassModule(final Class<?> testClass)
+    private TestModule getInnerClassModule(Class<?> testClass)
             throws InstantiationException, IllegalAccessException {
         Class<?> currentClass = testClass;
         while (currentClass != null) {
-            for (final Class<?> innerClass : currentClass.getDeclaredClasses()) {
+            for (Class<?> innerClass : currentClass.getDeclaredClasses()) {
                 if (TestModule.class.isAssignableFrom(innerClass)) {
                     return (TestModule) innerClass.newInstance();
                 }
@@ -181,11 +181,11 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
         return null;
     }
 
-    private boolean getAutoBindMocksValue(final Class<?> testClass) {
+    private boolean getAutoBindMocksValue(Class<?> testClass) {
         boolean autoBindMocks = true;
         Class<?> currentClass = testClass;
         while (currentClass != null) {
-            final UseModules useModules = currentClass.getAnnotation(UseModules.class);
+            UseModules useModules = currentClass.getAnnotation(UseModules.class);
             if (useModules != null) {
                 autoBindMocks = useModules.autoBindMocks();
                 break;
@@ -196,7 +196,7 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
     }
 
     private TestModule createJukitoModule(final Iterable<Class<? extends Module>> moduleClasses,
-                                          final boolean autoBindMocks) {
+                                          boolean autoBindMocks) {
         if (autoBindMocks) {
             return new JukitoModule() {
                 @Override
@@ -227,7 +227,7 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
     }
 
     @Override
-    public void run(final RunNotifier notifier) {
+    public void run(RunNotifier notifier) {
         // add listener that validates framework usage at the end of each test
         notifier.addListener(new FrameworkUsageValidator(notifier));
         super.run(notifier);
@@ -241,7 +241,7 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
     }
 
     @Override
-    protected Statement methodInvoker(final FrameworkMethod method, final Object test) {
+    protected Statement methodInvoker(FrameworkMethod method, Object test) {
         return new InjectedStatement(method, test, injector);
     }
 
@@ -281,14 +281,14 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
             throw new RuntimeException(e);
         }
         List<FrameworkMethod> testMethods = getTestClass().getAnnotatedMethods(Test.class);
-        List<FrameworkMethod> result = new ArrayList<FrameworkMethod>(testMethods.size());
+        List<FrameworkMethod> result = new ArrayList<>(testMethods.size());
         for (FrameworkMethod method : testMethods) {
             Method javaMethod = method.getMethod();
             Errors errors = new Errors(javaMethod);
             List<Key<?>> keys = GuiceUtils.getMethodKeys(javaMethod, errors);
             errors.throwConfigurationExceptionIfErrorsExist();
 
-            List<List<Binding<?>>> bindingsToUseForParameters = new ArrayList<List<Binding<?>>>();
+            List<List<Binding<?>>> bindingsToUseForParameters = new ArrayList<>();
             for (Key<?> key : keys) {
                 if (All.class.equals(key.getAnnotationType())) {
                     All allAnnotation = (All) key.getAnnotation();
@@ -407,6 +407,7 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
      * {@code @Before}, or {@code @After} that is not a public, void instance
      * method with no arguments.
      */
+    @Override
     protected void validateInstanceMethods(List<Throwable> errors) {
         validatePublicVoidMethods(After.class, false, errors);
         validatePublicVoidMethods(Before.class, false, errors);

@@ -55,13 +55,12 @@ class InjectedStatement extends Statement {
         UseModules useModules = javaMethod.getAnnotation(UseModules.class);
         if (useModules != null) {
             Class<? extends Module>[] moduleClasses = useModules.value();
-            final boolean autoBindMocks = useModules.autoBindMocks();
             final Module[] modules = new Module[moduleClasses.length];
             for (int i = 0; i < modules.length; i++) {
                 modules[i] = moduleClasses[i].newInstance();
             }
             TestModule jukitoModule;
-            if (autoBindMocks) {
+            if (useModules.autoBindMocks()) {
                 jukitoModule = new JukitoModule() {
                     @Override
                     protected void configureTest() {
