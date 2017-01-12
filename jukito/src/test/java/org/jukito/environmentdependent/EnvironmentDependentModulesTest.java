@@ -16,9 +16,6 @@
 
 package org.jukito.environmentdependent;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
-
 import org.jukito.EDRunner;
 import org.jukito.EnvironmentDependentComponent;
 import org.jukito.EnvironmentDependentModules;
@@ -27,6 +24,9 @@ import org.jukito.UseModules;
 import org.jukito.environmentdependent.EnvironmentDependentModulesTest.SomeCoreModule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
 
 /**
  * This test is run as many times as many Environment Dependent Modules you declare.

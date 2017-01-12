@@ -16,12 +16,12 @@
 
 package org.jukito;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.google.inject.Key;
 import com.google.inject.Provider;
 import com.google.inject.Scope;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Container of the {@link #SINGLETON} and {@link #EAGER_SINGLETON} scopes for
@@ -36,7 +36,7 @@ public class TestScope {
 
         private final Map<Key<?>, Object> backingMap = new HashMap<Key<?>, Object>();
 
-        public Singleton(String simpleName) {
+        private Singleton(String simpleName) {
             this.simpleName = simpleName;
         }
 

@@ -16,9 +16,9 @@
 
 package org.jukito;
 
-import com.google.inject.Provider;
-
 import org.mockito.Mockito;
+
+import com.google.inject.Provider;
 
 /**
  * For use in classes where you want to create a spied instance, as in
@@ -42,7 +42,7 @@ class SpyImmutableInstanceProvider<T> implements Provider<T> {
      *
      * @param instance The instance to be returned.
      */
-    public SpyImmutableInstanceProvider(T instance) {
+    SpyImmutableInstanceProvider(T instance) {
         this.instance = instance;
     }
 

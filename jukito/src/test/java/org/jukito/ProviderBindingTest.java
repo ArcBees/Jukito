@@ -16,12 +16,12 @@
 
 package org.jukito;
 
-import com.google.inject.Inject;
-import com.google.inject.Provider;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+
+import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 import static junit.framework.Assert.assertNotNull;
 

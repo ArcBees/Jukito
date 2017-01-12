@@ -16,10 +16,10 @@
 
 package org.jukito;
 
-import com.google.inject.Inject;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import com.google.inject.Inject;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.doReturn;

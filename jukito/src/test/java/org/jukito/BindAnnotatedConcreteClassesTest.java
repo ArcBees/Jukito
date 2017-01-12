@@ -16,10 +16,10 @@
 
 package org.jukito;
 
-import com.google.inject.name.Named;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import com.google.inject.name.Named;
 
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
@@ -57,21 +57,21 @@ public class BindAnnotatedConcreteClassesTest {
 
     @Test
     public void testConcreteClassBoundToDifferentSingletons(@Named("a") ConcreteClass a,
-                                                            @Named("b") ConcreteClass b) {
+            @Named("b") ConcreteClass b) {
         // THEN
         assertNotSame(a, b);
     }
 
     @Test
     public void testConcreteClassBoundToSameSingleton(@Named("c") ConcreteClass c,
-                                                      @Named("d") ConcreteClass d) {
+            @Named("d") ConcreteClass d) {
         // THEN
         assertSame(c, d);
     }
 
     @Test
     public void testConcreteClassNoBoundAsSingleton(SubSubConcreteClass instance1,
-                                                    SubSubConcreteClass instance2) {
+            SubSubConcreteClass instance2) {
         // THEN
         assertNotSame(instance1, instance2);
     }

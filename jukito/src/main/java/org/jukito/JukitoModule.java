@@ -16,6 +16,26 @@
 
 package org.jukito;
 
+import java.io.IOException;
+import java.io.Writer;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.logging.Logger;
+
+import org.jukito.BindingsCollector.BindingInfo;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
 import com.google.inject.ConfigurationException;
 import com.google.inject.Injector;
 import com.google.inject.Key;
@@ -31,26 +51,6 @@ import com.google.inject.internal.ProviderMethodsModule;
 import com.google.inject.spi.Dependency;
 import com.google.inject.spi.HasDependencies;
 import com.google.inject.spi.InjectionPoint;
-
-import org.jukito.BindingsCollector.BindingInfo;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import java.io.IOException;
-import java.io.Writer;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.logging.Logger;
 
 /**
  * A guice {@link com.google.inject.Module Module} with a bit of syntactic sugar
@@ -99,8 +99,7 @@ public abstract class JukitoModule extends TestModule {
      * to indicate that all concrete classes derived from the a specific type
      * will be mocked in {@link TestMockSingleton} scope.
      *
-     * @param klass The {@link Class} or interface for which all subclasses will
-     *              be mocked.
+     * @param klass The {@link Class} or interface for which all subclasses will be mocked.
      */
     protected void forceMock(Class<?> klass) {
         forceMock.add(klass);

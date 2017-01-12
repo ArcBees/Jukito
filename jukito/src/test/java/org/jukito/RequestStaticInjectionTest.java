@@ -16,13 +16,13 @@
 
 package org.jukito;
 
-import com.google.inject.Provides;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import com.google.inject.Provides;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -58,7 +58,8 @@ public class RequestStaticInjectionTest {
         @Provides
         @Named("a")
         Dummy createDummy() {
-            return new Dummy() { };
+            return new Dummy() {
+            };
         }
     }
 

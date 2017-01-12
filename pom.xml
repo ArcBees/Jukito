@@ -1,10 +1,11 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>org.sonatype.oss</groupId>
         <artifactId>oss-parent</artifactId>
-        <version>7</version>
+        <version>9</version>
     </parent>
 
     <groupId>org.jukito</groupId>
@@ -132,7 +133,9 @@
         <junit.version>4.12</junit.version>
         <mockito.version>2.5.7</mockito.version>
 
-        <maven-checkstyle-plugin.version>2.10</maven-checkstyle-plugin.version>
+        <maven-checkstyle-plugin.version>2.17</maven-checkstyle-plugin.version>
+        <checkstyle.version>6.12</checkstyle.version>
+        <arcbees-checkstyle.version>1.2</arcbees-checkstyle.version>
         <maven-compiler-plugin.version>3.0</maven-compiler-plugin.version>
         <maven-deploy-plugin.version>2.7</maven-deploy-plugin.version>
         <maven-eclipse-plugin.version>2.9</maven-eclipse-plugin.version>
@@ -144,7 +147,6 @@
     </properties>
 
     <modules>
-        <module>jukito-build-tools</module>
         <module>jukito</module>
         <module>jukito-samples</module>
     </modules>
@@ -186,9 +188,9 @@
                     <artifactId>maven-checkstyle-plugin</artifactId>
                     <version>${maven-checkstyle-plugin.version}</version>
                     <configuration>
-                        <configLocation>/org/jukito/checkstyle.xml</configLocation>
-                        <suppressionsLocation>/org/jukito/suppressions.xml</suppressionsLocation>
-                        <propertyExpansion>checkstyle.root=/org/jukito/</propertyExpansion>
+                        <configLocation>/checkstyle.xml</configLocation>
+                        <suppressionsLocation>/suppressions.xml</suppressionsLocation>
+                        <propertyExpansion>basedir=${basedir}</propertyExpansion>
                         <consoleOutput>true</consoleOutput>
                         <failsOnError>true</failsOnError>
                         <linkXRef>false</linkXRef>
@@ -205,9 +207,14 @@
                     </executions>
                     <dependencies>
                         <dependency>
-                            <groupId>org.jukito</groupId>
-                            <artifactId>jukito-build-tools</artifactId>
-                            <version>${project.version}</version>
+                            <groupId>com.puppycrawl.tools</groupId>
+                            <artifactId>checkstyle</artifactId>
+                            <version>${checkstyle.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>com.arcbees</groupId>
+                            <artifactId>checkstyle</artifactId>
+                            <version>${arcbees-checkstyle.version}</version>
                         </dependency>
                     </dependencies>
                 </plugin>
@@ -267,6 +274,7 @@
                         <maxmemory>2048</maxmemory>
                         <failOnError>true</failOnError>
                         <doctitle>Jukito Javadocs</doctitle>
+                        <additionalparam>-Xdoclint:none</additionalparam>
                         <links>
                             <link>http://download.oracle.com/javase/6/docs/api/</link>
                             <link>http://google-web-toolkit.googlecode.com/svn/javadoc/latest/</link>

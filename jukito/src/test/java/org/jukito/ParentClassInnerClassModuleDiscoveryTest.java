@@ -16,12 +16,12 @@
 
 package org.jukito;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Test which ensures that nested TestModules in parent classes are discovered by the JukitoRunner.

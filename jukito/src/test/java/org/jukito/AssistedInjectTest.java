@@ -16,21 +16,21 @@
 
 package org.jukito;
 
-import com.google.inject.Inject;
-import com.google.inject.assistedinject.Assisted;
-import com.google.inject.assistedinject.FactoryModuleBuilder;
-import com.google.inject.name.Named;
-import com.google.inject.name.Names;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
+import com.google.inject.assistedinject.FactoryModuleBuilder;
+import com.google.inject.name.Named;
+import com.google.inject.name.Names;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
@@ -69,7 +69,7 @@ public class AssistedInjectTest {
         private final LocaleInfo localeInfo;
 
         @Inject
-        public RealPayment(@Assisted Date date, @Assisted int amount, LocaleInfo localeInfo) {
+        RealPayment(@Assisted Date date, @Assisted int amount, LocaleInfo localeInfo) {
             this.date = date;
             this.amount = amount;
             this.localeInfo = localeInfo;
@@ -115,8 +115,8 @@ public class AssistedInjectTest {
         private final String name;
 
         @Inject
-        public StarImpl(@Named("G") Double gravitationalConstant, @Assisted double mass,
-                        @Assisted String name) {
+        StarImpl(@Named("G") Double gravitationalConstant, @Assisted double mass,
+                @Assisted String name) {
             this.gravitationalConstant = gravitationalConstant;
             this.mass = mass;
             this.name = name;

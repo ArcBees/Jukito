@@ -16,20 +16,20 @@
 
 package org.jukito;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import org.junit.runners.model.FrameworkMethod;
+import org.junit.runners.model.Statement;
+
 import com.google.inject.Binding;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.internal.Errors;
-
-import org.junit.runners.model.FrameworkMethod;
-import org.junit.runners.model.Statement;
-
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * A {@link Statement} invoking a method with parameters by filling-in these
@@ -41,7 +41,7 @@ class InjectedStatement extends Statement {
     private final Object test;
     private final Injector injector;
 
-    public InjectedStatement(FrameworkMethod method, Object test, Injector injector) {
+    InjectedStatement(FrameworkMethod method, Object test, Injector injector) {
         this.method = method;
         this.test = test;
         this.injector = injector;

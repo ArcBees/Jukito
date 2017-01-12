@@ -16,15 +16,15 @@
 
 package org.jukito;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import com.google.inject.Inject;
 import com.google.inject.Key;
 import com.google.inject.Provider;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
@@ -145,14 +145,14 @@ public class ProviderTest {
 
     static class MyMockProvider2 extends MockProvider<UninstanciableClass> {
         @Inject
-        public MyMockProvider2() {
+        MyMockProvider2() {
             super(UninstanciableClass.class);
         }
     }
 
     static class MyMockProvider3 extends MockProvider<UninstanciableClass> {
         @Inject
-        public MyMockProvider3() {
+        MyMockProvider3() {
             super(UninstanciableClass.class);
         }
     }
@@ -165,7 +165,7 @@ public class ProviderTest {
         private final DependencyShouldBeMocked1 dependency;
 
         @Inject
-        public ClassWithMockedDependency1(DependencyShouldBeMocked1 dependency) {
+        ClassWithMockedDependency1(DependencyShouldBeMocked1 dependency) {
             this.dependency = dependency;
         }
 
@@ -178,7 +178,7 @@ public class ProviderTest {
         final Provider<ClassWithMockedDependency1> provider;
 
         @Inject
-        public MyProvider1(Provider<ClassWithMockedDependency1> provider) {
+        MyProvider1(Provider<ClassWithMockedDependency1> provider) {
             this.provider = provider;
         }
 
@@ -196,7 +196,7 @@ public class ProviderTest {
         private final DependencyShouldBeMocked2 dependency;
 
         @Inject
-        public ClassWithMockedDependency2(DependencyShouldBeMocked2 dependency) {
+        ClassWithMockedDependency2(DependencyShouldBeMocked2 dependency) {
             this.dependency = dependency;
         }
 
@@ -209,7 +209,7 @@ public class ProviderTest {
         final Provider<ClassWithMockedDependency2> provider;
 
         @Inject
-        public MyProvider2(Provider<ClassWithMockedDependency2> provider) {
+        MyProvider2(Provider<ClassWithMockedDependency2> provider) {
             this.provider = provider;
         }
 

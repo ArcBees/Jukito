@@ -26,7 +26,7 @@ import org.junit.runner.RunWith;
 import static org.mockito.Mockito.verify;
 
 /**
- * A simple test with one real DOC (binding in test)
+ * A simple test with one real DOC (binding in test).
  */
 @RunWith(JukitoRunner.class)
 public class FordMustangTest2 {
