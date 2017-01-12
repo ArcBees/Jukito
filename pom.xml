@@ -130,7 +130,7 @@
 
         <guice.version>4.0</guice.version>
         <junit.version>4.12</junit.version>
-        <mockito.version>1.10.8</mockito.version>
+        <mockito.version>2.5.7</mockito.version>
 
         <maven-checkstyle-plugin.version>2.10</maven-checkstyle-plugin.version>
         <maven-compiler-plugin.version>3.0</maven-compiler-plugin.version>

@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2013 ArcBees Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -34,7 +34,6 @@ import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.Statement;
-import org.mockito.internal.runners.util.FrameworkUsageValidator;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
@@ -45,24 +44,19 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-/**
- * TODO: Rework this documentation
- * <p/>
+/*
  * This class implements the mockito runner but allows Guice dependency
  * injection. To setup the guice environment, the test class can have an inner
  * static class deriving from {@link TestModule}. This last class will let you bind
  * {@link TestSingleton} and {@link TestEagerSingleton} and the runner will make sure these
  * singletons are reset at every invocation of a test case.
- * <p/>
- * This code not very clean as it is cut & paste from
- * {@link org.mockito.internal.runners.JUnit45AndHigherRunnerImpl}, but it's
- * unclear how we could make otherwise.
- * <p/>
+ *
+ *
  * Most of the code here is inspired from: <a href=
  * "http://cowwoc.blogspot.com/2008/10/integrating-google-guice-into-junit4.html"
  * > http://cowwoc.blogspot.com/2008/10/integrating-google-guice-into-junit4.
  * html</a>
- * <p/>
+ *
  * Depends on Mockito.
  */
 public class JukitoRunner extends BlockJUnit4ClassRunner {
@@ -156,7 +150,7 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
      */
     private Set<Class<? extends Module>> getUseModuleClasses(Class<?> testClass) {
         Class<?> currentClass = testClass;
-        Set<Class<? extends Module>> modules = new HashSet<Class<? extends Module>>();
+        Set<Class<? extends Module>> modules = new HashSet<>();
         while (currentClass != null) {
             UseModules useModules = currentClass.getAnnotation(UseModules.class);
             if (useModules != null) {
@@ -229,7 +223,7 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
     @Override
     public void run(RunNotifier notifier) {
         // add listener that validates framework usage at the end of each test
-        notifier.addListener(new FrameworkUsageValidator(notifier));
+        notifier.addListener(new MockitoUsageValidator(notifier));
         super.run(notifier);
     }
 
@@ -319,11 +313,11 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
      * Computes a list of all bindings which match a {@link All} annotation.
      *
      * @param allAnnotation the annotation to match
-     * @param typeLiteral the type of the bindings.
+     * @param typeLiteral   the type of the bindings.
      * @return the computed list.
      */
     private List<Binding<?>> getBindingsForParameterWithAllAnnotation(All allAnnotation, TypeLiteral<?> typeLiteral) {
-        List<Binding<?>> result = new ArrayList<Binding<?>>();
+        List<Binding<?>> result = new ArrayList<>();
         String bindingName = allAnnotation.value();
         if (All.DEFAULT.equals(bindingName)) {
             // If the annotation is with the default name bind all bindings
@@ -357,7 +351,7 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
             Method javaMethod, List<FrameworkMethod> result) {
 
         if (index >= bindingsToUseForParameters.size()) {
-            List<Binding<?>> assignation = new ArrayList<Binding<?>>(currentAssignation.size());
+            List<Binding<?>> assignation = new ArrayList<>(currentAssignation.size());
             assignation.addAll(currentAssignation);
             result.add(new InjectedFrameworkMethod(javaMethod, assignation));
             return;
@@ -422,6 +416,7 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
      * Adds to {@code errors} for each method annotated with {@code @Test}that
      * is not a public, void instance method with no arguments.
      */
+    @Override
     protected void validateTestMethods(List<Throwable> errors) {
         validatePublicVoidMethods(Test.class, false, errors);
     }
@@ -435,8 +430,8 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
      * <li>is static (given {@code isStatic is false}), or
      * <li>is not static (given {@code isStatic is true}).
      */
-    protected void validatePublicVoidMethods(Class<? extends Annotation> annotation,
-                                             boolean isStatic, List<Throwable> errors) {
+    private void validatePublicVoidMethods(Class<? extends Annotation> annotation,
+                                           boolean isStatic, List<Throwable> errors) {
         List<FrameworkMethod> methods = getTestClass().getAnnotatedMethods(annotation);
 
         for (FrameworkMethod eachTestMethod : methods) {
