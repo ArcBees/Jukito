@@ -76,7 +76,7 @@ As you see here, Jukito lets you define your very own test module, where you can
 [Read the wiki](https://github.com/ArcBees/Jukito/wiki) to find out everything Jukito has to offer, and [join the discussion](http://groups.google.com/group/jukito)!
 
 ##Latest Release
-* 1.4.1
+* 1.5
 
 ##Links
 * [Jukito Custom Google Search](http://www.google.com/cse/home?cx=011138278718949652927:turyqq9pl64) - Search GWTP documentation, wiki and thread collections.
