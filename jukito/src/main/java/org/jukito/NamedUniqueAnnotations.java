@@ -16,11 +16,11 @@
 
 package org.jukito;
 
-import com.google.inject.BindingAnnotation;
-
 import java.lang.annotation.Annotation;
 import java.lang.annotation.Retention;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import com.google.inject.BindingAnnotation;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
@@ -34,7 +34,7 @@ class NamedUniqueAnnotations {
      * Returns if a NamedUniqueAnnotations matches a binding name.
      *
      * @param bindingName the name to match.
-     * @param annotation the annotation to match the name to.
+     * @param annotation  the annotation to match the name to.
      * @return if the annotation matches the bindingName.
      */
     public static boolean matches(String bindingName, java.lang.annotation.Annotation annotation) {
@@ -60,6 +60,7 @@ class NamedUniqueAnnotations {
     @BindingAnnotation
     private @interface Internal {
         String name();
+
         int value();
     }
 
@@ -67,7 +68,7 @@ class NamedUniqueAnnotations {
         private final int value;
         private final String name;
 
-        public InternalImpl(int value, String name) {
+        InternalImpl(int value, String name) {
             this.value = value;
             this.name = name;
         }

@@ -16,10 +16,10 @@
 
 package org.jukito.samples.modules;
 
-import com.google.inject.AbstractModule;
-
 import org.jukito.samples.Engine;
 import org.jukito.samples.PetrolEngine;
+
+import com.google.inject.AbstractModule;
 
 public class PetrolLineModule extends AbstractModule {
     @Override

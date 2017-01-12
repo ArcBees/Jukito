@@ -16,14 +16,14 @@
 
 package org.jukito;
 
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.name.Named;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
@@ -73,7 +73,7 @@ public class InstallTest {
         private final Foo ten;
 
         @Inject
-        public FooImpl(Provider<Bar> barProvider, @Named("10") Foo ten) {
+        FooImpl(Provider<Bar> barProvider, @Named("10") Foo ten) {
             this.barProvider = barProvider;
             this.ten = ten;
         }

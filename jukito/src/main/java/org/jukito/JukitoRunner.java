@@ -16,15 +16,14 @@
 
 package org.jukito;
 
-import com.google.inject.Binding;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Key;
-import com.google.inject.Module;
-import com.google.inject.Scope;
-import com.google.inject.TypeLiteral;
-import com.google.inject.internal.Errors;
-import com.google.inject.spi.DefaultBindingScopingVisitor;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.junit.After;
 import org.junit.Before;
@@ -35,14 +34,15 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.Statement;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import com.google.inject.Binding;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Key;
+import com.google.inject.Module;
+import com.google.inject.Scope;
+import com.google.inject.TypeLiteral;
+import com.google.inject.internal.Errors;
+import com.google.inject.spi.DefaultBindingScopingVisitor;
 
 /*
  * This class implements the mockito runner but allows Guice dependency
@@ -190,7 +190,7 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
     }
 
     private TestModule createJukitoModule(final Iterable<Class<? extends Module>> moduleClasses,
-                                          boolean autoBindMocks) {
+            boolean autoBindMocks) {
         if (autoBindMocks) {
             return new JukitoModule() {
                 @Override
@@ -241,7 +241,7 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
 
     @Override
     protected Statement withBefores(FrameworkMethod method, Object target,
-                                    Statement statement) {
+            Statement statement) {
         try {
             ensureInjector();
         } catch (Exception e) {
@@ -255,7 +255,7 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
 
     @Override
     protected Statement withAfters(FrameworkMethod method, Object target,
-                                   Statement statement) {
+            Statement statement) {
         try {
             ensureInjector();
         } catch (Exception e) {
@@ -431,7 +431,7 @@ public class JukitoRunner extends BlockJUnit4ClassRunner {
      * <li>is not static (given {@code isStatic is true}).
      */
     private void validatePublicVoidMethods(Class<? extends Annotation> annotation,
-                                           boolean isStatic, List<Throwable> errors) {
+            boolean isStatic, List<Throwable> errors) {
         List<FrameworkMethod> methods = getTestClass().getAnnotatedMethods(annotation);
 
         for (FrameworkMethod eachTestMethod : methods) {

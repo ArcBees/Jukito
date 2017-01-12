@@ -16,10 +16,10 @@
 
 package org.jukito;
 
+import javax.inject.Inject;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import javax.inject.Inject;
 
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mockingDetails;

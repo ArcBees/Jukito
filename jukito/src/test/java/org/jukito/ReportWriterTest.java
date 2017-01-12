@@ -16,11 +16,6 @@
 
 package org.jukito;
 
-import com.google.inject.Inject;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Arrays;
@@ -28,6 +23,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.inject.Singleton;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import com.google.inject.Inject;
 
 import static org.junit.Assert.assertEquals;
 
@@ -70,7 +70,7 @@ public class ReportWriterTest {
         Resource5 resource5;
 
         @Inject
-        public Resource3(Resource4 resource4) {
+        Resource3(Resource4 resource4) {
         }
 
         @Inject

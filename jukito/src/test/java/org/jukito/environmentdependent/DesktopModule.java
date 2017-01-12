@@ -16,9 +16,9 @@
 
 package org.jukito.environmentdependent;
 
-import com.google.inject.AbstractModule;
-
 import org.jukito.EnvironmentDependentComponent;
+
+import com.google.inject.AbstractModule;
 
 /**
  * Sample Environment Dependent Module.
