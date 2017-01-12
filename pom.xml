@@ -5,12 +5,12 @@
     <parent>
         <groupId>org.sonatype.oss</groupId>
         <artifactId>oss-parent</artifactId>
-        <version>7</version>
+        <version>9</version>
     </parent>
 
     <groupId>org.jukito</groupId>
     <artifactId>jukito-parent</artifactId>
-    <version>1.5-SNAPSHOT</version>
+    <version>1.6-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Jukito</name>
     <inceptionYear>2010</inceptionYear>
@@ -274,6 +274,7 @@
                         <maxmemory>2048</maxmemory>
                         <failOnError>true</failOnError>
                         <doctitle>Jukito Javadocs</doctitle>
+                        <additionalparam>-Xdoclint:none</additionalparam>
                         <links>
                             <link>http://download.oracle.com/javase/6/docs/api/</link>
                             <link>http://google-web-toolkit.googlecode.com/svn/javadoc/latest/</link>
