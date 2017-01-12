@@ -16,8 +16,6 @@
 
 package org.jukito;
 
-import com.google.inject.AbstractModule;
-
 import org.jukito.UseModulesTest.Abc;
 import org.jukito.UseModulesTest.AbcImpl;
 import org.jukito.UseModulesTest.Def;
@@ -27,6 +25,8 @@ import org.jukito.UseModulesTest.KlmImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+
+import com.google.inject.AbstractModule;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -93,7 +93,7 @@ class XyzModule extends AbstractModule {
     }
 }
 
-@UseModules({ DefModule.class, KlmModule.class })
+@UseModules({DefModule.class, KlmModule.class})
 abstract class UseModulesTestBase {
     // KlmModule should get installed
     // DefModule should be ignored because subClass has it

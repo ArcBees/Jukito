@@ -16,11 +16,11 @@
 
 package org.jukito;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -50,7 +50,7 @@ public class TransitiveDependencyTest {
         private final SubCollaborator subCollaborator;
 
         @Inject
-        public Collaborator(SubCollaborator subCollaborator) {
+        Collaborator(SubCollaborator subCollaborator) {
             this.subCollaborator = subCollaborator;
         }
     }
@@ -60,7 +60,7 @@ public class TransitiveDependencyTest {
         private final Collaborator collaborator;
 
         @Inject
-        public Leader(Collaborator collaborator) {
+        Leader(Collaborator collaborator) {
             this.collaborator = collaborator;
         }
     }
@@ -83,7 +83,7 @@ public class TransitiveDependencyTest {
 
         @Inject
         MyInterfaceImpl(MyDependency myDependency,
-                        MyDependentInterface myDependentInterface) {
+                MyDependentInterface myDependentInterface) {
             this.myDependency = myDependency;
         }
 

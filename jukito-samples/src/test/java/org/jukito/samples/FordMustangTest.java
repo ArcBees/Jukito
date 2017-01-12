@@ -24,9 +24,8 @@ import org.junit.runner.RunWith;
 
 import static org.mockito.Mockito.verify;
 
-
 /**
- * A simple test with one mock (engine) and one real object (FordMustang)
+ * A simple test with one mock (engine) and one real object (FordMustang).
  */
 @RunWith(JukitoRunner.class)
 public class FordMustangTest {

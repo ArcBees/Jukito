@@ -16,12 +16,12 @@
 
 package org.jukito;
 
-import com.google.inject.Provides;
+import javax.inject.Provider;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import javax.inject.Provider;
+import com.google.inject.Provides;
 
 import static org.junit.Assert.assertEquals;
 

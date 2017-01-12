@@ -58,7 +58,7 @@ public class NoModuleTest {
 
     @Test
     public void testAnnotatedMockSingleton(MyAnnotatedMockSingleton a,
-                                           MyAnnotatedMockSingleton b) {
+            MyAnnotatedMockSingleton b) {
         assertSame(a, b);
         a.dummy();
         verify(a).dummy();
@@ -77,7 +77,7 @@ public class NoModuleTest {
 
     @Test
     public void testAnnotatedEagerSingleton(MyAnnotatedEagerSingleton a,
-                                            MyAnnotatedEagerSingleton b) {
+            MyAnnotatedEagerSingleton b) {
         assertSame(a, b);
     }
 }

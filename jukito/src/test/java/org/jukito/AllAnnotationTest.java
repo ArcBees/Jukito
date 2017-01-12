@@ -16,13 +16,13 @@
 
 package org.jukito;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.AfterClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -68,7 +68,7 @@ public class AllAnnotationTest {
     static class TestDataInstance {
         private final String data;
 
-        public TestDataInstance(String data) {
+        TestDataInstance(String data) {
             this.data = data;
         }
 

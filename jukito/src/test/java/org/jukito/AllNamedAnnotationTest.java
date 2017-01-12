@@ -16,12 +16,12 @@
 
 package org.jukito;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.AfterClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -57,28 +57,39 @@ public class AllNamedAnnotationTest {
     }
 
     static class TestDataA implements TestData {
-        public String getData() { return "A"; }
+        public String getData() {
+            return "A";
+        }
     }
 
     static class TestDataB implements TestData {
-        public String getData() { return "B"; }
+        public String getData() {
+            return "B";
+        }
     }
 
     static class TestDataC implements TestData {
-        public String getData() { return "C"; }
+        public String getData() {
+            return "C";
+        }
     }
 
     static class TestDataD implements TestData {
-        public String getData() { return "D"; }
+        public String getData() {
+            return "D";
+        }
     }
 
     static class TestDataInstance {
         private final String data;
-        public TestDataInstance(String data) {
+
+        TestDataInstance(String data) {
             this.data = data;
         }
 
-        public String getData() { return data; }
+        public String getData() {
+            return data;
+        }
     }
 
     /**

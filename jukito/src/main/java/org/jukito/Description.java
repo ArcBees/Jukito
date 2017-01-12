@@ -22,7 +22,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation can be used for better test description (instead of camel case test method)
+ * Annotation can be used for better test description (instead of camel case test method).
  */
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)

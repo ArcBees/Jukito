@@ -16,14 +16,14 @@
 
 package org.jukito;
 
-import com.google.inject.Inject;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.AfterClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.google.inject.Inject;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
@@ -82,7 +82,7 @@ public class SingletonTest {
      */
     static class MyEagerSingleton {
         @Inject
-        public MyEagerSingleton(Registry registry) {
+        MyEagerSingleton(Registry registry) {
             registry.register(getClass());
             Bookkeeper.numberOfTimesEagerSingletonIsInstantiated++;
         }
@@ -94,7 +94,7 @@ public class SingletonTest {
     @TestEagerSingleton
     static class MyTestEagerSingleton {
         @Inject
-        public MyTestEagerSingleton(Registry registry) {
+        MyTestEagerSingleton(Registry registry) {
             registry.register(getClass());
             Bookkeeper.numberOfTimesTestEagerSingletonIsInstantiated++;
         }
@@ -106,7 +106,7 @@ public class SingletonTest {
     @TestSingleton
     static class MyTestSingleton {
         @Inject
-        public MyTestSingleton(Registry registry) {
+        MyTestSingleton(Registry registry) {
             registry.register(getClass());
             Bookkeeper.numberOfTimesTestSingletonIsInstantiated++;
         }

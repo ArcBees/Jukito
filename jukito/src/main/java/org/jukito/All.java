@@ -16,12 +16,12 @@
 
 package org.jukito;
 
-import com.google.inject.BindingAnnotation;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
+import com.google.inject.BindingAnnotation;
 
 /**
  * This annotation can be used on one or more parameter of a test function.

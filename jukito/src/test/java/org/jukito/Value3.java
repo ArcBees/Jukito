@@ -16,10 +16,10 @@
 
 package org.jukito;
 
-import com.google.inject.BindingAnnotation;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+
+import com.google.inject.BindingAnnotation;
 
 /**
  * An annotation used in a test class.

@@ -16,13 +16,13 @@
 
 package org.jukito;
 
+import java.util.Collections;
+import java.util.Set;
+
 import com.google.inject.Key;
 import com.google.inject.Provider;
 import com.google.inject.spi.Dependency;
 import com.google.inject.spi.HasDependencies;
-
-import java.util.Collections;
-import java.util.Set;
 
 import static org.mockito.Mockito.spy;
 
@@ -48,11 +48,11 @@ class SpyProvider<T> implements Provider<T>, HasDependencies {
      * {@link TestModule#bindSpy(Class)} or {@link TestModule#bindSpy(com.google.inject.TypeLiteral)}.
      *
      * @param rawProvider The test class, running with {@link JukitoRunner}.
-     * @param relayingKey The key of the binding used to relay to the real class. This should usually
-     *                    be the key of a {code toConstructor} binding. Internally, Jukito uses the
-     *                    {@link JukitoInternal} annotation to distinguish this binding.
+     * @param relayingKey The key of the binding used to relay to the real class. This should usually be the key of a
+     *                    {code toConstructor} binding. Internally, Jukito uses the {@link JukitoInternal} annotation to
+     *                    distinguish this binding.
      */
-    public SpyProvider(Provider<T> rawProvider, Key<T> relayingKey) {
+    SpyProvider(Provider<T> rawProvider, Key<T> relayingKey) {
         this.rawProvider = rawProvider;
         dependencies = Collections.<Dependency<?>>singleton(Dependency.get(relayingKey));
     }

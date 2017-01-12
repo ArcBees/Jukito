@@ -16,14 +16,14 @@
 
 package org.jukito;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.FactoryProvider;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import static org.junit.Assert.assertEquals;
 
@@ -71,7 +71,7 @@ public class OldStyleAssistedInjectTest {
         private final int amount;
 
         @Inject
-        public RealPayment1(@Named("moneySymbol") String moneySymbol, @Assisted int amount) {
+        RealPayment1(@Named("moneySymbol") String moneySymbol, @Assisted int amount) {
             this.moneySymbol = moneySymbol;
             this.amount = amount;
         }
@@ -86,7 +86,7 @@ public class OldStyleAssistedInjectTest {
         private final int amount;
 
         @Inject
-        public RealPayment2(@Assisted int amount) {
+        RealPayment2(@Assisted int amount) {
             this.amount = amount;
         }
 
@@ -121,9 +121,9 @@ public class OldStyleAssistedInjectTest {
         private final Amount amount;
 
         @Inject
-        public RealPaymentAmount(Configuration configuration,
-                                 InjectedClass injectedClass,
-                                 @Assisted Amount amount) {
+        RealPaymentAmount(Configuration configuration,
+                InjectedClass injectedClass,
+                @Assisted Amount amount) {
             this.configuration = configuration;
             this.injectedClass = injectedClass;
             this.amount = amount;

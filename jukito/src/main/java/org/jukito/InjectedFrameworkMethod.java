@@ -16,12 +16,12 @@
 
 package org.jukito;
 
-import com.google.inject.Binding;
+import java.lang.reflect.Method;
+import java.util.List;
 
 import org.junit.runners.model.FrameworkMethod;
 
-import java.lang.reflect.Method;
-import java.util.List;
+import com.google.inject.Binding;
 
 /**
  * This class is an extension of {@link FrameworkMethod} that makes it possible to specify

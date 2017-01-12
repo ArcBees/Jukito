@@ -16,14 +16,6 @@
 
 package org.jukito;
 
-import com.google.inject.ConfigurationException;
-import com.google.inject.Key;
-import com.google.inject.Provider;
-import com.google.inject.TypeLiteral;
-import com.google.inject.internal.Annotations;
-import com.google.inject.internal.Errors;
-import com.google.inject.internal.ErrorsException;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -32,6 +24,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+
+import com.google.inject.ConfigurationException;
+import com.google.inject.Key;
+import com.google.inject.Provider;
+import com.google.inject.TypeLiteral;
+import com.google.inject.internal.Annotations;
+import com.google.inject.internal.Errors;
+import com.google.inject.internal.ErrorsException;
 
 /**
  * A number of useful static methods to manipulate Guice object. Most are
@@ -66,7 +66,7 @@ public class GuiceUtils {
     }
 
     public static <T> Key<T> getProvidedKey(Key<Provider<T>> key,
-                                            Errors errors) throws ErrorsException {
+            Errors errors) throws ErrorsException {
         TypeLiteral<T> providedType = getProvidedType(key.getTypeLiteral(), errors);
 
         Key<T> providedKey;

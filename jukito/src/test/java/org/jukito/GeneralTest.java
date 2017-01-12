@@ -16,6 +16,11 @@
 
 package org.jukito;
 
+import java.util.logging.Logger;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Key;
@@ -24,11 +29,6 @@ import com.google.inject.Stage;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import java.util.logging.Logger;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.never;
@@ -39,7 +39,6 @@ import static org.mockito.Mockito.verify;
  */
 @RunWith(JukitoRunner.class)
 public class GeneralTest {
-
     /**
      * Guice test module.
      */
@@ -103,7 +102,7 @@ public class GeneralTest {
         }
     }
 
-    static enum MyEnum {
+    enum MyEnum {
         VALUE1,
         VALUE2,
         VALUE3
@@ -113,7 +112,7 @@ public class GeneralTest {
         private final MyEnum value;
 
         @Inject
-        public TestClass(@Named("VALUE2") MyEnum value) {
+        TestClass(@Named("VALUE2") MyEnum value) {
             this.value = value;
         }
     }
@@ -122,21 +121,20 @@ public class GeneralTest {
         final T value;
 
         @Inject
-        public ParameterizedTestClass(@Named("200") T value) {
+        ParameterizedTestClass(@Named("200") T value) {
             this.value = value;
         }
     }
 
     static class ParameterizedTestClassDouble extends ParameterizedTestClass<Double> {
         @Inject
-        public ParameterizedTestClassDouble() {
+        ParameterizedTestClassDouble() {
             super(10.0);
         }
     }
 
-    static class ParameterizedTestClassString extends ParameterizedTestClass<String> {
-        @Inject
-        public ParameterizedTestClassString() {
+    public static class ParameterizedTestClassString extends ParameterizedTestClass<String> {
+        ParameterizedTestClassString() {
             super("default constructor");
         }
 
@@ -149,7 +147,7 @@ public class GeneralTest {
         private int value;
 
         @Inject
-        public TestClassWithMethodInjection(@OneHundred Integer value) {
+        TestClassWithMethodInjection(@OneHundred Integer value) {
             this.value = value;
         }
 
@@ -167,7 +165,7 @@ public class GeneralTest {
         private int value;
 
         @Inject
-        public TestClassWithOptionalInjection(@OneHundred Integer value) {
+        TestClassWithOptionalInjection(@OneHundred Integer value) {
             this.value = value;
         }
 
@@ -192,7 +190,7 @@ public class GeneralTest {
         private final UninstanciableClass dependency;
 
         @Inject
-        public ClassWithUninstanciableDependency1(UninstanciableClass dependency) {
+        ClassWithUninstanciableDependency1(UninstanciableClass dependency) {
             this.dependency = dependency;
         }
 
@@ -207,7 +205,7 @@ public class GeneralTest {
 
     abstract static class ClassWithUninstanciableDependency2 {
         @Inject
-        public ClassWithUninstanciableDependency2(UninstanciableClass dependency) {
+        ClassWithUninstanciableDependency2(UninstanciableClass dependency) {
         }
 
         public int getValue() {
@@ -217,7 +215,7 @@ public class GeneralTest {
 
     static class ClassWithUninstanciableDependency3 {
         @Inject
-        public ClassWithUninstanciableDependency3(UninstanciableClass dependency) {
+        ClassWithUninstanciableDependency3(UninstanciableClass dependency) {
         }
 
         public int getValue() {
@@ -227,14 +225,14 @@ public class GeneralTest {
 
     static class MyMockProvider3b extends MockProvider<ClassWithUninstanciableDependency3> {
         @Inject
-        public MyMockProvider3b() {
+        MyMockProvider3b() {
             super(ClassWithUninstanciableDependency3.class);
         }
     }
 
     static class MyMockProvider3c extends MockProvider<ClassWithUninstanciableDependency3> {
         @Inject
-        public MyMockProvider3c() {
+        MyMockProvider3c() {
             super(ClassWithUninstanciableDependency3.class);
         }
     }
@@ -243,7 +241,7 @@ public class GeneralTest {
         private final Class<? super U> injectedType;
 
         @Inject
-        public TestGenericClassInjectedWithTypeLiteral(TypeLiteral<U> typeLiteral) {
+        TestGenericClassInjectedWithTypeLiteral(TypeLiteral<U> typeLiteral) {
             injectedType = typeLiteral.getRawType();
         }
 

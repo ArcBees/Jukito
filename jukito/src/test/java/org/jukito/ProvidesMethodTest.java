@@ -16,13 +16,13 @@
 
 package org.jukito;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
-
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
@@ -165,7 +165,7 @@ public class ProvidesMethodTest {
         private final DependencyShouldBeMocked1 dependency;
 
         @Inject
-        public ClassWithMockedDependency1(DependencyShouldBeMocked1 dependency) {
+        ClassWithMockedDependency1(DependencyShouldBeMocked1 dependency) {
             this.dependency = dependency;
         }
 
@@ -182,7 +182,7 @@ public class ProvidesMethodTest {
         private final DependencyShouldBeMocked2 dependency;
 
         @Inject
-        public ClassWithMockedDependency2(DependencyShouldBeMocked2 dependency) {
+        ClassWithMockedDependency2(DependencyShouldBeMocked2 dependency) {
             this.dependency = dependency;
         }
 
@@ -194,7 +194,7 @@ public class ProvidesMethodTest {
     static class Value {
         public final String string;
 
-        public Value(String string) {
+        Value(String string) {
             this.string = string;
         }
     }

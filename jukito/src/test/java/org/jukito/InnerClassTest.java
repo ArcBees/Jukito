@@ -16,11 +16,11 @@
 
 package org.jukito;
 
-import com.google.inject.ConfigurationException;
-import com.google.inject.Inject;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import com.google.inject.ConfigurationException;
+import com.google.inject.Inject;
 
 import static org.junit.Assert.assertEquals;
 
@@ -45,7 +45,8 @@ public class InnerClassTest {
      * Dummy inner class with a single inject.
      */
     class InnerClass {
-        @Inject String test;
+        @Inject
+        String test;
 
         public String toString() {
             return test;
@@ -56,7 +57,8 @@ public class InnerClassTest {
      * Dummy static inner class with a single inject.
      */
     static class StaticInnerClass {
-        @Inject String test;
+        @Inject
+        String test;
 
         public String toString() {
             return test;
@@ -65,7 +67,7 @@ public class InnerClassTest {
 
     /**
      * Verify that when you try to inject an inner class, a ConfigurationException is thrown.
-     * 
+     *
      * @param klass
      */
     @Test(expected = ConfigurationException.class)
@@ -75,7 +77,7 @@ public class InnerClassTest {
 
     /**
      * Verify that when you try to inject a static inner class, everything works properly.
-     * 
+     *
      * @param klass
      */
     @Test

@@ -16,14 +16,14 @@
 
 package org.jukito;
 
-import com.google.inject.Injector;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.internal.runners.model.MultipleFailureException;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.google.inject.Injector;
 
 /**
  * A {@link Statement} invoking a list of methods with parameters by filling-in
@@ -36,7 +36,7 @@ public class InjectedAfterStatements extends Statement {
     private final List<Statement> afters;
 
     public InjectedAfterStatements(Statement prev, List<FrameworkMethod> afters,
-                                   Object target, Injector injector) {
+            Object target, Injector injector) {
         this.prev = prev;
         this.afters = new ArrayList<Statement>(afters.size());
         for (FrameworkMethod method : afters) {

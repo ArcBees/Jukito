@@ -16,6 +16,8 @@
 
 package org.jukito;
 
+import java.lang.reflect.Constructor;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
@@ -23,8 +25,6 @@ import com.google.inject.binder.LinkedBindingBuilder;
 import com.google.inject.binder.ScopedBindingBuilder;
 import com.google.inject.name.Names;
 import com.google.inject.spi.InjectionPoint;
-
-import java.lang.reflect.Constructor;
 
 /**
  * A guice {@link com.google.inject.Module Module} with a bit of syntactic sugar to bind within
@@ -175,7 +175,7 @@ public abstract class TestModule extends AbstractModule {
      * @return A {@link ScopedBindingBuilder}.
      */
     protected <T> ScopedBindingBuilder bindNamedMock(TypeLiteral<T> typeLiteral,
-                                                     String name) {
+            String name) {
         return bindNewMockProvider(Key.get(typeLiteral, Names.named(name)));
     }
 
@@ -206,7 +206,7 @@ public abstract class TestModule extends AbstractModule {
      * @return A {@link ScopedBindingBuilder}.
      */
     protected <T> ScopedBindingBuilder bindNamedSpy(TypeLiteral<T> typeLiteral,
-                                                    String name) {
+            String name) {
         return bindNewSpyProvider(Key.get(typeLiteral, Names.named(name)));
     }
 
@@ -224,7 +224,7 @@ public abstract class TestModule extends AbstractModule {
      * @return A {@link ScopedBindingBuilder}.
      */
     protected <T> ScopedBindingBuilder bindNamedSpy(Class<T> klass, T instance,
-                                                    String name) {
+            String name) {
         return bindNewSpyImmutableInstanceProvider(Key.get(klass, Names.named(name)), instance);
     }
 
@@ -242,7 +242,7 @@ public abstract class TestModule extends AbstractModule {
      * @return A {@link ScopedBindingBuilder}.
      */
     protected <T> ScopedBindingBuilder bindNamedSpy(TypeLiteral<T> typeLiteral,
-                                                    T instance, String name) {
+            T instance, String name) {
         return bindNewSpyImmutableInstanceProvider(Key.get(typeLiteral, Names.named(name)), instance);
     }
 
@@ -408,7 +408,7 @@ public abstract class TestModule extends AbstractModule {
      * @see {@link All}
      */
     protected <T> void bindManyNamed(TypeLiteral<T> type, String name,
-                                     TypeLiteral<? extends T>... boundTypes) {
+            TypeLiteral<? extends T>... boundTypes) {
         for (TypeLiteral<? extends T> boundType : boundTypes) {
             bind(type).annotatedWith(NamedUniqueAnnotations.create(name)).to(boundType).in(TestScope.SINGLETON);
         }
@@ -435,7 +435,7 @@ public abstract class TestModule extends AbstractModule {
      * @return A {@link ScopedBindingBuilder}.
      */
     protected <T> LinkedBindingBuilder<T> bindNamed(TypeLiteral<T> typeLiteral,
-                                                    String name) {
+            String name) {
         return bind(typeLiteral).annotatedWith(Names.named(name));
     }
 }
