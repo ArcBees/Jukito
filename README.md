@@ -1,6 +1,6 @@
 ![Jukito] (http://i.imgur.com/rSeHAEc.png "Jukito")
 
-###The combined power of JUnit, Guice and Mockito. Plus it sounds like a cool martial art.
+### The combined power of JUnit, Guice and Mockito. Plus it sounds like a cool martial art.
 
 -----
 
@@ -72,20 +72,20 @@ public class CalculatorTest {
 
 As you see here, Jukito lets you define your very own test module, where you can bind classes just like a regular Guice module. It doesn't stop there, however. The `bindMany` methods let you bind different classes or instances to the same interface. Combined with the powerful `@All` annotation this lets you easily run a single test on a whole suite of test examples. The code above will run a total of six tests!
 
-##Getting Started
+## Getting Started
 [Read the wiki](https://github.com/ArcBees/Jukito/wiki) to find out everything Jukito has to offer, and [join the discussion](http://groups.google.com/group/jukito)!
 
-##Latest Release
+## Latest Release
 * 1.5
 
-##Links
+## Links
 * [Jukito Custom Google Search](http://www.google.com/cse/home?cx=011138278718949652927:turyqq9pl64) - Search GWTP documentation, wiki and thread collections.
 * [Jukito WebSite Source](https://github.com/ArcBees/jukito-website) - Jukito website source.
 * [Jukito Google Group](https://groups.google.com/forum/?fromgroups#!forum/jukito) - Find help here.
 * [Jukito Previous Repo](https://code.google.com/p/jukito/) - Previous home of Jukito.
 * [GWTP](https://github.com/ArcBees/GWTP) - Find out more about GWT-Platform.
 
-##Thanks to
+## Thanks to
 [![Arcbees.com](http://i.imgur.com/HDf1qfq.png)](http://arcbees.com)
 
 [![Atlassian](http://i.imgur.com/BKkj8Rg.png)](https://www.atlassian.com/)
