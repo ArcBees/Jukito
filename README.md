@@ -1,4 +1,4 @@
-![Jukito] (http://i.imgur.com/rSeHAEc.png "Jukito")
+![Jukito](http://i.imgur.com/rSeHAEc.png "Jukito")
 
 ### The combined power of JUnit, Guice and Mockito. Plus it sounds like a cool martial art.
 
