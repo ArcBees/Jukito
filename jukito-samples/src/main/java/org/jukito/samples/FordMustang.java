@@ -16,7 +16,7 @@
 
 package org.jukito.samples;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 public class FordMustang extends Car {
     @Inject

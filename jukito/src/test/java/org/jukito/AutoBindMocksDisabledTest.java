@@ -16,14 +16,14 @@
 
 package org.jukito;
 
-import javax.inject.Inject;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
 import com.google.inject.PrivateModule;
+
+import jakarta.inject.Inject;
 
 /**
  * Tests behavior of autoBindMocks property on UseModules annotation.

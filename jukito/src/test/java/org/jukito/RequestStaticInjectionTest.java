@@ -16,13 +16,13 @@
 
 package org.jukito;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.google.inject.Provides;
+
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
