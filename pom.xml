@@ -125,25 +125,24 @@
     </mailingLists>
 
     <properties>
-        <target.jdk>1.7</target.jdk>
+        <target.jdk>11</target.jdk>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <guice.version>4.0</guice.version>
-        <junit.version>4.12</junit.version>
-        <mockito.version>2.5.7</mockito.version>
+        <guice.version>7.0.0</guice.version>
+        <junit.version>4.13.2</junit.version>
+        <mockito.version>4.11.0</mockito.version>
 
-        <maven-checkstyle-plugin.version>2.17</maven-checkstyle-plugin.version>
-        <checkstyle.version>6.12</checkstyle.version>
-        <arcbees-checkstyle.version>1.2</arcbees-checkstyle.version>
-        <maven-compiler-plugin.version>3.0</maven-compiler-plugin.version>
-        <maven-deploy-plugin.version>2.7</maven-deploy-plugin.version>
+        <maven-checkstyle-plugin.version>3.6.0</maven-checkstyle-plugin.version>
+        <checkstyle.version>10.20.1</checkstyle.version>
+        <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
+        <maven-deploy-plugin.version>3.1.3</maven-deploy-plugin.version>
         <maven-eclipse-plugin.version>2.9</maven-eclipse-plugin.version>
-        <maven-javadoc-plugin.version>2.9</maven-javadoc-plugin.version>
-        <maven-source-plugin.version>2.2.1</maven-source-plugin.version>
-        <maven-surefire-plugin.version>2.14.1</maven-surefire-plugin.version>
-        <animal-sniffer-maven-plugin.version>1.9</animal-sniffer-maven-plugin.version>
-        <github.version>0.7</github.version>
+        <maven-javadoc-plugin.version>3.11.1</maven-javadoc-plugin.version>
+        <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
+        <maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
+        <animal-sniffer-maven-plugin.version>1.24</animal-sniffer-maven-plugin.version>
+        <github.version>0.12</github.version>
     </properties>
 
     <modules>
@@ -188,8 +187,8 @@
                     <artifactId>maven-checkstyle-plugin</artifactId>
                     <version>${maven-checkstyle-plugin.version}</version>
                     <configuration>
-                        <configLocation>/checkstyle.xml</configLocation>
-                        <suppressionsLocation>/suppressions.xml</suppressionsLocation>
+                        <configLocation>/codequality/checkstyle.xml</configLocation>
+                        <suppressionsLocation>/codequality/suppressions.xml</suppressionsLocation>
                         <propertyExpansion>basedir=${basedir}</propertyExpansion>
                         <consoleOutput>true</consoleOutput>
                         <failsOnError>true</failsOnError>
@@ -210,11 +209,6 @@
                             <groupId>com.puppycrawl.tools</groupId>
                             <artifactId>checkstyle</artifactId>
                             <version>${checkstyle.version}</version>
-                        </dependency>
-                        <dependency>
-                            <groupId>com.arcbees</groupId>
-                            <artifactId>checkstyle</artifactId>
-                            <version>${arcbees-checkstyle.version}</version>
                         </dependency>
                     </dependencies>
                 </plugin>

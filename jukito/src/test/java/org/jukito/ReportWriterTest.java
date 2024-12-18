@@ -22,12 +22,12 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.inject.Singleton;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.google.inject.Inject;
+
+import jakarta.inject.Singleton;
 
 import static org.junit.Assert.assertEquals;
 
@@ -103,7 +103,7 @@ public class ReportWriterTest {
                 "EagerSingleton");
         e.add("  Key[type=org.jukito.ReportWriterTest$Resource4, annotation=@org.jukito.JukitoInternal] --> Bound " +
                 "directly ### No scope");
-        e.add("  Key[type=org.jukito.ReportWriterTest$Resource4, annotation=@com.google.inject.name.Named(value=Spy)]" +
+        e.add("  Key[type=org.jukito.ReportWriterTest$Resource4, annotation=@com.google.inject.name.Named(\"Spy\")]" +
                 " " +
                 "--> Instance of org.jukito.SpyProvider ### In scope org.jukito.TestSingleton");
 
